@@ -1,0 +1,20 @@
+{
+  "name": "bbw",
+  "version": "0.0.1",
+  "description": "bbw",
+  "authors": [
+    "bbrouse"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cache": "~2.3.3"
+  }
+}

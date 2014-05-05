@@ -1,0 +1,21 @@
+/* Your app's CSS, go crazy, make it your own */
+
+.ionic-logo {
+    display: block;
+    margin: 15px auto;
+    width: 96px;
+    height: 96px;
+}
+
+.checkbox input:checked:before {
+    border: 0;
+    background: lightgrey;
+
+}
+.checkbox input:before {
+    border: 1px solid lightgrey;
+}
+
+.angular-google-map-container {
+     height: 400px;
+}

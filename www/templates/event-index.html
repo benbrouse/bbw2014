@@ -1,0 +1,37 @@
+
+<ion-view title="Baltimore Beer Week - Events Information" animation="nav-title-slide-ios7">
+    <ion-nav-buttons side="right">
+        <button class="button-icon icon ion-navicon" ng-click="openModal()"></button>
+    </ion-nav-buttons>    
+    <ion-content has-header="true" has-tabs="true">
+        <div class="list">
+            <!--<div class="item tabs tabs-secondary tabs-icon-left">
+                <a class="tab-item" href="#">
+                    <i class="icon ion-map"></i>
+                    Full Schedule
+                </a>
+
+                <a class="tab-item" ng-click="toggle()">
+                    <i class="icon ion-pin"></i>
+                    My Itenerary
+                </a>
+            </div>-->            
+
+            <div ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
+
+                <div ng-show="initialized" class="item item-divider">
+                    {{ eventDate.date | date: 'fullDate' }}
+                </div>
+
+                <a ng-repeat="event in events | matchesDate:'date':eventDate.date | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" href="#/tab/event/{{event.id}}">
+                    <img ng-src="{{ event.location.image }}" />
+                    <h2>{{event.title}}</h2>
+                    <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
+                    <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
+                    <h4 class="item-text-wrap">{{ event.description }}</h4>
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+

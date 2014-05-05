@@ -1,0 +1,19 @@
+<div class="modal">
+    <ion-header-bar>
+        <h1 class="title">Filter Event List</h1>
+        <div class="buttons">
+            <button class="button-icon icon ion-ios7-close-outline" ng-click="closeModal()"></button>
+        </div>
+    </ion-header-bar>
+
+    <ion-content>
+        <ul class="list">
+            <li ng-repeat="eventDate in eventDates" class="item item-checkbox">
+                <label class="checkbox">
+                    <input type="checkbox" name="selectedDates[]" ng-model="eventDate.selected">
+                </label>
+                {{ eventDate.date | date: 'fullDate'}}
+            </li>
+        </ul>
+    </ion-content>
+</div>

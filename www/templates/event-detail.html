@@ -1,0 +1,13 @@
+<!--
+-->
+
+<ion-view title="{{event.title}}">
+    <ion-nav-buttons side="left">
+        <button class="button-icon icon ion-arrow-left-c" ng-click="goBack()"></button>
+    </ion-nav-buttons>     
+    <ion-content>
+        <p>{{ event.description }}</p>
+
+        <google-map center="map.center" zoom="map.zoom" draggable="true"></google-map>
+    </ion-content>
+</ion-view>

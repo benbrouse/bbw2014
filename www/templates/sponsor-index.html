@@ -1,0 +1,21 @@
+<!--
+-->
+
+<ion-view title="Baltimore Beer Week - Sponsors Information">
+    <ion-content has-header="true" has-tabs="true">
+        <div class="list">
+            
+            <div ng-repeat="sponsorLevel in levels">
+                <div ng-show="initialized" class="item item-divider">
+                    {{ sponsorLevel | sponsorLevel }}
+                </div>
+
+                <a ng-repeat="sponsor in sponsors |  orderBy:'title' | filter:{'level':sponsorLevel}" ng-show="initialized" class="item item-thumbnail-left" href="#/tab/sponsor/{{sponsor.id}}">
+                    <img ng-src="{{ sponsor.image }}" />
+                    <h2>{{sponsor.title}}</h2>
+                    <h4 class="item-text-wrap">{{sponsor.description}}</h4>
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
