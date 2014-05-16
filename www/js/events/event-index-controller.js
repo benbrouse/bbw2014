@@ -3,9 +3,10 @@
 // A simple controller that fetches a list of data from a service
 .controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', 'LoaderService', 'EventsService', 'AddressService', 'GoogleMapsService', function($scope, $log, $filter, $ionicModal, LoaderService, EventsService, AddressService, GoogleMapsService) {
     $scope.initialized = false;
+    $scope.eventInitialized = false;
 
     // Load the modal from the given template URL
-    $ionicModal.fromTemplateUrl('templates/event-filter.html', {
+    $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function(modal) {
@@ -13,7 +14,7 @@
     });
 
     // Load the modal from the given template URL
-    $ionicModal.fromTemplateUrl('templates/event-detail.html', {
+    $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function (modal) {
@@ -36,6 +37,8 @@
 
     $scope.closeEventModal = function () {
         $scope.modalEvent.hide();
+
+        $scope.eventInitialized = true;
         $scope.currentModal = null;
     };
 
@@ -49,13 +52,12 @@
     $scope.$on('modal.shown', function (modal) {
         // extra bootstrapping to display the map correctly
         if ($scope.currentModal == "eventDetail") {
-            initializeMap();
-
             var eventAddress = $scope.event.location.address;
             if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                 AddressService.geocode(eventAddress).then(function (location) {
-                    $scope.map.setZoom(16);
-                    $scope.map.setCenter(location);
+
+                    $scope.eventInitialized = true;
+                    initializeMap(16, location);
                 });
             }
         }
@@ -66,6 +68,11 @@
 
     EventsService.all().then(function(events) {
         $scope.events = events;
+
+        var selectionChoices = ['All Events', 'My Events'];
+        $scope.eventSelections = _.map(selectionChoices, function (choice) {
+            return { text: choice, selected: (choice == 'All Events') };
+        });
 
         // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
         EventsService.getEventDates($scope.events).then(function(eventDates) {
@@ -93,11 +100,11 @@
         $log.write(reason);
     });
 
-    var initializeMap = function ()
+    var initializeMap = function (zoomLevel, location)
     {
         var mapOptions = {
-            center: new google.maps.LatLng(43.07493, -89.381388),
-            zoom: 16,
+            center: location,
+            zoom: zoomLevel,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
@@ -105,7 +112,6 @@
         var map = new google.maps.Map(mapElement, mapOptions);
 
         // Stop the side bar from dragging when mousedown/tapdown on the map
-        var mapElement = document.getElementById('map');
         google.maps.event.addDomListener(mapElement, 'mousedown', function (e) {
             e.preventDefault();
             return false;

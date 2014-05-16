@@ -1,0 +1,21 @@
+<div class="modal">
+    <ion-header-bar>
+        <h1 class="title">Baltimore Beer Week 2014</h1>
+        <div class="buttons">
+            <button class="button-icon icon ion-ios7-close-outline" ng-click="closeEventModal()"></button>
+        </div>
+    </ion-header-bar>
+
+    <ion-content scroll="false" data-tap-disabled="true">
+        <div ng-show="eventInitialized" class="item item-thumbnail-left">
+            <img ng-src="{{ event.location.image }}" />
+            <h2>{{event.title}}</h2>
+            <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
+            <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
+        </div>
+
+        <h4 ng-show="eventInitialized" class="item item-text-wrap">{{ event.description }}</h4>
+
+        <div ng-show="eventInitialized" id="map" style="height: 100%"></div>
+    </ion-content>
+</div>
