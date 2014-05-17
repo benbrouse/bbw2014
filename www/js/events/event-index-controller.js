@@ -6,6 +6,9 @@
     $scope.eventInitialized = false;
     $scope.redirectToLocation = false;
 
+    $scope.showEventMap = false;
+    $scope.showEventDescription = true;
+
     // Load the modal from the given template URL
     $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
         scope: $scope,
@@ -34,6 +37,10 @@
         $scope.event = EventsService.get(eventId);
 
         $scope.redirectToLocation = false;
+
+        $scope.showEventDescription = true;
+        $scope.showEventMap = false;
+
         $scope.currentModal = "eventDetail";
         $scope.modalEvent.show();
     };
@@ -73,6 +80,13 @@
         });
     };
 
+    $scope.refreshContent = function () {
+        // todo: get update content
+
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+    };
+
     //Be sure to cleanup the modal
     $scope.$on('$destroy', function() {
         $scope.modalFilter.remove();
@@ -100,10 +114,10 @@
     EventsService.all().then(function(events) {
         $scope.events = events;
 
-        var selectionChoices = ['All Events', 'My Events'];
-        $scope.eventSelections = _.map(selectionChoices, function (choice) {
-            return { text: choice, selected: (choice == 'All Events') };
-        });
+        $scope.filterSettingsList = [
+            { text: "Only display my selected events", checked: true },
+            { text: "Limit to events near me", checked: false }
+        ];
 
         // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
         EventsService.getEventDates($scope.events).then(function(eventDates) {
@@ -154,5 +168,23 @@
         });
 
         $scope.map = map;
+    };
+
+    $scope.switchEventView = function () {
+        $scope.showEventDescription = !$scope.showEventDescription;
+        $scope.showEventMap = !$scope.showEventMap;
+
+        if ($scope.showEventMap) {
+            var eventAddress = $scope.event.location.address;
+            if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
+                AddressService.geocode(eventAddress).then(function (location) {
+
+                    $scope.eventInitialized = true;
+                    initializeMap(16, location, $scope.event.location.name);
+                });
+            }
+        }
+
+        google.maps.event.trigger($scope.map, "resize");
     };
 }]);

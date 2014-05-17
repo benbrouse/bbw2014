@@ -8,8 +8,11 @@
 
     <ion-content>
         
-        <ion-toggle>Only display my selected events</ion-toggle>
-        <ion-toggle>Limit to events near me</ion-toggle>
+        <ion-toggle ng-repeat="item in filterSettingsList"
+                    ng-model="item.checked"
+                    ng-checked="item.checked">
+            {{ item.text }}
+        </ion-toggle>
 
         <ul class="list">
             <li ng-repeat="eventDate in eventDates" class="item item-checkbox">

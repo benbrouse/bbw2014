@@ -12,11 +12,26 @@
             <h2>{{event.title}}</h2>
             <h4 class="item-text-wrap">Location: <a ng-click="showLocationMenu()">{{ event.location.name }}</a></h4>
             <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
-            
         </div>
 
-        <h4 ng-show="eventInitialized" class="item item-text-wrap">{{ event.description }}</h4>
+        <div class="row inline-bar">
+            <div class="col" align="center" ng-click="switchEventView()">
+                <i class="icon ion-android-note"></i>
+                Details
+            </div>
+            <div class="col" align="center" ng-click="switchEventView()">
+                <i class="icon ion-location"></i>
+                View Map
+            </div>
+        </div>
+        
+        <div ng-show="eventInitialized" style="height: 100%; width: 100%;">
+            <div ng-show="!showEventMap" class="item">
+                <h4 class="item-text-wrap">{{ event.description }}</h4>
+            </div>
 
-        <div ng-show="eventInitialized" id="map" style="height: 100%"></div>
+            <div ng-show="showEventMap" id="map" style="height: 100%"></div>
+        </div>
     </ion-content>
+
 </div>
