@@ -1,4 +1,8 @@
-﻿angular.module('events', [
+﻿angular.module('about', [
+                          'bbw.about-controller'
+]);
+
+angular.module('events', [
                           'bbw.event-service',
                           'bbw.event-index-controller',
                           'bbw.eventDateSelectedFilter'
@@ -12,4 +16,4 @@ angular.module('sponsors', [
                             'bbw.sponsor-level-filter'
 ]);
 
-angular.module('bbw-depends', ['events', 'sponsors']);
+angular.module('bbw-depends', ['about', 'events', 'sponsors']);

@@ -1,8 +1,11 @@
 <div class="modal">
-    <ion-header-bar>
+    <ion-header-bar class="bar-dark">
+        <div class="buttons light" side="left">
+            <button class="button-icon icon ion-ios7-star-outline light"></button>
+        </div>
         <h1 class="title">Baltimore Beer Week 2014</h1>
-        <div class="buttons">
-            <button class="button-icon icon ion-ios7-close-outline" ng-click="closeEventModal()"></button>
+        <div class="buttons light">
+            <button class="button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
         </div>
     </ion-header-bar>
 
@@ -21,7 +24,11 @@
             </div>
             <div class="col" align="center" ng-click="switchEventView()">
                 <i class="icon ion-location"></i>
-                View Map
+                Map
+            </div>
+            <div class="col" align="center" ng-click="switchEventView()">
+                <i class="icon ion-location"></i>
+                More Events
             </div>
         </div>
         

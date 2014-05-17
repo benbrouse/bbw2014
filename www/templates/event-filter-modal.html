@@ -1,8 +1,8 @@
 <div class="modal">
-    <ion-header-bar>
+    <ion-header-bar class="bar-dark">
         <h1 class="title">Filter Event List</h1>
         <div class="buttons">
-            <button class="button-icon icon ion-ios7-close-outline" ng-click="closeFilterModal()"></button>
+            <button class="button-icon icon ion-ios7-close-outline light" ng-click="closeFilterModal()"></button>
         </div>
     </ion-header-bar>
 
@@ -10,7 +10,8 @@
         
         <ion-toggle ng-repeat="item in filterSettingsList"
                     ng-model="item.checked"
-                    ng-checked="item.checked">
+                    ng-checked="item.checked"
+                    class="toggle-dark">
             {{ item.text }}
         </ion-toggle>
 

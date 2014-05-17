@@ -1,13 +1,15 @@
 ﻿<div class="modal">
-    <ion-header-bar>
+    <ion-header-bar class="bar-dark">
         <h1 class="title">Baltimore Beer Week 2014</h1>
         <div class="buttons">
-            <button class="button-icon icon ion-ios7-close-outline" ng-click="closeSponsorModal()"></button>
+            <button class="button-icon icon ion-ios7-close-outline light" ng-click="closeSponsorModal()"></button>
         </div>
     </ion-header-bar>
 
     <ion-content scroll="false">
         <div ng-show="sponsorInitialized" class="item item-thumbnail-left">
-            {{ sponsor.title }}
+            <h2>{{ sponsor.title }}</h2>
+            <h4>TODO: show more information</h4>
+        </div>
     </ion-content>
 </div>

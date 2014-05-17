@@ -62,8 +62,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
             url: '/about',
             views: {
                 'about-tab': {
-                    templateUrl: 'templates/about.html'
-                }
+                    templateUrl: 'templates/about.html',
+                    controller: 'AboutCtrl'
+}
             }
         })
         .state('tab.openingtap', {

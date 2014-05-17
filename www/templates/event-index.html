@@ -1,12 +1,25 @@
 
 <ion-view title="Baltimore Beer Week 2014" animation="nav-title-slide-ios7">
     <ion-nav-buttons side="right">
-        <button class="button-icon icon ion-navicon" ng-click="openFilterModal()"></button>
-    </ion-nav-buttons>    
+        <button class="button-icon icon ion-navicon light" ng-click="openFilterModal()"></button>
+    </ion-nav-buttons>
 
-    <ion-content has-header="true" has-tabs="true" delegate-handle="eventListScroll">
+    <ion-header-bar align-title="left" class="bar-subheader bar-light">
+        <div class="row">
+            <div class="col" align="center" ng-click="switchEventView()">
+                <i class="icon ion-ios7-time-outline"></i>
+                Sort By Date
+            </div>
+            <div class="col" align="center" ng-click="switchEventView()">
+                <i class="icon ion-ios7-location"></i>
+                Sort By Location
+            </div>
+        </div>
+    </ion-header-bar>
+
+    <ion-content delegate-handle="eventListScroll">
         <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
-        </ion-refresher>        
+        </ion-refresher>
 
         <div class="list">
             <div ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
