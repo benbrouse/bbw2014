@@ -8,6 +8,7 @@
 
     $scope.showEventMap = false;
     $scope.showEventDescription = true;
+    $scope.showEventOther = false;
 
     // Load the modal from the given template URL
     $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
@@ -170,9 +171,10 @@
         $scope.map = map;
     };
 
-    $scope.switchEventView = function () {
-        $scope.showEventDescription = !$scope.showEventDescription;
-        $scope.showEventMap = !$scope.showEventMap;
+    $scope.switchEventView = function (id) {
+        $scope.showEventDescription = (id == 'details') ? true : false;
+        $scope.showEventMap = (id == 'location') ? true : false;
+        $scope.showEventOther = (id == 'events') ? true : false;
 
         if ($scope.showEventMap) {
             var eventAddress = $scope.event.location.address;

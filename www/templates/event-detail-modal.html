@@ -10,7 +10,7 @@
     </ion-header-bar>
 
     <ion-content scroll="false">
-        <div ng-show="eventInitialized" class="item item-thumbnail-left" ng-click="showLocationMenu()">
+        <div ng-show="eventInitialized" class="item item-thumbnail-left">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
             <h4 class="item-text-wrap">Location: <a ng-click="showLocationMenu()">{{ event.location.name }}</a></h4>
@@ -18,27 +18,30 @@
         </div>
 
         <div class="row inline-bar">
-            <div class="col" align="center" ng-click="switchEventView()">
+            <div class="col" align="center" ng-click="switchEventView('details')">
                 <i class="icon ion-android-note"></i>
                 Details
             </div>
-            <div class="col" align="center" ng-click="switchEventView()">
+            <div class="col" align="center" ng-click="switchEventView('location')">
                 <i class="icon ion-location"></i>
                 Map
             </div>
-            <div class="col" align="center" ng-click="switchEventView()">
+            <div class="col" align="center" ng-click="switchEventView('events')">
                 <i class="icon ion-location"></i>
                 More Events
             </div>
         </div>
-        
+
         <div ng-show="eventInitialized" style="height: 100%; width: 100%;">
-            <div ng-show="!showEventMap" class="item">
+            <div ng-show="showEventDescription" class="item">
                 <h4 class="item-text-wrap">{{ event.description }}</h4>
             </div>
 
             <div ng-show="showEventMap" id="map" style="height: 100%"></div>
+
+            <div ng-show="showEventOther" class="item">
+                <h4 class="item-text-wrap">TODO: show other events at this location</h4>
+            </div>
         </div>
     </ion-content>
-
 </div>
