@@ -1,9 +1,10 @@
 ﻿angular.module('bbw.event-index-controller', ['ionic'])
 
 // A simple controller that fetches a list of data from a service
-.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', 'LoaderService', 'EventsService', 'AddressService', 'GoogleMapsService', function($scope, $log, $filter, $ionicModal, LoaderService, EventsService, AddressService, GoogleMapsService) {
+.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', 'LoaderService', 'EventsService', 'AddressService', 'GoogleMapsService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, LoaderService, EventsService, AddressService, GoogleMapsService) {
     $scope.initialized = false;
     $scope.eventInitialized = false;
+    $scope.redirectToLocation = false;
 
     // Load the modal from the given template URL
     $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
@@ -31,6 +32,8 @@
      
     $scope.openEventModal = function (eventId) {
         $scope.event = EventsService.get(eventId);
+
+        $scope.redirectToLocation = false;
         $scope.currentModal = "eventDetail";
         $scope.modalEvent.show();
     };
@@ -40,7 +43,37 @@
 
         $scope.eventInitialized = true;
         $scope.currentModal = null;
+
+        if ($scope.redirectToLocation) {
+            // todo:
+            alert('go somewhere else!');
+        }
     };
+
+    $scope.showLocationMenu = function() {
+
+        // Show the action sheet
+        $ionicActionSheet.show({
+            buttons: [
+                { text: '<b>View</b> other events here' },
+                { text: '<b>Add</b> to my intinerary' },
+                { text: '<b>Cancel</b>' }
+            ],
+            titleText: 'Options',
+            buttonClicked: function (index) {
+                if (index == 0) {
+                    $scope.redirectToLocation = true;
+                    $scope.closeEventModal();
+                }
+
+                if (index == 1) {
+                    // TODO:
+                    alert('add to iternary');
+                }
+                return true;
+            }
+        });
+    }
 
     //Be sure to cleanup the modal
     $scope.$on('$destroy', function() {
@@ -57,7 +90,7 @@
                 AddressService.geocode(eventAddress).then(function (location) {
 
                     $scope.eventInitialized = true;
-                    initializeMap(16, location);
+                    initializeMap(16, location, $scope.event.location.name);
                 });
             }
         }
@@ -100,7 +133,7 @@
         $log.write(reason);
     });
 
-    var initializeMap = function (zoomLevel, location)
+    var initializeMap = function (zoomLevel, location, name)
     {
         var mapOptions = {
             center: location,
@@ -110,6 +143,12 @@
 
         var mapElement = document.getElementById('map');
         var map = new google.maps.Map(mapElement, mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: name
+        });
 
         // Stop the side bar from dragging when mousedown/tapdown on the map
         google.maps.event.addDomListener(mapElement, 'mousedown', function (e) {

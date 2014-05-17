@@ -6,12 +6,13 @@
         </div>
     </ion-header-bar>
 
-    <ion-content scroll="false" data-tap-disabled="true">
-        <div ng-show="eventInitialized" class="item item-thumbnail-left">
+    <ion-content scroll="false">
+        <div ng-show="eventInitialized" class="item item-thumbnail-left" ng-click="showLocationMenu()">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
-            <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
+            <h4 class="item-text-wrap">Location: <a ng-click="showLocationMenu()">{{ event.location.name }}</a></h4>
             <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
+            
         </div>
 
         <h4 ng-show="eventInitialized" class="item item-text-wrap">{{ event.description }}</h4>
