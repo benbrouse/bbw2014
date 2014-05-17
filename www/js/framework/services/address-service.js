@@ -2,7 +2,7 @@
     core service to perform address lookups
 */
 angular.module('core.address-service', ['core.google-maps-service'])
-.factory('AddressService', ['$q', '$timeout', 'GoogleMapsService', function ($q, $timeout, GoogleMapsService) {
+.factory('AddressService', ['$q', function ($q) {
     var geocodeAddress = function(address) {
         var deferred = $q.defer();
 

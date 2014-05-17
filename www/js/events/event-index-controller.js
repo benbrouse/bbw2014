@@ -1,7 +1,7 @@
 ﻿angular.module('bbw.event-index-controller', ['ionic'])
 
 // A simple controller that fetches a list of data from a service
-.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', 'LoaderService', 'EventsService', 'AddressService', 'GoogleMapsService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, LoaderService, EventsService, AddressService, GoogleMapsService) {
+.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', 'LoaderService', 'EventsService', 'AddressService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, LoaderService, EventsService, AddressService) {
     $scope.initialized = false;
     $scope.eventInitialized = false;
     $scope.redirectToLocation = false;
@@ -46,7 +46,6 @@
 
         if ($scope.redirectToLocation) {
             // todo:
-            alert('go somewhere else!');
         }
     };
 
@@ -60,20 +59,19 @@
                 { text: '<b>Cancel</b>' }
             ],
             titleText: 'Options',
-            buttonClicked: function (index) {
-                if (index == 0) {
+            buttonClicked: function(index) {
+                if (index === 0) {
                     $scope.redirectToLocation = true;
                     $scope.closeEventModal();
                 }
 
                 if (index == 1) {
                     // TODO:
-                    alert('add to iternary');
                 }
                 return true;
             }
         });
-    }
+    };
 
     //Be sure to cleanup the modal
     $scope.$on('$destroy', function() {
@@ -82,7 +80,7 @@
     });
 
     // Execute action on hide modal
-    $scope.$on('modal.shown', function (modal) {
+    $scope.$on('modal.shown', function () {
         // extra bootstrapping to display the map correctly
         if ($scope.currentModal == "eventDetail") {
             var eventAddress = $scope.event.location.address;
@@ -133,8 +131,7 @@
         $log.write(reason);
     });
 
-    var initializeMap = function (zoomLevel, location, name)
-    {
+    var initializeMap = function(zoomLevel, location, name) {
         var mapOptions = {
             center: location,
             zoom: zoomLevel,
@@ -144,18 +141,18 @@
         var mapElement = document.getElementById('map');
         var map = new google.maps.Map(mapElement, mapOptions);
 
-        var marker = new google.maps.Marker({
+        new google.maps.Marker({
             position: location,
             map: map,
             title: name
         });
 
         // Stop the side bar from dragging when mousedown/tapdown on the map
-        google.maps.event.addDomListener(mapElement, 'mousedown', function (e) {
+        google.maps.event.addDomListener(mapElement, 'mousedown', function(e) {
             e.preventDefault();
             return false;
         });
 
         $scope.map = map;
-    }
+    };
 }]);

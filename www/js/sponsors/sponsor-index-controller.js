@@ -14,6 +14,7 @@
     });
 
     $scope.openSponsorModal = function (sponsorId) {
+        $scope.sponsor = SponsorsService.get(sponsorId);
         $scope.modalSponsor.show();
     };
 
@@ -22,7 +23,7 @@
     };
 
     LoaderService.show('Retrieving Sponsor List');
-
+     
     SponsorsService.all().then(function(sponsors) {
         $scope.sponsors = sponsors;
         $scope.levels = SponsorsService.getLevels();
