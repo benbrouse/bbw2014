@@ -6,11 +6,11 @@
 
     <ion-header-bar align-title="left" class="bar-subheader bar-light">
         <div class="row">
-            <div class="col" align="center" ng-click="switchEventView()">
+            <div class="col" align="center" ng-click="switchSort()">
                 <i class="icon ion-ios7-time-outline"></i>
                 Sort By Date
             </div>
-            <div class="col" align="center" ng-click="switchEventView()">
+            <div class="col" align="center" ng-click="switchSort()">
                 <i class="icon ion-ios7-location"></i>
                 Sort By Location
             </div>
@@ -22,7 +22,7 @@
         </ion-refresher>
 
         <div class="list">
-            <div ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
+            <div ng-if="sortByDate" ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
 
                 <div ng-show="initialized" class="item item-divider">
                     {{ eventDate.date | date: 'fullDate' }}
@@ -36,6 +36,12 @@
                     <h4 class="item-text-wrap">{{ event.description }}</h4>
                 </a>
             </div>
+            
+            <div ng-if="!sortByDate">
+                TODO: show by location
+            </div>
+            
+
         </div>
     </ion-content>
 </ion-view>

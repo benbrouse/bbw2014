@@ -6,6 +6,9 @@
     $scope.eventInitialized = false;
     $scope.redirectToLocation = false;
 
+    $scope.sortByDate = true;
+
+    // state flag for which tab is being displayed
     $scope.showEventMap = false;
     $scope.showEventDescription = true;
     $scope.showEventOther = false;
@@ -189,4 +192,8 @@
 
         google.maps.event.trigger($scope.map, "resize");
     };
+
+    $scope.switchSort = function() {
+        $scope.sortByDate = !$scope.sortByDate;
+    }
 }]);

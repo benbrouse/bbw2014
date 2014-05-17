@@ -13,7 +13,7 @@
         <div ng-show="eventInitialized" class="item item-thumbnail-left">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
-            <h4 class="item-text-wrap">Location: <a ng-click="showLocationMenu()">{{ event.location.name }}</a></h4>
+            <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
             <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
         </div>
 
