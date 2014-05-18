@@ -37,18 +37,18 @@
                     <h4 class="item-text-wrap">{{ event.description }}</h4>
                 </a>
             </div>
-            
+
             <!-- event listing by location -->
             <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations">
-                <div ng-show="initialized" class="item item-divider">
-                    {{ eventLocation.name }}
-                </div>
-                
-                <div ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
-                    <a ng-repeat="event in events | matchesString:'location.name':eventLocation.name | matchesDate:'date':eventDate.date | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
+                <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | orderBy:'date'" ng-show="initialized">
+                    <div ng-show="initialized && $index==0" class="item item-divider">
+                        {{ eventLocation.name }}
+                    </div>
+
+                    <a class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
                         <img ng-src="{{ event.location.image }}" />
                         <h2>{{event.title}}</h2>
-                        <h4 class="item-text-wrap">{{ eventDate.date | date: 'fullDate' }}</h4>
+                        <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
                         <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
                         <h4 class="item-text-wrap">{{ event.description }}</h4>
                     </a>
