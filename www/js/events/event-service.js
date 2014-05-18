@@ -33,7 +33,7 @@
 
     return {
         all: retrieveAll,
-        get: function (eventId) {
+        get: function(eventId) {
             var id = angular.isString(eventId) ? Number(eventId) : eventId;
 
             // Simple index lookup
@@ -41,14 +41,14 @@
             return filteredEvents[0];
         },
 
-        getEventDates: function (passedEventList) {
+        getEventDates: function(passedEventList) {
             var deferred = $q.defer();
 
             var processEventList = function(eventList) {
                 // get a list of unique dates for the events
                 var eventDatesOnly = _.pluck(eventList, 'date');
 
-                var eventShortDates = _.map(eventDatesOnly, function (date) {
+                var eventShortDates = _.map(eventDatesOnly, function(date) {
                     var parsedDate = new Date(date);
                     return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()).toISOString();
                 });
@@ -57,12 +57,12 @@
                 eventList = $filter('unique')(eventShortDates, 'date');
 
                 // define a function to be used to sort the list
-                var date_sort_asc = function (date1, date2) {
+                var date_sort_asc = function(date1, date2) {
                     if (new Date(date1) > new Date(date2)) {
-                         return 1;
+                        return 1;
                     }
                     if (new Date(date1) < new Date(date2)) {
-                         return -1;
+                        return -1;
                     }
                     return 0;
                 };
@@ -74,7 +74,34 @@
             };
 
             if (angular.isUndefined(passedEventList)) {
-                retrieveAll().then(function (eventList) {
+                retrieveAll().then(function(eventList) {
+                    processEventList(eventList);
+                });
+            } else {
+                processEventList(passedEventList);
+            }
+
+            return deferred.promise;
+        },
+
+        getEventLocations: function(passedEventList) {
+            var deferred = $q.defer();
+
+            var processEventList = function(eventList) {
+                // get a list of unique locations for the events
+                var eventLocationsOnly = _.pluckDeep(eventList, 'location.name');
+
+                // begin to transform the list
+                eventList = $filter('unique')(eventLocationsOnly, 'name');
+
+                // First let's sort the array in ascending order.
+                eventList = eventList.sort();
+
+                deferred.resolve(eventList);
+            };
+
+            if (angular.isUndefined(passedEventList)) {
+                retrieveAll().then(function(eventList) {
                     processEventList(eventList);
                 });
             } else {
@@ -83,5 +110,5 @@
 
             return deferred.promise;
         }
-    };
+};
 }]);

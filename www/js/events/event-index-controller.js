@@ -123,6 +123,12 @@
             { text: "Limit to events near me", checked: false }
         ];
 
+        EventsService.getEventLocations($scope.events).then(function (eventLocations) {
+            $scope.eventLocations = _.map(eventLocations, function (location) {
+                return { name: location, selected: true };
+            });
+        });
+
         // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
         EventsService.getEventDates($scope.events).then(function(eventDates) {
             $scope.eventDates = _.map(eventDates, function(date) {
