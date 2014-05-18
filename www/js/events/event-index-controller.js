@@ -195,5 +195,5 @@
 
     $scope.switchSort = function() {
         $scope.sortByDate = !$scope.sortByDate;
-    }
+    };
 }]);

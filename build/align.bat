@@ -1,0 +1,1 @@
+zipalign -f -v 4 ../platforms/android/bin/StarterApp-release-unsigned.apk StarterApp.apk
