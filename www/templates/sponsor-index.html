@@ -11,11 +11,11 @@
                 </div>
                 
                 <!--  ng-click="openSponsorModal({{sponsor.id}}) -->
-                <a ng-repeat="sponsor in sponsors |  orderBy:'title' | filter:{'level':sponsorLevel}" ng-show="initialized" class="item item-thumbnail-left">
+                <div ng-repeat="sponsor in sponsors |  orderBy:'title' | filter:{'level':sponsorLevel}" ng-show="initialized" class="item item-thumbnail-left">
                     <img ng-src="{{ sponsor.image }}" />
                     <h2>{{sponsor.title}}</h2>
                     <h4 class="item-text-wrap">{{sponsor.description}}</h4>
-                </a>
+                </div>
             </div>
         </div>
     </ion-content>
