@@ -111,7 +111,7 @@
             return deferred.promise;
         },
 
-        getLocationEvents: function (locationName, passedEventList) {
+        getLocationEvents: function (locationName, excludeId, passedEventList) {
             var deferred = $q.defer();
 
             var processEventList = function (eventList) {

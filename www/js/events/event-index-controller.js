@@ -42,7 +42,7 @@
 
         // retrieve all data needed for the modal
         $scope.event = EventsService.get(eventId);
-        EventsService.getLocationEvents($scope.event.location.name).then(function(locationEvents) {
+        EventsService.getLocationEvents($scope.event.location.name, eventId).then(function (locationEvents) {
             $scope.locationEvents = locationEvents;
 
             // setup state for the modal

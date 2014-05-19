@@ -13,6 +13,7 @@
         <div class="item item-thumbnail-left">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
+            <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
             <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
             <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
         </div>
@@ -47,8 +48,8 @@
 
         <div ng-if="locationEvents.length > 1" ng-show="showEventOther" class="item event-detail-others">
             <ion-scroll direction="y" class="event-detail-others">
-                <div ng-repeat="event in locationEvents" class="text-center event-detail-other-event">
-                    <h4><a href="#">{{event.title}}</a></h4>
+                <div ng-repeat="event in locationEvents | orderBy:'date'" class="text-center event-detail-other-event">
+                    <h3><a href="#">{{event.title}}</a></h3>
                     <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
                     <p />
                 </div>
