@@ -19,7 +19,7 @@
         </div>
         
         <div class="item">
-            <h4 class="dt text-center">{{ event.location.address }}</h4>            
+            <h3 class="dt text-center">{{ event.location.address }}</h3>            
         </div>
 
         <div class="row inline-bar">
@@ -32,8 +32,8 @@
                 Map
             </div>
             <div ng-if="locationEvents.length > 1" class="col" align="center" ng-click="switchEventView('events')">
-                <i class="icon ion-location"></i>
-                More Events
+                <i class="icon ion-ios7-calendar"></i>
+                More
             </div>
         </div>
     </ion-header-bar>
@@ -48,10 +48,16 @@
 
         <div ng-if="locationEvents.length > 1" ng-show="showEventOther" class="item event-detail-others">
             <ion-scroll direction="y" class="event-detail-others">
-                <div ng-repeat="event in locationEvents | orderBy:'date'" class="text-center event-detail-other-event">
-                    <h3><a href="#">{{event.title}}</a></h3>
-                    <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
-                    <p />
+                <div ng-repeat="event in locationEvents | orderBy:'date'" class="row event-detail-other-event" ng-show="showEventOther">
+                    <div class="col col-10"></div>
+                    <div class="col col-70">
+                        <h3><a href="#">{{event.title}}</a></h3>
+                        <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
+                    </div>
+
+                    <div class="col col-20">
+                        <i class="icon ion-ios7-star-outline dark event-detail-other-event-star"></i>
+                    </div>
                 </div>
             </ion-scroll>
         </div>

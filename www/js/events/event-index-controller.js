@@ -130,7 +130,7 @@
         $scope.events = events;
 
         $scope.filterSettingsList = [
-            { text: "Only display my selected events", checked: true },
+            { text: "Only display my selected events", checked: false },
             { text: "Limit to events near me", checked: false }
         ];
 

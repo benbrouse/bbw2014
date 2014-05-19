@@ -28,7 +28,10 @@
 }
 
 .event-detail-content {
-    top: 230px;
+    top: 235px;
+    border-color: #ddd;
+    border-top-style: solid;
+    border-width: 1px;
 }
 
 .event-detail-header {
@@ -41,8 +44,16 @@
 
 .event-detail-others {
     height: 100%;
+    padding: 0;
 }
 
 .event-detail-other-event {
+    border-color: #ddd;
+    border-top-style: solid;
+    border-width: 1px;
     margin-bottom: 8px;
+}
+
+.event-detail-other-event-star {
+    margin-top: 10px;
 }
