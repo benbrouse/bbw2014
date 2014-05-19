@@ -8,6 +8,7 @@ angular.module('core-filters', [
                             'core.costFilter',
                             'core.matchesDateFilter',
                             'core.matchesStringFilter',
+                            'core.excludeFilter',
                             'core.uniqueFilter'
 ]);
 

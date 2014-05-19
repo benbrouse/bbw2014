@@ -117,6 +117,7 @@
             var processEventList = function (eventList) {
                 // begin to transform the list
                 eventList = $filter('matchesString')(eventList, 'location.name', locationName);
+                eventList = $filter('exclude')(eventList, 'id', excludeId);
 
                 // define a function to be used to sort the list
                 var date_sort_asc = function (date1, date2) {
