@@ -38,15 +38,26 @@
     };
      
     $scope.openEventModal = function (eventId) {
+        LoaderService.show('Retrieving Event Details');
+
+        // retrieve all data needed for the modal
         $scope.event = EventsService.get(eventId);
+        EventsService.getLocationEvents($scope.event.location.name).then(function(locationEvents) {
+            $scope.locationEvents = locationEvents;
 
-        $scope.redirectToLocation = false;
+            // setup state for the modal
+            $scope.redirectToLocation = false;
 
-        $scope.showEventDescription = true;
-        $scope.showEventMap = false;
+            $scope.showEventDescription = true;
+            $scope.showEventMap = false;
 
-        $scope.currentModal = "eventDetail";
-        $scope.modalEvent.show();
+            $scope.currentModal = "eventDetail";
+
+            LoaderService.hide();
+
+            // finally show the modal dialog
+            $scope.modalEvent.show();
+        });
     };
 
     $scope.closeEventModal = function () {

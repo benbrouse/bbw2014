@@ -1,5 +1,5 @@
 <div class="modal">
-    <ion-header-bar class="bar-dark">
+    <ion-header-bar class="bar-dark event-detail-header">
         <div class="buttons light" side="left">
             <button class="button-icon icon ion-ios7-star-outline light"></button>
         </div>
@@ -9,12 +9,16 @@
         </div>
     </ion-header-bar>
 
-    <ion-content scroll="false">
-        <div ng-show="eventInitialized" class="item item-thumbnail-left">
+    <ion-header-bar class="bar-subheader event-detail-header">
+        <div class="item item-thumbnail-left">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
             <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
             <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Free'}}</h4>
+        </div>
+        
+        <div class="item">
+            <h4 class="dt text-center">{{ event.location.address }}</h4>            
         </div>
 
         <div class="row inline-bar">
@@ -26,22 +30,29 @@
                 <i class="icon ion-location"></i>
                 Map
             </div>
-            <div class="col" align="center" ng-click="switchEventView('events')">
+            <div ng-if="locationEvents.length > 1" class="col" align="center" ng-click="switchEventView('events')">
                 <i class="icon ion-location"></i>
                 More Events
             </div>
         </div>
+    </ion-header-bar>
 
-        <div ng-show="eventInitialized" style="height: 100%; width: 100%;">
-            <div ng-show="showEventDescription" class="item">
-                <h4 class="item-text-wrap">{{ event.description }}</h4>
-            </div>
+    <ion-content ng-show="eventInitialized" scroll="false" class="event-detail-content">
 
-            <div ng-show="showEventMap" id="map" style="height: 100%"></div>
+        <div ng-show="showEventDescription" class="item">
+            <h4 class="item-text-wrap">{{ event.description }}</h4>
+        </div>
 
-            <div ng-show="showEventOther" class="item">
-                <h4 class="item-text-wrap">TODO: show other events at this location</h4>
-            </div>
+        <div ng-show="showEventMap" id="map" class="event-detail-map"></div>
+
+        <div ng-if="locationEvents.length > 1" ng-show="showEventOther" class="item event-detail-others">
+            <ion-scroll direction="y" class="event-detail-others">
+                <div ng-repeat="event in locationEvents" class="text-center event-detail-other-event">
+                    <h4><a href="#">{{event.title}}</a></h4>
+                    <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
+                    <p />
+                </div>
+            </ion-scroll>
         </div>
     </ion-content>
 </div>

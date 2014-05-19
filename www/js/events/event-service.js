@@ -109,6 +109,41 @@
             }
 
             return deferred.promise;
+        },
+
+        getLocationEvents: function (locationName, passedEventList) {
+            var deferred = $q.defer();
+
+            var processEventList = function (eventList) {
+                // begin to transform the list
+                eventList = $filter('matchesString')(eventList, 'location.name', locationName);
+
+                // define a function to be used to sort the list
+                var date_sort_asc = function (date1, date2) {
+                    if (new Date(date1) > new Date(date2)) {
+                        return 1;
+                    }
+                    if (new Date(date1) < new Date(date2)) {
+                        return -1;
+                    }
+                    return 0;
+                };
+
+                // First let's sort the array in ascending order.
+                eventList = eventList.sort(date_sort_asc);
+
+                deferred.resolve(eventList);
+            };
+
+            if (angular.isUndefined(passedEventList)) {
+                retrieveAll().then(function (eventList) {
+                    processEventList(eventList);
+                });
+            } else {
+                processEventList(passedEventList);
+            }
+
+            return deferred.promise;
         }
 };
 }]);

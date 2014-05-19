@@ -26,3 +26,23 @@
     border-color: #111 !important ;
     background-color: #444444 !important;
 }
+
+.event-detail-content {
+    top: 230px;
+}
+
+.event-detail-header {
+    padding: 0;
+}
+
+.event-detail-map {
+    height: 100%;
+}
+
+.event-detail-others {
+    height: 100%;
+}
+
+.event-detail-other-event {
+    margin-bottom: 8px;
+}
