@@ -9,7 +9,7 @@
 
 .checkbox input:checked:before {
     border: 0;
-    background: lightgrey;
+    background: #444444;
 
 }
 .checkbox input:before {
@@ -19,9 +19,10 @@
 .inline-bar {
     border-color: #b2b2b2;
     background-color: #f8f8f8;
-    color: #444; }    
-}
+    color: #444; 
+}    
 
-.angular-google-map-container {
-     height: 400px;
+.toggle input:checked+.track {
+    border-color: #111 !important ;
+    background-color: #444444 !important;
 }
