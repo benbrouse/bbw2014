@@ -4,7 +4,6 @@
 .controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', 'LoaderService', 'EventsService', 'AddressService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, LoaderService, EventsService, AddressService) {
     $scope.initialized = false;
     $scope.eventInitialized = false;
-    $scope.redirectToLocation = false;
 
     $scope.sortByDate = true;
 
@@ -25,7 +24,7 @@
     $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
-    }).then(function (modal) {
+    }).then(function(modal) {
         $scope.modalEvent = modal;
     });
 
@@ -39,24 +38,22 @@
      
     $scope.openEventModal = function (eventId) {
         LoaderService.show('Retrieving Event Details');
-
+        
         // retrieve all data needed for the modal
         $scope.event = EventsService.get(eventId);
         EventsService.getLocationEvents($scope.event.location.name, eventId).then(function (locationEvents) {
             $scope.locationEvents = locationEvents;
 
-            // setup state for the modal
-            $scope.redirectToLocation = false;
-
-            $scope.showEventDescription = true;
-            $scope.showEventMap = false;
-
-            $scope.currentModal = "eventDetail";
-
             LoaderService.hide();
 
-            // finally show the modal dialog
-            $scope.modalEvent.show();
+            if (!$scope.modalEvent.isShown()) {
+                // setup state for the modal
+                $scope.showEventDescription = true;
+                $scope.showEventMap = false;
+
+                $scope.modalEvent.show();
+                $scope.currentModal = "eventDetail";
+            }
         });
     };
 
@@ -65,34 +62,6 @@
 
         $scope.eventInitialized = true;
         $scope.currentModal = null;
-
-        if ($scope.redirectToLocation) {
-            // todo:
-        }
-    };
-
-    $scope.showLocationMenu = function() {
-
-        // Show the action sheet
-        $ionicActionSheet.show({
-            buttons: [
-                { text: '<b>View</b> other events here' },
-                { text: '<b>Add</b> to my intinerary' },
-                { text: '<b>Cancel</b>' }
-            ],
-            titleText: 'Options',
-            buttonClicked: function(index) {
-                if (index === 0) {
-                    $scope.redirectToLocation = true;
-                    $scope.closeEventModal();
-                }
-
-                if (index == 1) {
-                    // TODO:
-                }
-                return true;
-            }
-        });
     };
 
     $scope.refreshContent = function () {
@@ -103,9 +72,14 @@
     };
 
     //Be sure to cleanup the modal
-    $scope.$on('$destroy', function() {
-        $scope.modalFilter.remove();
-        $scope.modalEvent.remove();
+    $scope.$on('$destroy', function () {
+        if ($scope.modalEvent) {
+            $scope.modalEvent.remove();
+        }
+
+        if ($scope.modalFilter) {
+            $scope.modalFilter.remove();
+        }
     });
 
     // Execute action on hide modal

@@ -50,9 +50,12 @@
             <ion-scroll direction="y" class="event-detail-others">
                 <div ng-repeat="event in locationEvents | orderBy:'date'" class="row event-detail-other-event" ng-show="showEventOther">
                     <div class="col col-10"></div>
+
                     <div class="col col-70">
-                        <h3><a href="#">{{event.title}}</a></h3>
-                        <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
+                        <a ng-click="openEventModal(event.id)">
+                            <h3>{{event.title}}</h3>
+                            <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
+                        </a>
                     </div>
 
                     <div class="col col-20">
