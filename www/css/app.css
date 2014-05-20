@@ -51,9 +51,12 @@
     border-color: #ddd;
     border-top-style: solid;
     border-width: 1px;
-    margin-bottom: 8px;
+    
+}
+
+.event-detail-other-event-desc {
+    margin-top: 7px;
 }
 
 .event-detail-other-event-star {
-    margin-top: 10px;
 }

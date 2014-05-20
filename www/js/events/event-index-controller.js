@@ -197,7 +197,7 @@
         if (event != null) {
             event.favorite = !event.favorite;
 
-            EventsService.toggleFavorite(eventId);
+            // EventsService.toggleFavorite(eventId);
         }
     };
 }]);
