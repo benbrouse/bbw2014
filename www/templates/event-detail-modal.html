@@ -1,12 +1,8 @@
 <div class="modal">
-    <ion-header-bar class="bar-dark event-detail-header">
-        <div class="buttons light" side="left">
-            <button class="button-icon icon ion-ios7-star-outline light"></button>
-        </div>
+    <ion-header-bar class="bat bar-dark event-detail-header">
+        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite(event.id)"></button>
         <h1 class="title">Baltimore Beer Week 2014</h1>
-        <div class="buttons light">
-            <button class="button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
-        </div>
+        <button class="button button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
     </ion-header-bar>
 
     <ion-header-bar class="bar-subheader event-detail-header">
@@ -19,7 +15,7 @@
         </div>
         
         <div class="item">
-            <h3 class="dt text-center">{{ event.location.address }}</h3>            
+            <h3 class="text-center">{{ event.location.address }}</h3>            
         </div>
 
         <div class="row inline-bar">
@@ -39,7 +35,6 @@
     </ion-header-bar>
 
     <ion-content ng-show="eventInitialized" scroll="false" class="event-detail-content">
-
         <div ng-show="showEventDescription" class="item">
             <h4 class="item-text-wrap">{{ event.description }}</h4>
         </div>
@@ -59,7 +54,7 @@
                     </div>
 
                     <div class="col col-20">
-                        <i class="icon ion-ios7-star-outline dark event-detail-other-event-star"></i>
+                        <i ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="icon dark event-detail-other-event-star" ng-click="toggleLocationFavorite(event.id)"></i>
                     </div>
                 </div>
             </ion-scroll>

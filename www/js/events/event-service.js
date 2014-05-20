@@ -31,15 +31,26 @@
         return deferred.promise;
     };
 
+    var getEventById = function(eventId) {
+        var id = angular.isString(eventId) ? Number(eventId) : eventId;
+
+        // Simple index lookup
+        var filteredEvents = _.where(events, { id: id });
+
+        var event = null;
+        if (filteredEvents.length > 0) {
+            event = filteredEvents[0];
+
+            // TODO: get this from localstorage
+            event.favorite = false;
+        }
+
+        return event;
+    };
+
     return {
         all: retrieveAll,
-        get: function(eventId) {
-            var id = angular.isString(eventId) ? Number(eventId) : eventId;
-
-            // Simple index lookup
-            var filteredEvents = _.where(events, { id: id });
-            return filteredEvents[0];
-        },
+        get: getEventById,
 
         getEventDates: function(passedEventList) {
             var deferred = $q.defer();
@@ -145,6 +156,13 @@
             }
 
             return deferred.promise;
+        },
+
+        toggleFavorite: function(eventId) {
+            var event = getEventById(eventId);
+            event.favorite = !event.favorite;
+
+            return event;
         }
-};
+    };
 }]);

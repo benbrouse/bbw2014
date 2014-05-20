@@ -187,4 +187,17 @@
     $scope.switchSort = function() {
         $scope.sortByDate = !$scope.sortByDate;
     };
+
+    $scope.toggleFavorite = function(eventId) {
+        $scope.event = EventsService.toggleFavorite(eventId);
+    };
+
+    $scope.toggleLocationFavorite = function(eventId) {
+        var event = _.findWhere($scope.locationEvents, { id: eventId });
+        if (event != null) {
+            event.favorite = !event.favorite;
+
+            EventsService.toggleFavorite(eventId);
+        }
+    };
 }]);
