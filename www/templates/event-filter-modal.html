@@ -1,6 +1,6 @@
 <div class="modal">
     <ion-header-bar class="bar-dark">
-        <h1 class="title">Filter Event List</h1>
+        <h1 class="title">Filter the Event List</h1>
         <div class="buttons">
             <button class="button-icon icon ion-ios7-close-outline light" ng-click="closeFilterModal()"></button>
         </div>
@@ -8,14 +8,18 @@
 
     <ion-content>
         
-        <ion-toggle ng-repeat="item in filterSettingsList"
-                    ng-model="item.checked"
-                    ng-checked="item.checked"
-                    toggle-class="toggle-dark">
-            {{ item.text }}
-        </ion-toggle>
-
         <ul class="list">
+            <li class="item item-divider text-center">Options</li>
+            <li ng-repeat="item in filterSettingsList">
+                <ion-toggle ng-model="item.checked"
+                            ng-checked="item.checked"
+                            toggle-class="toggle-dark">
+                    {{ item.text }}
+                </ion-toggle>
+            </li>
+
+            <li class="item item-divider text-center">Dates To Display</li>
+
             <li ng-repeat="eventDate in eventDates" class="item item-checkbox">
                 <label class="checkbox">
                     <input type="checkbox" name="selectedDates[]" ng-model="eventDate.selected">
