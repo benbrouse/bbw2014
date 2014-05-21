@@ -150,16 +150,19 @@
         var mapElement = document.getElementById('map');
         var map = new google.maps.Map(mapElement, mapOptions);
 
-        new google.maps.Marker({
+        var infowindow = new google.maps.InfoWindow({
+            content: "This is the text"
+        });
+
+        var marker = new google.maps.Marker({
             position: location,
             map: map,
             title: name
         });
 
-        // Stop the side bar from dragging when mousedown/tapdown on the map
-        google.maps.event.addDomListener(mapElement, 'mousedown', function(e) {
-            e.preventDefault();
-            return false;
+        google.maps.event.addListener(marker, 'click', function () {
+            $log.write('show the marker' + infowindow.content);
+            //infowindow.open(map, marker);
         });
 
         $scope.map = map;
