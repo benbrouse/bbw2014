@@ -24,7 +24,7 @@
                 <i class="icon ion-android-note"></i>
                 Details
             </div>
-            <div class="col" align="center" ng-click="switchEventView('location')">
+            <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
                 <i class="icon ion-location"></i>
                 Map
             </div>

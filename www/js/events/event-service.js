@@ -3,7 +3,7 @@
 .factory('EventsService', ['$q', '$timeout', '$filter', function ($q, $timeout, $filter) {
     // Some fake testing data
     var events = [
-      { id: 0, title: 'Event 0', date: '2014-10-10T20:44:55', cost: 9.99, description: 'Description 1. The sly fox went to roost. Blah Blah.     Can you see this?', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/HS_logo_sl.png' } },
+      { id: 0, title: 'Event 0 Longer Title More Blah Blah Blah', date: '2014-10-10T20:44:55', cost: 9.99, description: 'Description 1. The sly fox went to roost. Blah Blah.     Can you see this?', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/HS_logo_sl.png' } },
       { id: 15, title: 'Event 15', date: '2014-10-10T21:44:55', cost: 20, description: 'Description 1.', location: { name: 'Max\'s Taphouse', address: '737 S Broadway, Baltimore, MD 21231', image: 'img/temp/Maxs_New_sl.png' } },
       { id: 1, title: 'Event 1', date: '2014-10-10T20:44:55', cost: 0, description: 'Description 2', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/metro_logo_sl.png' } },
       { id: 2, title: 'Event 2', date: '2014-10-11T20:44:55', cost: 0, description: 'Description 3', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/metro_logo_sl.png' } },
