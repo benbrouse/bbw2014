@@ -1,4 +1,5 @@
 ﻿angular.module('core-services', [
+                            'core.app-settings',
                             'core.address-service',
                             'core.loader-service',
                             'core.google-maps-service'

@@ -31,6 +31,10 @@
 
                 <a ng-repeat="event in events | matchesDate:'date':eventDate.date | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
                     <img ng-src="{{ event.location.image }}" />
+                    
+                    <!--Show the ribbon that indicates that this is a sponsored event-->
+                    <!--<img src="/img/ribbon-icon.png" />-->
+
                     <h2>{{event.title}}</h2>
                     <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
                     <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
