@@ -4,7 +4,8 @@
     // Some fake testing data
     var events = [
         {
-            id: 0, title: 'Event 0 Longer Title More Blah Blah Blah',
+            id: 0,
+            title: 'Event 0 Longer Title More Blah Blah Blah',
             date: '2014-10-10T20:44:55',
             cost: 9.99,
             description: 'Description 1. The sly fox went to roost. Blah Blah.     Can you see this?',

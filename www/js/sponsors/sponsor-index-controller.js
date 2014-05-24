@@ -14,8 +14,10 @@
     });
 
     $scope.openSponsorModal = function (sponsorId) {
-        $scope.sponsor = SponsorsService.get(sponsorId);
-        $scope.modalSponsor.show();
+        SponsorsService.get(sponsorId).then(function(sponsor) {
+            $scope.sponsor = sponsor;
+            $scope.modalSponsor.show();
+        });
     };
 
     $scope.closeSponsorModal = function () {
