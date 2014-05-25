@@ -1,7 +1,7 @@
 ﻿angular.module('bbw.event-index-controller', ['ionic'])
 
 // A simple controller that fetches a list of data from a service
-.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', 'LoaderService', 'EventsService', 'AddressService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, LoaderService, EventsService, AddressService) {
+.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'EventsService', 'AddressService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, EventsService, AddressService) {
     $scope.initialized = false;
     $scope.eventInitialized = false;
 
@@ -37,23 +37,26 @@
     };
      
     $scope.openEventModal = function (eventId) {
-        LoaderService.show('Retrieving Event Details');
+        $scope.showLoading('Retrieving Event Details');
         
         // retrieve all data needed for the modal
-        $scope.event = EventsService.get(eventId);
-        EventsService.getLocationEvents($scope.event.location.name, eventId).then(function (locationEvents) {
-            $scope.locationEvents = locationEvents;
+        EventsService.get(eventId).then(function(event) {
+            $scope.event = event;
 
-            LoaderService.hide();
+            EventsService.getLocationEvents($scope.event.location.name, eventId).then(function (locationEvents) {
+                $scope.locationEvents = locationEvents;
 
-            if (!$scope.modalEvent.isShown()) {
-                // setup state for the modal
-                $scope.showEventDescription = true;
-                $scope.showEventMap = false;
+                $scope.hideLoading();
 
-                $scope.modalEvent.show();
-                $scope.currentModal = "eventDetail";
-            }
+                if (!$scope.modalEvent.isShown()) {
+                    // setup state for the modal
+                    $scope.showEventDescription = true;
+                    $scope.showEventMap = false;
+
+                    $scope.modalEvent.show();
+                    $scope.currentModal = "eventDetail";
+                }
+            });
         });
     };
 
@@ -65,7 +68,8 @@
     };
 
     $scope.refreshContent = function () {
-        // todo: get update content
+        // update content
+        getEventData(true);
 
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
@@ -95,49 +99,6 @@
                 });
             }
         }
-    });
-
-    // Show loader from service
-    LoaderService.show('Retrieving Event List');
-
-    EventsService.all().then(function(events) {
-        $scope.events = events;
-
-        $scope.filterSettingsList = [
-            { text: "Only display my selected events", checked: false },
-            { text: "Limit to events near me", checked: false }
-        ];
-
-        EventsService.getEventLocations($scope.events).then(function (eventLocations) {
-            $scope.eventLocations = _.map(eventLocations, function (location) {
-                return { name: location, selected: true };
-            });
-        });
-
-        // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
-        EventsService.getEventDates($scope.events).then(function(eventDates) {
-            $scope.eventDates = _.map(eventDates, function(date) {
-                return { date: date, selected: true };
-            });
-
-            $scope.selection = [];
-
-            $scope.$watch('eventDates|filter:{selected:true}', function(nv) {
-                $scope.selection = nv.map(function(date) {
-                    return date.date;
-                });
-            }, true);
-
-            // Hide overlay when done
-            LoaderService.hide();
-            $scope.initialized = true;
-        }, function (reason) {
-            // could not get the list of event dates
-            $log.write(reason);
-        });
-    }, function (reason) {
-        // could not get the list of events
-        $log.write(reason);
     });
 
     var initializeMap = function(zoomLevel, location, name) {
@@ -203,4 +164,64 @@
             // EventsService.toggleFavorite(eventId);
         }
     };
+
+    $scope.showLoading = function(text) {
+        // Show the loading overlay and text
+        $scope.loadingIndicator = $ionicLoading.show({
+            // The text to display in the loading indicator
+            template: text
+        });
+    };
+
+    $scope.hideLoading = function() {
+        $ionicLoading.hide();
+    };
+
+
+    var getEventData = function(force) {
+        // Show loader from service
+        $scope.showLoading('Retrieving Event List');
+
+        EventsService.all(force).then(function(events) {
+            $scope.events = events;
+
+            $scope.filterSettingsList = [
+                { text: "Only display my selected events", checked: false },
+                { text: "Limit to events near me", checked: false }
+            ];
+
+            EventsService.getEventLocations($scope.events).then(function(eventLocations) {
+                $scope.eventLocations = _.map(eventLocations, function(location) {
+                    return { name: location, selected: true };
+                });
+            });
+
+            // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
+            EventsService.getEventDates($scope.events).then(function(eventDates) {
+                $scope.eventDates = _.map(eventDates, function(date) {
+                    return { date: date, selected: true };
+                });
+
+                $scope.selection = [];
+
+                $scope.$watch('eventDates|filter:{selected:true}', function(nv) {
+                    $scope.selection = nv.map(function(date) {
+                        return date.date;
+                    });
+                }, true);
+
+                // Hide overlay when done
+                $scope.hideLoading();
+                $scope.initialized = true;
+            }, function(reason) {
+                // could not get the list of event dates
+                $log.write(reason);
+            });
+        }, function(reason) {
+            // could not get the list of events
+            $log.write(reason);
+        });
+    };
+
+    getEventData(false);
 }]);

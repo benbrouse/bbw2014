@@ -3,10 +3,10 @@
 .factory('SponsorsService', ['$q', '$timeout', '$log', '$resource', '$angularCacheFactory', 'AppSettings', function ($q, $timeout, $log, $resource, $angularCacheFactory, AppSettings) {
     var cacheName = 'sponsorDataCache';
 
-    $angularCacheFactory(cacheName, {
+    // NOTE: http://jmdobry.github.io/angular-cache/configuration.html
+    var dataCache = $angularCacheFactory(cacheName, {
         maxAge: AppSettings.cacheMaxAge,
         cacheFlushInterval: AppSettings.cacheFlushInterval,
-        deleteOnExpire: 'aggressive',       // Items will be deleted from this cache right when they expire.
         storageMode: 'localStorage'         // This cache will sync itself with `localStorage`.
     });
 
@@ -17,7 +17,7 @@
     var retrieveAll = function (force) {
         var deferred = $q.defer();
 
-        var dataCache = $angularCacheFactory.get(cacheName);
+        // the cache entry for ALL sponsors
         var Sponsors = $resource(dataUrl);
         var cacheEntry = "sponsors";
 
@@ -50,11 +50,13 @@
         return deferred.promise;
     };
 
-    var getById = function(sponsorId) {
+    var getById = function (sponsorId) {
+        var id = angular.isString(sponsorId) ? Number(sponsorId) : sponsorId;
+
         var deferred = $q.defer();
 
         retrieveAll().then(function (sponsorList) {
-            var filteredSponsors = _.where(sponsorList, { id: sponsorId });
+            var filteredSponsors = _.where(sponsorList, { id: id });
             if (filteredSponsors != null && filteredSponsors.length > 0) {
                 var sponsor = filteredSponsors[0];
 

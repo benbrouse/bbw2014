@@ -1,8 +1,19 @@
-﻿angular.module('bbw.event-service', ['core-services'])
+﻿angular.module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache'])
 
-.factory('EventsService', ['$q', '$timeout', '$filter', function ($q, $timeout, $filter) {
+.factory('EventsService', ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'AppSettings', function ($q, $timeout, $filter, $log, $resource, $angularCacheFactory, AppSettings) {
+    var cacheName = 'eventDataCache';
+
+    // NOTE: http://jmdobry.github.io/angular-cache/configuration.html
+    var dataCache = $angularCacheFactory(cacheName, {
+        maxAge: AppSettings.cacheMaxAge,
+        cacheFlushInterval: AppSettings.cacheFlushInterval,
+        storageMode: 'localStorage'         // This cache will sync itself with `localStorage`.
+    });
+
+    var dataUrl = AppSettings.url + 'events/:id';
+
     // Some fake testing data
-    var events = [
+    var mockData = [
         {
             id: 0,
             title: 'Event 0 Longer Title More Blah Blah Blah',
@@ -32,31 +43,66 @@
         }
     ];
 
-    var retrieveAll = function () {
+    var retrieveAll = function (force) {
         var deferred = $q.defer();
 
-        $timeout(function() {
-            deferred.resolve(events);
-        }, 300);
+        // the cache entry for ALL events
+        var Events = $resource(dataUrl);
+        var cacheEntry = "events";
+
+        // should we make the call across the wire?
+        var retrieve = false;
+        if (!angular.isUndefined(force) && force) {
+            retrieve = true;
+        }
+
+        if (!retrieve && dataCache.get(cacheEntry)) {
+            deferred.resolve(dataCache.get(cacheEntry));
+        } else {
+            if (AppSettings.useMockData) {
+                deferred.resolve(mockData);
+            } else {
+                Events.query().$promise.then(function (list) {
+                    // success
+                    dataCache.put(cacheEntry, list);
+                    deferred.resolve(list);
+                }, function (errResponse) {
+                    if (dataCache.get(cacheEntry)) {
+                        $log.write('EventsService: falling back to cache entry');
+
+                        // fail safe
+                        deferred.resolve(dataCache.get(cacheEntry));
+                    } else {
+                        // fail
+                        deferred.reject(errResponse);
+                    }
+                });
+            }
+        }
 
         return deferred.promise;
     };
 
-    var getEventById = function(eventId) {
+    var getEventById = function (eventId) {
         var id = angular.isString(eventId) ? Number(eventId) : eventId;
 
-        // Simple index lookup
-        var filteredEvents = _.where(events, { id: id });
+        var deferred = $q.defer();
 
-        var event = null;
-        if (filteredEvents.length > 0) {
-            event = filteredEvents[0];
+        retrieveAll().then(function (sponsorList) {
+            var filtered = _.where(sponsorList, { id: id });
+            if (filtered != null && filtered.length > 0) {
+                var record = filtered[0];
 
-            // TODO: get this from localstorage
-            event.favorite = false;
-        }
+                // TODO: get this from localstorage
+                record.favorite = false;
 
-        return event;
+                deferred.resolve(record);
+            }
+        }, function (err) {
+            deferred.reject(err);
+        });
+
+        return deferred.promise;
     };
 
     return {

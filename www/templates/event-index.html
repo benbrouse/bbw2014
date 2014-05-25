@@ -55,6 +55,7 @@
                         <h2>{{event.title}}</h2>
                         <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
                         <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
+                        <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
                         <h4 class="item-text-wrap">{{ event.description }}</h4>
                     </a>
                 </div>
