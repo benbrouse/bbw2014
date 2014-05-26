@@ -1,19 +1,19 @@
 <!--
 -->
 
-<ion-view title="Baltimore Beer Week 2014">
+<ion-view title="{{ applicationName }}">
     <ion-content>
         <div class="list">
-            
+
             <div ng-repeat="sponsorLevel in levels">
                 <div ng-show="initialized" class="item item-divider">
                     {{ sponsorLevel | sponsorLevel }}
                 </div>
-                
+
                 <!--  ng-click="openSponsorModal({{sponsor.id}}) -->
                 <div ng-repeat="sponsor in sponsors |  orderBy:'title' | filter:{'level':sponsorLevel}" ng-show="initialized" class="item item-thumbnail-left">
                     <img ng-src="{{ sponsor.image }}" />
-                    
+
                     <h2>{{sponsor.title}}</h2>
                     <h4 style="margin-left: 15px;" class="item-text-wrap"><a href="{{sponsor.url}}" target="_blank">{{sponsor.url}}</a></h4>
                     <h4 style="margin-left: 15px;" class="item-text-wrap">{{sponsor.twitter}}</h4>

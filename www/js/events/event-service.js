@@ -60,7 +60,10 @@
             deferred.resolve(dataCache.get(cacheEntry));
         } else {
             if (AppSettings.useMockData) {
-                deferred.resolve(mockData);
+                $timeout(function () {
+                    dataCache.put(cacheEntry, mockData);
+                    deferred.resolve(mockData);
+                }, 1500);
             } else {
                 Events.query().$promise.then(function (list) {
                     // success

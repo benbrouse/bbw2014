@@ -80,5 +80,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/tab/about');
 });
 
+app.run(function($rootScope) {
+    $rootScope.applicationName = "Baltimore Beer Week 2014";
+});
+
 angular.module('bbw-version', []).value('version', '0.0.1');
 

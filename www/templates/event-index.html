@@ -1,10 +1,10 @@
 
-<ion-view title="Baltimore Beer Week 2014" animation="nav-title-slide-ios7">
+<ion-view title="{{ applicationName }}" animation="nav-title-slide-ios7">
     <ion-nav-buttons side="right">
         <button class="button-icon icon ion-navicon light" ng-click="openFilterModal()"></button>
     </ion-nav-buttons>
 
-    <ion-header-bar align-title="left" class="bar-subheader bar-light">
+    <ion-header-bar align-title="left" class="bar-subheader bar-light" ng-if="!data.isLoading">
         <div class="row">
             <div class="col" align="center" ng-click="switchSort()">
                 <i class="icon ion-ios7-time-outline"></i>
@@ -17,7 +17,11 @@
         </div>
     </ion-header-bar>
 
-    <ion-content delegate-handle="eventListScroll">
+    <div class="bar bar-loading bar-dark" ng-if="data.isLoading">
+        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>Loading event data...
+    </div>
+
+    <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
         <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
         </ion-refresher>
 
@@ -31,7 +35,7 @@
 
                 <a ng-repeat="event in events | matchesDate:'date':eventDate.date | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
                     <img ng-src="{{ event.location.image }}" />
-                    
+
                     <!--Show the ribbon that indicates that this is a sponsored event-->
                     <!--<img src="/img/ribbon-icon.png" />-->
 

@@ -7,6 +7,10 @@
 
     $scope.sortByDate = true;
 
+    $scope.data = {
+        isLoading: true
+    };
+
     // state flag for which tab is being displayed
     $scope.showEventMap = false;
     $scope.showEventDescription = true;
@@ -165,16 +169,19 @@
         }
     };
 
-    $scope.showLoading = function(text) {
-        // Show the loading overlay and text
-        $scope.loadingIndicator = $ionicLoading.show({
-            // The text to display in the loading indicator
-            template: text
-        });
+    $scope.showLoading = function() {
+        //// Show the loading overlay and text
+        //$scope.loadingIndicator = $ionicLoading.show({
+        //    // The text to display in the loading indicator
+        //    template: text
+        //});
+
+        $scope.data.isLoading = true;
     };
 
     $scope.hideLoading = function() {
-        $ionicLoading.hide();
+//        $ionicLoading.hide();
+        $scope.data.isLoading = false;
     };
 
 
