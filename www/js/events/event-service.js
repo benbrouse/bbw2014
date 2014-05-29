@@ -91,13 +91,11 @@
 
         var deferred = $q.defer();
 
-        retrieveAll().then(function (sponsorList) {
-            var filtered = _.where(sponsorList, { id: id });
+        retrieveAll().then(function (eventList) {
+            var filtered = _.where(eventList, { id: id });
             if (filtered != null && filtered.length > 0) {
                 var record = filtered[0];
-
-                // TODO: get this from localstorage
-                record.favorite = false;
+                record.favorite = isFavorite(record.id);
 
                 deferred.resolve(record);
             }
@@ -106,6 +104,12 @@
         });
 
         return deferred.promise;
+    };
+
+    var isFavorite = function (eventId) {
+        // TODO: complete this
+        $log.write(eventId);
+        return false;
     };
 
     return {
@@ -204,6 +208,12 @@
                 // First let's sort the array in ascending order.
                 eventList = eventList.sort(date_sort_asc);
 
+                // add in the favorite flag
+                eventList = _.map(eventList, function (event) {
+                    event.favorite = isFavorite(event.id);
+                    return event;
+                });
+
                 deferred.resolve(eventList);
             };
 
@@ -218,9 +228,13 @@
             return deferred.promise;
         },
 
-        toggleFavorite: function(eventId) {
+        toggleFavorite: function (eventId) {
+            // retrieve the event and toggle it's status
             var event = getEventById(eventId);
             event.favorite = !event.favorite;
+
+            // TODO: persist the favorite status for this event
+
 
             return event;
         }
