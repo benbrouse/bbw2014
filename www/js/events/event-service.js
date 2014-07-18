@@ -108,7 +108,7 @@
 
     var isFavorite = function (eventId) {
         // TODO: complete this
-        $log.write(eventId);
+        //$log.write(eventId);
         return false;
     };
 
