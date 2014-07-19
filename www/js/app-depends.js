@@ -5,7 +5,8 @@
 angular.module('events', [
                           'bbw.event-service',
                           'bbw.event-index-controller',
-                          'bbw.eventDateSelectedFilter'
+                          'bbw.eventDateSelectedFilter',
+                          'bbw.eventFavoriteFilter'
 ]);
 
 

@@ -1,7 +1,7 @@
 
 <ion-view title="{{ applicationName }}" animation="nav-title-slide-ios7">
     <ion-nav-buttons side="right">
-        <button class="button-icon icon ion-navicon light" ng-click="openFilterModal()"></button>
+        <button class="button-icon icon ion-navicon light" ng-show="!data.isLoading" ng-click="openFilterModal()"></button>
     </ion-nav-buttons>
 
     <ion-header-bar align-title="left" class="bar-subheader bar-light" ng-show="!data.isLoading">
@@ -33,7 +33,7 @@
                     {{ eventDate.date | date: 'fullDate' }}
                 </div>
 
-                <a ng-repeat="event in events | matchesDate:'date':eventDate.date | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
+                <a ng-repeat="event in events | matchesDate:'date':eventDate.date | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
                     <img ng-src="{{ event.location.image }}" />
 
                     <!--Show the ribbon that indicates that this is a sponsored event-->
@@ -49,7 +49,7 @@
 
             <!-- event listing by location -->
             <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations">
-                <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | orderBy:'date'" ng-show="initialized">
+                <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized">
                     <div ng-show="initialized && $index==0" class="item item-divider">
                         {{ eventLocation.name }}
                     </div>

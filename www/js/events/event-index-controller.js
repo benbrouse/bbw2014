@@ -7,6 +7,8 @@
 
     $scope.sortByDate = true;
 
+    $scope.favoriteFilter = { text: "Show favorite events only", checked: false };
+
     $scope.data = {
         isLoading: true
     };
@@ -208,7 +210,7 @@
             $scope.events = events;
 
             $scope.filterSettingsList = [
-                { text: "Only display my selected events", checked: false },
+                $scope.favoriteFilter,
                 { text: "Limit to events near me", checked: false }
             ];
 

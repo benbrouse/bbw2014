@@ -69,12 +69,18 @@
         if (!retrieve && !angular.isUndefined(cacheValue)) {
             $timeout(function() {
                 deferred.resolve(cacheValue);
-            }, 1500);
+            }, 0);
         } else {
             if (AppSettings.useMockData) {
                 $timeout(function () {
-                    dataCache.put(cacheEntry, mockData);
-                    deferred.resolve(mockData);
+                    // add in the favorite flag
+                    cacheValue = _.map(mockData, function (event) {
+                        event.favorite = isFavorite(event.id);
+                        return event;
+                    });
+
+                    dataCache.put(cacheEntry, cacheValue);
+                    deferred.resolve(cacheValue);
                 }, 1500);
             } else {
                 Events.query().$promise.then(function (list) {
@@ -252,6 +258,8 @@
             } else {
                 favoriteCache.remove(cacheEntry);
             }
-        }
+        },
+
+        isFavorite: isFavorite
     };
 }]);
