@@ -4,7 +4,7 @@
         <button class="button-icon icon ion-navicon light" ng-click="openFilterModal()"></button>
     </ion-nav-buttons>
 
-    <ion-header-bar align-title="left" class="bar-subheader bar-light">
+    <ion-header-bar align-title="left" class="bar-subheader bar-light" ng-show="!data.isLoading">
         <div class="row">
             <div class="col" align="center" ng-click="switchSort()">
                 <i class="icon ion-ios7-time-outline"></i>
@@ -17,9 +17,9 @@
         </div>
     </ion-header-bar>
 
-    <!--<div class="bar bar-loading bar-dark" ng-if="data.isLoading">
-        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>Loading event data...
-    </div>-->
+    <div class="bar bar-loading bar-dark" ng-show="data.isLoading">
+        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>{{ loadingText }}
+    </div>
 
     <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
         <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">

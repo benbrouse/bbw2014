@@ -1,14 +1,22 @@
 ﻿angular.module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache'])
 
 .factory('EventsService', ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'AppSettings', function ($q, $timeout, $filter, $log, $resource, $angularCacheFactory, AppSettings) {
-    var cacheName = 'eventDataCache';
+    var cacheNameData = 'eventDataCache';
+    var cacheNameFavorite = 'eventFavoriteCache';
 
     // NOTE: http://jmdobry.github.io/angular-cache/configuration.html
-    var dataCache = $angularCacheFactory(cacheName, {
+    var dataCache = $angularCacheFactory(cacheNameData, {
         maxAge: AppSettings.cacheMaxAge,
         cacheFlushInterval: AppSettings.cacheFlushInterval,
         storageMode: 'localStorage'         // This cache will sync itself with `localStorage`.
     });
+
+    var favoriteCache = $angularCacheFactory(cacheNameFavorite, {
+        maxAge: AppSettings.cacheMaxAge,
+        cacheFlushInterval: AppSettings.cacheFlushInterval,
+        storageMode: 'localStorage'         // This cache will sync itself with `localStorage`.
+    });
+
 
     var dataUrl = AppSettings.url + 'events/:id';
 
@@ -56,8 +64,12 @@
             retrieve = true;
         }
 
-        if (!retrieve && dataCache.get(cacheEntry)) {
-            deferred.resolve(dataCache.get(cacheEntry));
+        var cacheValue = dataCache.get(cacheEntry);
+
+        if (!retrieve && !angular.isUndefined(cacheValue)) {
+            $timeout(function() {
+                deferred.resolve(cacheValue);
+            }, 1500);
         } else {
             if (AppSettings.useMockData) {
                 $timeout(function () {
@@ -66,15 +78,17 @@
                 }, 1500);
             } else {
                 Events.query().$promise.then(function (list) {
+                    cacheValue = list;
+
                     // success
-                    dataCache.put(cacheEntry, list);
-                    deferred.resolve(list);
+                    dataCache.put(cacheEntry, cacheValue);
+                    deferred.resolve(cacheValue);
                 }, function (errResponse) {
-                    if (dataCache.get(cacheEntry)) {
+                    if (!angular.isUndefined(cacheValue)) {
                         $log.write('EventsService: falling back to cache entry');
 
                         // fail safe
-                        deferred.resolve(dataCache.get(cacheEntry));
+                        deferred.resolve(cacheValue);
                     } else {
                         // fail
                         deferred.reject(errResponse);
@@ -107,9 +121,10 @@
     };
 
     var isFavorite = function (eventId) {
-        // TODO: complete this
-        //$log.write(eventId);
-        return false;
+        var cacheEntry = "fav:" + eventId;
+        var cacheValue = favoriteCache.get(cacheEntry);
+
+        return !angular.isUndefined(cacheValue);
     };
 
     return {
@@ -228,15 +243,15 @@
             return deferred.promise;
         },
 
-        toggleFavorite: function (eventId) {
-            // retrieve the event and toggle it's status
-            var event = getEventById(eventId);
+        toggleFavorite: function (event) {
             event.favorite = !event.favorite;
 
-            // TODO: persist the favorite status for this event
-
-
-            return event;
+            var cacheEntry = "fav:" + event.id;
+            if (event.favorite) {
+                favoriteCache.put(cacheEntry, true);
+            } else {
+                favoriteCache.remove(cacheEntry);
+            }
         }
     };
 }]);

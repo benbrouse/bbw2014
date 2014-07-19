@@ -71,6 +71,8 @@
         $scope.currentModal = null;
     };
 
+    $scope.loadingText = "Loading event data";
+
     $scope.refreshContent = function () {
         // update content
         getEventData(true);
@@ -157,31 +159,43 @@
         $scope.sortByDate = !$scope.sortByDate;
     };
 
-    $scope.toggleFavorite = function(eventId) {
-        $scope.event = EventsService.toggleFavorite(eventId);
+    $scope.toggleFavorite = function() {
+        EventsService.toggleFavorite($scope.event);
     };
 
     $scope.toggleLocationFavorite = function(eventId) {
         var event = _.findWhere($scope.locationEvents, { id: eventId });
         if (event != null) {
-            event.favorite = !event.favorite;
-
-            // EventsService.toggleFavorite(eventId);
+            EventsService.toggleFavorite(event);
         }
     };
 
-    $scope.showLoading = function() {
-        //// Show the loading overlay and text
-        //$scope.loadingIndicator = $ionicLoading.show({
-        //    // The text to display in the loading indicator
-        //    template: text
-        //});
+    $scope.showLoading = function(text) {
+        // Show the loading overlay and text
+        $ionicLoading.show({
+            // The text to display in the loading indicator
+            content: 'One moment please',
 
+            // The animation to use
+            animation: 'fade-in',
+
+            // Will a dark overlay or backdrop cover the entire view
+            showBackdrop: true,
+
+            // The maximum width of the loading indicator
+            // Text will be wrapped if longer than maxWidth
+            maxWidth: 200,
+
+            // The delay in showing the indicator
+            showDelay: 500
+        });
+
+        $scope.loadingText = text;
         $scope.data.isLoading = true;
     };
 
-    $scope.hideLoading = function() {
-//        $ionicLoading.hide();
+    $scope.hideLoading = function () {
+        $ionicLoading.hide();
         $scope.data.isLoading = false;
     };
 
