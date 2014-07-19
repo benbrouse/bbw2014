@@ -77,6 +77,7 @@
 
         // Stop the ion-refresher from spinning
         $scope.$broadcast('scroll.refreshComplete');
+        $scope.$apply();
     };
 
     //Be sure to cleanup the modal
