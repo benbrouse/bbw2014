@@ -50,18 +50,12 @@
 .event-detail-other-event {
     border-color: #ddd;
     border-top-style: solid;
-    border-width: 1px;
-    
+    border-width: 1px;    
 }
 
 .event-detail-other-event-desc {
     margin-top: 7px;
 }
-
-.event-detail-other-event-star {
-}
-
-
 
 .bar.bar-loading {
   display: block;
@@ -79,7 +73,6 @@
   -webkit-transition: 200ms all;
 }
 
-
 /* 
  * make the content's top changes animate.
  * might not always look good, but looks
@@ -88,6 +81,7 @@
 .has-header {
   -webkit-transition: 200ms top;
 }
+
 .has-header.has-loading {
   /* 44px (header) + 24px */
   top: 68px;
@@ -99,6 +93,7 @@
   height: 0;
   border-width: 0px;
 }
+
 .bar-loading.ng-enter.ng-enter-active,
 .bar-loading.ng-leave {
   height: 24px;

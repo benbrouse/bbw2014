@@ -12,6 +12,14 @@
         $scope.modalMap = modal;
     });
 
+    // Load the modal from the given template URL
+    $ionicModal.fromTemplateUrl('templates/about-settings-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modalSettings = modal;
+    });
+
     $scope.openMapModal = function () {
         $scope.modalMap.show();
     };
@@ -19,6 +27,14 @@
     $scope.closeMapModal = function () {
         $scope.modalMap.hide();
     };
+
+    $scope.openSettingsModal = function () {
+        $scope.modalSettings.show();
+    };
+
+    $scope.closeSettingsModal = function () {
+        $scope.modalSettings.hide();
+    }
 
     //Be sure to cleanup the modal
     $scope.$on('$destroy', function () {

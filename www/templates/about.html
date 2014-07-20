@@ -2,6 +2,10 @@
   This template loads for the 'tab.about' state (app.js)
 -->
 <ion-view title="{{ applicationName }}">
+    <ion-nav-buttons side="right">
+        <button class="button-icon icon ion-ios7-gear light" ng-click="openSettingsModal()"></button>
+    </ion-nav-buttons>
+
     <ion-content padding="true">
 
         <div class="row">
