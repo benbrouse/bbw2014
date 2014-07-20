@@ -17,4 +17,8 @@ angular.module('sponsors', [
                             'bbw.sponsor-level-filter'
 ]);
 
+angular.module('locations', [
+                            'bbw.location-service'
+]);
+
 angular.module('bbw-depends', ['about', 'events', 'sponsors']);

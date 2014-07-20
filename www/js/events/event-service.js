@@ -1,6 +1,6 @@
-﻿angular.module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache'])
+﻿angular.module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache', 'locations'])
 
-.factory('EventsService', ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'AppSettings', function ($q, $timeout, $filter, $log, $resource, $angularCacheFactory, AppSettings) {
+.factory('EventsService', ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'LocationsService', 'AppSettings', function ($q, $timeout, $filter, $log, $resource, $angularCacheFactory, LocationsService, AppSettings) {
     var cacheNameData = 'eventDataCache';
     var cacheNameFavorite = 'eventFavoriteCache';
 
@@ -32,7 +32,10 @@
             location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/HS_logo_sl.png' },
             sponsors: [ '0', '1']
         },
-        { id: 15, title: 'Event 15', date: '2014-10-10T21:44:55', cost: 20, description: 'Description 1.', location: { name: 'Max\'s Taphouse', address: '737 S Broadway, Baltimore, MD 21231', image: 'img/temp/Maxs_New_sl.png' } },
+        {
+            id: 15, title: 'Event 15', date: '2014-10-10T21:44:55', cost: 20, description: 'Description 1.',
+            location: { name: 'Max\'s Taphouse', address: '737 S Broadway, Baltimore, MD 21231', image: 'img/temp/Maxs_New_sl.png' }
+        },
         { id: 1, title: 'Event 1', date: '2014-10-10T20:44:55', cost: 0, description: 'Description 2', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/metro_logo_sl.png' } },
         { id: 2, title: 'Event 2', date: '2014-10-11T20:44:55', cost: 0, description: 'Description 3', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/metro_logo_sl.png' } },
         { id: 3, title: 'Event 3', date: '2014-10-11T20:44:55', cost: 0, description: 'Description 3', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/metro_logo_sl.png' } },
@@ -47,7 +50,8 @@
         { id: 13, title: 'Event 13', date: '2014-10-20T20:44:55', cost: 0, description: 'Description 3', location: { name: 'Metropolitan', address: '902 S Charles St, Baltimore, MD 21230', image: 'img/temp/metro_logo_sl.png' } },
         { id: 14, title: 'Event 14', date: '2014-10-20T20:44:55', cost: 0, description: 'Description 4', location: { name: 'Barflys', address: '620 E Fort Ave, Baltimore, MD 21230', phone: '4101112345', image: 'img/temp/barflys_logo.png' } },
         {
-            id: 4, title: 'Event 4', date: '2014-10-12T20:44:55', cost: 0, description: 'Description 3', location: { name: 'Barflys', address: '620 E Fort Ave, Baltimore, MD 21230', phone: '4101112345', image: 'img/temp/barflys_logo.png' } 
+            id: 4, title: 'Event 4', date: '2014-10-12T20:44:55', cost: 0, description: 'Description 3',
+            location: { name: 'Barflys', address: '620 E Fort Ave, Baltimore, MD 21230', phone: '4101112345', image: 'img/temp/barflys_logo.png' }
         }
     ];
 
