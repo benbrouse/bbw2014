@@ -2,7 +2,8 @@
                             'core.app-settings',
                             'core.address-service',
                             'core.loader-service',
-                            'core.google-maps-service'
+                            'core.google-maps-service',
+                            'core.distance-service'
 ]);
 
 angular.module('core-filters', [
