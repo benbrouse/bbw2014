@@ -40,4 +40,19 @@
     $scope.$on('$destroy', function () {
         $scope.modalMap.remove();
     });
+
+
+    $scope.getLocation = function() {
+        navigator.geolocation.getCurrentPosition(
+             function (position) {
+                 $scope.latitude = position.coords.latitude;
+                 $scope.longitude = position.coords.longitude;
+
+                 $scope.$apply();
+             },
+             function () {
+                 alert('Error getting location');
+             }
+        );
+    }
 }]);
