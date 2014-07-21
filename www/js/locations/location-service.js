@@ -63,21 +63,18 @@
 
     var getById = function (identifier) {
         var id = angular.isString(identifier) ? Number(identifier) : identifier;
+        var entity = {};
 
-        var deferred = $q.defer();
+        var getData = retrieveAll();
 
-        retrieveAll().then(function (list) {
+        $q.all([getData]).then(function (list) {
             var filtered = _.where(list, { id: id });
             if (filtered != null && filtered.length > 0) {
-                var entity = filtered[0];
-
-                deferred.resolve(entity);
+                entity = filtered[0];
             }
-        }, function (err) {
-            deferred.reject(err);
-        });
 
-        return deferred.promise;
+            return entity;
+        });
     };
 
     return {
