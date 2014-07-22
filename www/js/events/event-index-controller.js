@@ -232,8 +232,8 @@
             $scope.events = events;
 
             $scope.filterSettingsList = [
-                $scope.favoriteFilter,
-                { text: "Limit to events near me", checked: false }
+                $scope.favoriteFilter
+//                { text: "Limit to events near me", checked: false }
             ];
 
             EventsService.getEventLocations($scope.events).then(function(eventLocations) {
