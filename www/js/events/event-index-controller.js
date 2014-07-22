@@ -124,7 +124,7 @@
                             $scope.$apply();
                         },
                         function () {
-                            alert('Error getting location');
+                            $log.error('Error getting location');
                         }
                     );
                 });

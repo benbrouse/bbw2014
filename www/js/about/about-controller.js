@@ -34,7 +34,7 @@
 
     $scope.closeSettingsModal = function () {
         $scope.modalSettings.hide();
-    }
+    };
 
     //Be sure to cleanup the modal
     $scope.$on('$destroy', function () {
@@ -44,15 +44,15 @@
 
     $scope.getLocation = function() {
         navigator.geolocation.getCurrentPosition(
-             function (position) {
-                 $scope.latitude = position.coords.latitude;
-                 $scope.longitude = position.coords.longitude;
+            function(position) {
+                $scope.latitude = position.coords.latitude;
+                $scope.longitude = position.coords.longitude;
 
-                 $scope.$apply();
-             },
-             function () {
-                 alert('Error getting location');
-             }
+                $scope.$apply();
+            },
+            function () {
+                $log.log('Error getting location');
+            }
         );
-    }
+    };
 }]);

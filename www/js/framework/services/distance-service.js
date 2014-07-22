@@ -4,12 +4,12 @@
     // convert to radians
     var toRad = function (num) {
         return num * Math.PI / 180;
-    }
+    };
 
-    var haversine = function (start, end, options) {
+    var haversine = function(start, end, options) {
         var km = 6371;
         var mile = 3960;
-        options   = options || {}
+        options = options || {};
 
         var R = options.unit === 'mile' ? mile : km;
 
@@ -27,7 +27,7 @@
         } else {
             return R * c;
         }
-    }
+    };
 
     return {
         // var start = {
