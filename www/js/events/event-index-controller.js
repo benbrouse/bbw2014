@@ -1,7 +1,7 @@
-﻿angular.module('bbw.event-index-controller', ['ionic'])
+﻿angular.module('bbw.event-index-controller', ['ionic', 'core-services'])
 
 // A simple controller that fetches a list of data from a service
-.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'EventsService', 'AddressService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, EventsService, AddressService) {
+.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'EventsService', 'AddressService', 'DistanceService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, EventsService, AddressService, DistanceService) {
     $scope.initialized = false;
     $scope.eventInitialized = false;
 
@@ -102,9 +102,31 @@
             var eventAddress = $scope.event.location.address;
             if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                 AddressService.geocode(eventAddress).then(function (location) {
-
                     $scope.eventInitialized = true;
-                    initializeMap(16, location, $scope.event.location.name);
+
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            var start = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+
+                            var end = {
+                                latitude: location.k,
+                                longitude: location.B
+                            };
+
+                            $scope.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+
+                            // Candidate to be removed
+                            //initializeMap(16, location, $scope.event.location.name);
+
+                            $scope.$apply();
+                        },
+                        function () {
+                            alert('Error getting location');
+                        }
+                    );
                 });
             }
         }
