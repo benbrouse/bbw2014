@@ -2,7 +2,15 @@
 -->
 
 <ion-view title="{{ applicationName }}">
-    <ion-content>
+
+    <div class="bar bar-loading bar-dark" ng-show="data.isLoading">
+        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>{{ loadingText }}
+    </div>
+
+    <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
+        </ion-refresher>
+
         <div class="list">
 
             <div ng-repeat="sponsorLevel in levels">

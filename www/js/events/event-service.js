@@ -107,12 +107,19 @@
             retrieve = true;
         }
 
-        LocationsService.all().then(function (locations) {
+        LocationsService.all(force).then(function (locations) {
             var cacheValue = dataCache.get(cacheEntry);
 
             if (!retrieve && !angular.isUndefined(cacheValue)) {
                 $timeout(function () {
                     // resolve the location
+                    // add in the favorite flag
+                    cacheValue = _.map(cacheValue, function (event) {
+                        event.favorite = isFavorite(event.id);
+                        return event;
+                    });
+
+
                     cacheValue = _.map(cacheValue, function (event) {
                         event.location = getLocation(locations, event.locationId);
                         return event;
@@ -143,6 +150,12 @@
                         // add in the favorite flag
                         cacheValue = _.map(list, function (event) {
                             event.favorite = isFavorite(event.id);
+                            return event;
+                        });
+
+                        // resolve the location
+                        cacheValue = _.map(cacheValue, function (event) {
+                            event.location = getLocation(locations, event.locationId);
                             return event;
                         });
 
