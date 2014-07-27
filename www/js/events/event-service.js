@@ -112,54 +112,21 @@
 
             if (!retrieve && !angular.isUndefined(cacheValue)) {
                 $timeout(function () {
-                    // resolve the location
-                    // add in the favorite flag
-                    cacheValue = _.map(cacheValue, function (event) {
-                        event.favorite = isFavorite(event.id);
-                        return event;
-                    });
-
-
-                    cacheValue = _.map(cacheValue, function (event) {
-                        event.location = getLocation(locations, event.locationId);
-                        return event;
-                    });
-
+                    cacheValue = processList(cacheValue, locations);
                     deferred.resolve(cacheValue);
                 }, 0);
             } else {
                 if (AppSettings.useMockData) {
                     $timeout(function () {
-                        // add in the favorite flag
-                        cacheValue = _.map(mockData, function (event) {
-                            event.favorite = isFavorite(event.id);
-                            return event;
-                        });
-
-                        // resolve the location
-                        cacheValue = _.map(cacheValue, function (event) {
-                            event.location = getLocation(locations, event.locationId);
-                            return event;
-                        });
+                        cacheValue = processList(mockData, locations);
 
                         dataCache.put(cacheEntry, cacheValue);
                         deferred.resolve(cacheValue);
                     }, 1500);
                 } else {
                     Events.query().$promise.then(function (list) {
-                        // add in the favorite flag
-                        cacheValue = _.map(list, function (event) {
-                            event.favorite = isFavorite(event.id);
-                            return event;
-                        });
+                        cacheValue = processList(list, locations);
 
-                        // resolve the location
-                        cacheValue = _.map(cacheValue, function (event) {
-                            event.location = getLocation(locations, event.locationId);
-                            return event;
-                        });
-
-                        // success
                         dataCache.put(cacheEntry, cacheValue);
                         deferred.resolve(cacheValue);
                     }, function (errResponse) {
@@ -179,6 +146,21 @@
 
 
         return deferred.promise;
+    };
+
+    var processList = function(list, locations) {
+        // add in the favorite flag
+        list = _.map(list, function(event) {
+            event.favorite = isFavorite(event.id);
+            return event;
+        });
+
+        list = _.map(list, function(event) {
+            event.location = getLocation(locations, event.locationId);
+            return event;
+        });
+
+        return list;
     };
 
     var getEventById = function (eventId) {
