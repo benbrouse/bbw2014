@@ -12,7 +12,7 @@
 
     var dataUrl = AppSettings.url + 'sponsors/:id';
 
-    var levels = [0, 1, 2];
+    var levels = [0, 1, 2, 3, 4];
 
     var mockData = [
         {
