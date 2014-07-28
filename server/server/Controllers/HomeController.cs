@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage;
 
 namespace server.Controllers
 {
@@ -9,6 +11,15 @@ namespace server.Controllers
             ViewBag.Title = "Home Page";
 
             return View();
+        }
+
+        public ActionResult Insert()
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("StorageConnectionString"));      
+      
+            return new ContentResult();
+
         }
     }
 }
