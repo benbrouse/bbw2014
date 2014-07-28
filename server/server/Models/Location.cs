@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.WindowsAzure.Storage.Table;
-using Wintellect.Azure.Storage.Table;
-
-namespace server.Models
+﻿namespace server.Models
 {
-    public class Location : TableEntity
+    public class Location : Entity
     {
-        public int Id;
-        public string Name;
-        public string Address;
-        public string Image;
+        public Location()
+        {
+            
+        }
+
+        public Location(string partitionKey, string rowKey)
+            : base(partitionKey, rowKey)
+        {
+        }
+
+
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Image { get; set; }
     }
 }

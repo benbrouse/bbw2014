@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\MockData\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -186,9 +187,12 @@
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\MockDataController.cs" />
     <Compile Include="Controllers\SponsorsController.cs" />
     <Compile Include="Data\Configuration.cs" />
     <Compile Include="Data\DataServiceT.cs" />
+    <Compile Include="Data\EventService.cs" />
+    <Compile Include="Data\LocationService.cs" />
     <Compile Include="Data\SponsorService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

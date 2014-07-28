@@ -1,16 +1,23 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
-
-namespace server.Models
+﻿namespace server.Models
 {
-    public class Event : TableEntity
+    public class Event : Entity
     {
-        public int Id;
-        public string Title;
-        public string Date;
-        public double Cost;
-        public string Description;
-        public string Image;
-        public int LocationId;
-        public int[] Sponsors;
+        public Event()
+        {
+            
+        }
+
+        public Event(string partitionKey, string rowKey)
+            : base(partitionKey, rowKey)
+        {
+        }
+
+        public string Title { get; set; }
+        public string Date { get; set; }
+        public double Cost { get; set; }
+        public string Description { get; set; }
+        public string Image { get; set; }
+        public int LocationId { get; set; }
+        public int[] Sponsors { get; set; }
     }
 }

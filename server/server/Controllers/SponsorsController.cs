@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using server.Data;
@@ -13,15 +12,17 @@ namespace server.Controllers
         // GET api/<controller>
         public IEnumerable<Sponsor> Get()
         {
-            IEnumerable<Sponsor> sponsors = SponsorService.RetrieveAll(Tables.SPONSOR);
+            var dataService = new SponsorService();
+            IEnumerable<Sponsor> sponsors = dataService.RetrieveAll();
+
             return sponsors;
         }
 
         // GET api/<controller>/5
         public Sponsor Get(int id)
         {
-            IEnumerable<Sponsor> sponsors = SponsorService.RetrieveAll(Tables.SPONSOR);
-            Sponsor sponsor = sponsors.FirstOrDefault(x => x.Id == id);
+            var dataService = new SponsorService();
+            Sponsor sponsor = dataService.Retrieve(id);
 
             return sponsor;
         }

@@ -5,7 +5,12 @@ namespace server.Data
 {
     public class SponsorService : DataService<Sponsor>
     {
-        public static List<Sponsor> GetMockData()
+        public SponsorService()
+        {
+            _tableName = Tables.SPONSOR;
+        }
+
+        public List<Sponsor> GetMockData()
         {
             List<Sponsor> sponsors = new List<Sponsor>();
 
