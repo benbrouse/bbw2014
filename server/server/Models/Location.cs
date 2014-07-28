@@ -7,7 +7,7 @@ using Wintellect.Azure.Storage.Table;
 
 namespace server.Models
 {
-    public class Location
+    public class Location : TableEntity
     {
         public int Id;
         public string Name;

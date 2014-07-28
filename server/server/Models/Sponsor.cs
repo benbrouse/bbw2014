@@ -2,22 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace server.Models
 {
-    public class Sponsor
+    public class Sponsor : Entity
     {
-        public int Id;
-       
-        public int Level;
-        public string Title;
-        public string Image;
-        public string Description;
+        public Sponsor()
+        {
+            
+        }
 
-        public SponsorLocation Location;
+        public Sponsor(string partitionKey, string rowKey) : base(partitionKey, rowKey)
+        {
+        }
 
-        public string Phone;
-        public string Url;
-        public string Twitter;
+        public int Level { get; set; }
+        public string Title { get; set; }
+        public string Image { get; set; }
+        public string Description { get; set; }
+
+        public SponsorLocation Location { get; set; }
+
+        public string Phone { get; set; }
+        public string Url { get; set; }
+        public string Twitter { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace server.Models
+﻿using Microsoft.WindowsAzure.Storage.Table;
+
+namespace server.Models
 {
-    public class Event
+    public class Event : TableEntity
     {
         public int Id;
         public string Title;

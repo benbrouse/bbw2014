@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Storage;
+using server.Data;
 
 namespace server.Controllers
 {
@@ -15,11 +14,13 @@ namespace server.Controllers
 
         public ActionResult Insert()
         {
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
-                CloudConfigurationManager.GetSetting("StorageConnectionString"));      
+            var sponsorList = SponsorService.GetMockData();
+            foreach (var sponsor in sponsorList)
+            {
+                SponsorService.Save(sponsor);
+            }
       
             return new ContentResult();
-
         }
     }
 }
