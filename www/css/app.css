@@ -7,6 +7,11 @@
     height: 96px;
 }
 
+.logo {
+    height: 150px;
+    margin: 0 auto;
+}
+
 .checkbox input:checked:before {
     border: 0;
     background: #444444;
