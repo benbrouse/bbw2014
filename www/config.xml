@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "9"
-        version="0.0.9"
+        versionCode = "10"
+        version="0.9.0"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -14,7 +14,7 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>0.0.9</version>
+    <version>0.9.0</version>
   
     <content src="index.html" />
     <access origin="*" />

@@ -1,6 +1,6 @@
 <div class="modal">
     <ion-header-bar class="bat bar-dark event-detail-header">
-        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite()"></button>
+        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite()" ng-if="allowFavorites"></button>
         <h1 class="title">{{ applicationName }}</h1>
         <button class="button button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
     </ion-header-bar>
@@ -58,7 +58,8 @@
                         <a>
                             <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline' "
                                     class="button button-clear icon dark event-detail-other-event-star"
-                                    ng-click="toggleLocationFavorite(event.id)"></button>
+                                    ng-click="toggleLocationFavorite(event.id)"
+                                    ng-if="allowFavorites"></button>
                         </a>
                     </div>
                 </div>

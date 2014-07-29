@@ -3,7 +3,7 @@
 -->
 <ion-view title="{{ applicationName }}">
     <ion-nav-buttons side="right">
-        <button class="button-icon icon ion-ios7-gear light" ng-click="openSettingsModal()"></button>
+        <button class="button-icon icon ion-ios7-gear light" ng-click="openSettingsModal()" ng-if="allowConfiguration"></button>
     </ion-nav-buttons>
 
     <ion-content padding="true">

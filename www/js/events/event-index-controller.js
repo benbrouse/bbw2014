@@ -1,8 +1,9 @@
 ﻿angular.module('bbw.event-index-controller', ['ionic', 'core-services'])
 
 // A simple controller that fetches a list of data from a service
-.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'EventsService', 'AddressService', 'DistanceService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, EventsService, AddressService, DistanceService) {
+.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, AppSettings, EventsService, AddressService, DistanceService) {
     $scope.initialized = false;
+    $scope.allowFavorites = AppSettings.allowFavorites;
     $scope.eventInitialized = false;
 
     $scope.sortByDate = true;

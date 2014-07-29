@@ -1,8 +1,9 @@
 ﻿angular.module('bbw.about-controller', ['ionic'])
 
 // A simple controller that fetches a list of data from a service
-.controller('AboutCtrl', ['$scope', '$log', '$ionicModal', function ($scope, $log, $ionicModal) {
+.controller('AboutCtrl', ['$scope', '$log', '$ionicModal', 'AppSettings', function ($scope, $log, $ionicModal, AppSettings) {
     $scope.initialized = false;
+    $scope.allowConfiguration = AppSettings.allowConfiguration;
 
     // Load the modal from the given template URL
     $ionicModal.fromTemplateUrl('templates/about-map-modal.html', {
