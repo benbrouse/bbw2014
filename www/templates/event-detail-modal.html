@@ -35,9 +35,9 @@
         </div>
     </ion-header-bar>
 
-    <ion-content ng-show="eventInitialized" scroll="false" class="event-detail-content">
-        <div ng-show="showEventDescription" class="item">
-            <textarea>{{ event.description }}</textarea>
+    <ion-content ng-show="eventInitialized" scroll="false" class="event-detail-content" padding="true">
+        <div ng-show="showEventDescription">
+            <p>{{ event.description }}</p>
         </div>
 
         <div ng-show="showEventMap" id="map" class="event-detail-map" data-tap-disabled="true"></div>
