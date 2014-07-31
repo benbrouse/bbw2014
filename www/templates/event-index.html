@@ -48,7 +48,7 @@
             </div>
 
             <!-- event listing by location -->
-            <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations">
+            <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations | orderBy:'location.name'">
                 <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized">
                     <div ng-show="initialized && $index==0" class="item item-divider">
                         {{ eventLocation.name }}

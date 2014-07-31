@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "11"
-        version="0.9.1"
+        versionCode = "12"
+        version="0.9.2"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -14,7 +14,7 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
   
     <content src="index.html" />
     <access origin="*" />
@@ -33,6 +33,7 @@
 
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <gap:plugin name="org.apache.cordova.geolocation" version="0.3.7" />
+    <gap:plugin name="org.apache.cordova.device" version="0.2.8" />
 
     <!-- iOS Configuration -->
     <preference name="target-device" value="handset" />  
