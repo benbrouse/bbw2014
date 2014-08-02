@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Baltimore Beer Week</title>
+        <!-- ionic css -->
+        <link href="lib/css/ionic.css" rel="stylesheet">
+        <!-- your app's css -->
+        <link href="css/app.css" rel="stylesheet">
+
+        <!-- angularjs scripts -->
+        <script src="lib/js/ionic.js"></script>
+        <script src="lib/js/angular/angular.js"></script>
+        <script src="lib/js/angular/angular-animate.js"></script>
+        <script src="lib/js/angular/angular-sanitize.js"></script>
+        <script src="lib/js/angular/angular-resource.js"></script>
+        <script src="lib/js/angular-ui/angular-ui-router.js"></script>
+        <script src="lib/js/angular-cache/dist/angular-cache.js"></script>
+        <script src="lib/js/ionic-angular.js"></script>
+
+        <script src="lib/js/underscore/underscore-min.js"></script>
+        <script src="lib/js/underscore/deep.js"></script>
+        <script src="lib/js/underscore/_.pluckDeep.js"></script>
+
+        <!-- cordova script -->
+        <script src="cordova.js"></script>
+
+        <!-- main app script -->
+        <script src="js/app.js"></script>
+        <script src="js/app-depends.js"></script>
+
+        <!-- framework support - filters -->
+        <script src="js/framework/filters/matchesDateFilter.js"></script>
+        <script src="js/framework/filters/matchesStringFilter.js"></script>
+        <script src="js/framework/filters/costFilter.js"></script>
+        <script src="js/framework/filters/uniqueFilter.js"></script>
+        <script src="js/framework/filters/excludeFilter.js"></script>
+        <script src="js/framework/filters/telephoneFilter.js"></script>
+
+        <!-- framework support - services -->
+        <script src="js/framework/services/app-settings.js"></script>
+        <script src="js/framework/services/loader-service.js"></script>
+        <script src="js/framework/services/address-service.js"></script>
+        <script src="js/framework/services/google-maps-service.js"></script>
+        <script src="js/framework/services/distance-service.js"></script>
+
+        <script src="js/framework/core-all.js"></script>
+    
+        <!-- application: about -->
+        <script src="js/about/about-controller.js"></script>
+
+        <!-- application: locations -->
+        <script src="js/locations/location-service.js"></script>
+
+        <!-- application: sponsors -->
+        <script src="js/sponsors/sponsor-level-filter.js"></script>
+        <script src="js/sponsors/sponsor-service.js"></script>
+        <script src="js/sponsors/sponsor-index-controller.js"></script>
+        <script src="js/sponsors/sponsor-detail-controller.js"></script>
+
+        <!-- application: events -->
+        <script src="js/events/event-favorite-filter.js"></script>
+        <script src="js/events/event-date-selected-filter.js"></script>
+        <script src="js/events/event-service.js"></script>
+        <script src="js/events/event-index-controller.js"></script>
+
+        <!-- google maps javascript -->
+        <script src='http://maps.googleapis.com/maps/api/js?sensor=true'></script>
+        <script src="lib/js/angular-google-maps/angular-google-maps.min.js"></script>
+    </head>
+
+    <body ng-app="bbw">
+        <ion-nav-bar class="nav-title-slide-ios7 bar-dark">
+            <ion-nav-back-button class="button-icon ion-arrow-left-c">
+            </ion-nav-back-button>
+        </ion-nav-bar>
+
+        <ion-nav-view animation="slide-left-right"></ion-nav-view>
+    </body>
+</html>

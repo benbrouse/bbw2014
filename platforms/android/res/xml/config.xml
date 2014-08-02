@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.brewnotes.bbw" version="0.0.6" versionCode="6" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>Hello Cordova</name>
+    <description>
+        A sample Apache Cordova application that responds to the deviceready event.
+    </description>
+    <preference name="loglevel" value="DEBUG" />
+    <feature name="App">
+        <param name="android-package" value="org.apache.cordova.App" />
+    </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <name>BBW 2014</name>
+    <description>
+        The official Baltimore Beer Week companion application.
+    </description>
+    <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
+        Baltimore Beer Week Team
+    </author>
+    <version>0.0.6</version>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="fullscreen" value="false" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="permissions" value="INTERNET" />
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.GeoBroker" />
+    </feature>
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+    <gap:platform name="winphone" />
+    <preference name="target-device" value="handset" />
+    <icon src="icon.png" />
+    <icon gap:platform="android" gap:qualifier="ldpi" src="icon-ldpi.png" />
+    <icon gap:platform="android" gap:qualifier="mdpi" src="icon-mdpi.png" />
+    <icon gap:platform="android" gap:qualifier="hdpi" src="icon-hdpi.png" />
+    <icon gap:platform="android" gap:qualifier="xhdpi" src="icon-xhdpi.png" />
+    <preference name="android-minSdkVersion" value="14" />
+</widget>

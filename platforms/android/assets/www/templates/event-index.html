@@ -1,0 +1,70 @@
+
+<ion-view title="{{ applicationName }}" animation="nav-title-slide-ios7">
+    <ion-nav-buttons side="right">
+        <button class="button-icon icon ion-navicon light" ng-show="!data.isLoading" ng-click="openFilterModal()"></button>
+    </ion-nav-buttons>
+
+    <ion-header-bar align-title="left" class="bar-subheader bar-light" ng-show="!data.isLoading">
+        <div class="row">
+            <div class="col" align="center" ng-click="switchSort()">
+                <i class="icon ion-ios7-time-outline"></i>
+                Sort By Date
+            </div>
+            <div class="col" align="center" ng-click="switchSort()">
+                <i class="icon ion-ios7-location"></i>
+                Sort By Location
+            </div>
+        </div>
+    </ion-header-bar>
+
+    <div class="bar bar-loading bar-dark" ng-show="data.isLoading">
+        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>{{ loadingText }}
+    </div>
+
+    <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
+        </ion-refresher>
+
+        <div class="list">
+            <!-- event listing by date -->
+            <div ng-show="sortByDate" ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
+
+                <div ng-show="initialized" class="item item-divider">
+                    {{ eventDate.date | date: 'fullDate' }}
+                </div>
+
+                <a ng-repeat="event in events | matchesDate:'date':eventDate.date | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
+                    <img ng-src="{{ event.location.image }}" />
+
+                    <!--Show the ribbon that indicates that this is a sponsored event-->
+                    <!--<img src="/img/ribbon-icon.png" />-->
+
+                    <h2>{{event.title}}</h2>
+                    <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
+                    <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
+                    <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
+                    <h4 class="item-text-wrap">{{ event.description }}</h4>
+                </a>
+            </div>
+
+            <!-- event listing by location -->
+            <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations">
+                <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized">
+                    <div ng-show="initialized && $index==0" class="item item-divider">
+                        {{ eventLocation.name }}
+                    </div>
+
+                    <a class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
+                        <img ng-src="{{ event.location.image }}" />
+                        <h2>{{event.title}}</h2>
+                        <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
+                        <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
+                        <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
+                        <h4 class="item-text-wrap">{{ event.description }}</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+
