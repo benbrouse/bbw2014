@@ -1,8 +1,9 @@
-﻿angular.module('bbw.event-index-controller', ['ionic'])
+﻿angular.module('bbw.event-index-controller', ['ionic', 'core-services'])
 
 // A simple controller that fetches a list of data from a service
-.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'EventsService', 'AddressService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, EventsService, AddressService) {
+.controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, AppSettings, EventsService, AddressService, DistanceService) {
     $scope.initialized = false;
+    $scope.allowFavorites = AppSettings.allowFavorites;
     $scope.eventInitialized = false;
 
     $scope.sortByDate = true;
@@ -26,12 +27,20 @@
         $scope.modalFilter = modal;
     });
 
-    // Load the modal from the given template URL
-    $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function(modal) {
+    //// Load the modal from the given template URL
+    //$ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
+    //    scope: $scope,
+    //    animation: 'slide-in-up'
+    //}).then(function(modal) {
+    //    $scope.modalEvent = modal;
+    //});
+
+    $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', function (modal) {
         $scope.modalEvent = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up',
+//        focusFirstInput: true
     });
 
     $scope.openFilterModal = function () {
@@ -102,9 +111,31 @@
             var eventAddress = $scope.event.location.address;
             if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                 AddressService.geocode(eventAddress).then(function (location) {
-
                     $scope.eventInitialized = true;
-                    initializeMap(16, location, $scope.event.location.name);
+
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            var start = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+
+                            var end = {
+                                latitude: location.k,
+                                longitude: location.B
+                            };
+
+                            $scope.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+
+                            // Candidate to be removed
+                            //initializeMap(16, location, $scope.event.location.name);
+
+                            $scope.$apply();
+                        },
+                        function () {
+                            $log.error('Error getting location');
+                        }
+                    );
                 });
             }
         }
@@ -210,8 +241,8 @@
             $scope.events = events;
 
             $scope.filterSettingsList = [
-                $scope.favoriteFilter,
-                { text: "Limit to events near me", checked: false }
+                $scope.favoriteFilter
+//                { text: "Limit to events near me", checked: false }
             ];
 
             EventsService.getEventLocations($scope.events).then(function(eventLocations) {

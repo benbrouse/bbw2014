@@ -1,11 +1,11 @@
 <div class="modal">
-    <ion-header-bar class="bat bar-dark event-detail-header">
-        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite()"></button>
+    <ion-header-bar class="bat bar-dark">
+        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite()" ng-if="allowFavorites"></button>
         <h1 class="title">{{ applicationName }}</h1>
         <button class="button button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
     </ion-header-bar>
 
-    <ion-header-bar class="bar-subheader event-detail-header">
+    <div class="bar-subheader event-detail-header">
         <div class="item item-thumbnail-left">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
@@ -16,7 +16,7 @@
 
         <div class="item">
             <h3 class="text-center">{{ event.location.name }} <span ng-if="event.location.phone.length > 0"> - <a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></span></h3>
-            <h4 class="text-center">{{ event.location.address }}</h4>
+            <h4 class="text-center">{{ event.location.address }} - {{ event.location.distance }}m</h4>
         </div>
 
         <div class="row inline-bar">
@@ -33,11 +33,11 @@
                 More
             </div>
         </div>
-    </ion-header-bar>
+    </div>
 
-    <ion-content ng-show="eventInitialized" scroll="false" class="event-detail-content">
-        <div ng-show="showEventDescription" class="item">
-            <textarea>{{ event.description }}</textarea>
+    <ion-content ng-show="eventInitialized" scroll="false" class="event-detail-content" padding="true">
+        <div ng-show="showEventDescription">
+            <p>{{ event.description }}</p>
         </div>
 
         <div ng-show="showEventMap" id="map" class="event-detail-map" data-tap-disabled="true"></div>
@@ -58,7 +58,8 @@
                         <a>
                             <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline' "
                                     class="button button-clear icon dark event-detail-other-event-star"
-                                    ng-click="toggleLocationFavorite(event.id)"></button>
+                                    ng-click="toggleLocationFavorite(event.id)"
+                                    ng-if="allowFavorites"></button>
                         </a>
                     </div>
                 </div>

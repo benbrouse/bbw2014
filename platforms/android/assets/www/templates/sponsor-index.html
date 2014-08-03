@@ -2,7 +2,15 @@
 -->
 
 <ion-view title="{{ applicationName }}">
-    <ion-content>
+
+    <div class="bar bar-loading bar-dark" ng-show="data.isLoading">
+        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>{{ loadingText }}
+    </div>
+
+    <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
+        <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
+        </ion-refresher>
+
         <div class="list">
 
             <div ng-repeat="sponsorLevel in levels">
@@ -15,7 +23,7 @@
                     <img ng-src="{{ sponsor.image }}" />
 
                     <h2>{{sponsor.title}}</h2>
-                    <h4 style="margin-left: 15px;" class="item-text-wrap"><a href="{{sponsor.url}}" target="_blank">{{sponsor.url}}</a></h4>
+                    <h4 style="margin-left: 15px;" class="item-text-wrap">{{sponsor.url}}</h4>
                     <h4 style="margin-left: 15px;" class="item-text-wrap">{{sponsor.twitter}}</h4>
                     <h4 style="margin-left: 15px;" ng-if="sponsor.phone.length > 0"><a href="tel:{{sponsor.phone}}">{{sponsor.phone | telephone}}</a></h4>
                 </div>

@@ -12,6 +12,7 @@ angular.module('core.costFilter', []).filter('costnone', ['$injector', function 
             var currencyFilter = $filter('currency');
 
             var nothing = currencyFilter(0);
+            var fixPrice = currencyFilter(-1);
 
             if (angular.equals(items, nothing)) {
                 if(angular.isUndefined(defaultText)) {
@@ -20,6 +21,11 @@ angular.module('core.costFilter', []).filter('costnone', ['$injector', function 
 
                 items = defaultText;
             }
+
+            if (angular.equals(items, fixPrice)) {
+                items = "Fixed Price";
+            }
+
         } else {
             // we are forcing this to be an error
             items = undefined;

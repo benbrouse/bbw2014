@@ -1,8 +1,9 @@
 ﻿angular.module('bbw.about-controller', ['ionic'])
 
 // A simple controller that fetches a list of data from a service
-.controller('AboutCtrl', ['$scope', '$log', '$ionicModal', function ($scope, $log, $ionicModal) {
+.controller('AboutCtrl', ['$scope', '$log', '$ionicModal', 'AppSettings', function ($scope, $log, $ionicModal, AppSettings) {
     $scope.initialized = false;
+    $scope.allowConfiguration = AppSettings.allowConfiguration;
 
     // Load the modal from the given template URL
     $ionicModal.fromTemplateUrl('templates/about-map-modal.html', {
@@ -34,7 +35,7 @@
 
     $scope.closeSettingsModal = function () {
         $scope.modalSettings.hide();
-    }
+    };
 
     //Be sure to cleanup the modal
     $scope.$on('$destroy', function () {
@@ -44,15 +45,15 @@
 
     $scope.getLocation = function() {
         navigator.geolocation.getCurrentPosition(
-             function (position) {
-                 $scope.latitude = position.coords.latitude;
-                 $scope.longitude = position.coords.longitude;
+            function(position) {
+                $scope.latitude = position.coords.latitude;
+                $scope.longitude = position.coords.longitude;
 
-                 $scope.$apply();
-             },
-             function () {
-                 alert('Error getting location');
-             }
+                $scope.$apply();
+            },
+            function () {
+                $log.log('Error getting location');
+            }
         );
-    }
+    };
 }]);

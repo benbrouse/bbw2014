@@ -23,6 +23,14 @@ angular.module('bbw.sponsor-level-filter', []).filter('sponsorLevel', [function 
                 item = "Silver Sponsor";
                 break;
 
+            case 3:
+                item = "Bronze Sponsor";
+                break;
+
+            case 4:
+                item = "Featured Sponsor";
+                break;
+
             default:
                 item = "Unknown Sponsor";
                 break;

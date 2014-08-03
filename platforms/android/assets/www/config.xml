@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "6"
-        version="0.0.6"
+        versionCode = "16"
+        version="0.9.6"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -14,25 +14,26 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>0.0.6</version>
+    <version>0.9.6</version>
   
     <content src="index.html" />
     <access origin="*" />
   
+    <preference name="phonegap-version" value="3.5.0" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="permissions" value="INTERNET" />  
-
-    <feature name="Geolocation">
-       <param name="android-package" value="org.apache.cordova.GeoBroker" />
-    </feature>
+    <preference name="permissions" value="none" />  
 
     <!-- Supported Platforms -->
     <gap:platform name="ios" />
     <gap:platform name="android" />
     <gap:platform name="winphone" />
+
+    <feature name="http://api.phonegap.com/1.0/geolocation"/>
+    <gap:plugin name="org.apache.cordova.geolocation" version="0.3.7" />
+    <gap:plugin name="org.apache.cordova.device" version="0.2.8" />
 
     <!-- iOS Configuration -->
     <preference name="target-device" value="handset" />  

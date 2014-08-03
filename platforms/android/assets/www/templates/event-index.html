@@ -41,14 +41,14 @@
 
                     <h2>{{event.title}}</h2>
                     <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
-                    <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                     <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
+                    <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                     <h4 class="item-text-wrap">{{ event.description }}</h4>
                 </a>
             </div>
 
             <!-- event listing by location -->
-            <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations">
+            <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations | orderBy:'location.name'">
                 <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized">
                     <div ng-show="initialized && $index==0" class="item item-divider">
                         {{ eventLocation.name }}
@@ -58,8 +58,8 @@
                         <img ng-src="{{ event.location.image }}" />
                         <h2>{{event.title}}</h2>
                         <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
-                        <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                         <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
+                        <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                         <h4 class="item-text-wrap">{{ event.description }}</h4>
                     </a>
                 </div>

@@ -20,80 +20,6 @@
 
     var dataUrl = AppSettings.url + 'events/:id';
 
-    // Some fake testing data
-    var mockData = [
-        {
-            id: 0,
-            title: 'Event 0 Longer Title More Blah Blah Blah',
-            date: '2014-10-10T20:44:55',
-            cost: 9.99,
-            description: 'Description 1. The sly fox went to roost. Blah Blah.     Can you see this?',
-            image: 'img/temp/HS_logo_sl.png',
-            locationId: 0,
-            sponsors: [ '0', '1']
-        },
-        {
-            id: 15, title: 'Event 15', date: '2014-10-10T21:44:55', cost: 20, description: 'Description 1.',
-            locationId: 0,
-        },
-        {
-            id: 1, title: 'Event 1', date: '2014-10-10T20:44:55', cost: 0, description: 'Description 2',
-            locationId: 0,
-        },
-        {
-            id: 2, title: 'Event 2', date: '2014-10-11T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 3, title: 'Event 3', date: '2014-10-11T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 5, title: 'Event 5', date: '2014-10-14T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 6, title: 'Event 6', date: '2014-10-14T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 1,
-        },
-        {
-            id: 7, title: 'Event 7', date: '2014-10-15T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 8, title: 'Event 8', date: '2014-10-17T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 9, title: 'Event 9', date: '2014-10-17T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 10, title: 'Event 10', date: '2014-10-19T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 1,
-        },
-        {
-            id: 11, title: 'Event 11', date: '2014-10-19T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 12, title: 'Event 12', date: '2014-10-20T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 13, title: 'Event 13', date: '2014-10-20T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 0,
-        },
-        {
-            id: 14, title: 'Event 14', date: '2014-10-20T20:44:55', cost: 0, description: 'Description 4',
-            locationId: 2,
-        },
-        {
-            id: 4, title: 'Event 4', date: '2014-10-12T20:44:55', cost: 0, description: 'Description 3',
-            locationId: 2,
-        }
-    ];
-
     var retrieveAll = function (force) {
         var deferred = $q.defer();
 
@@ -107,65 +33,51 @@
             retrieve = true;
         }
 
-        LocationsService.all().then(function (locations) {
+        LocationsService.all(force).then(function (locations) {
             var cacheValue = dataCache.get(cacheEntry);
 
             if (!retrieve && !angular.isUndefined(cacheValue)) {
                 $timeout(function () {
-                    // resolve the location
-                    cacheValue = _.map(cacheValue, function (event) {
-                        event.location = getLocation(locations, event.locationId);
-                        return event;
-                    });
-
+                    cacheValue = processList(cacheValue, locations);
                     deferred.resolve(cacheValue);
                 }, 0);
             } else {
-                if (AppSettings.useMockData) {
-                    $timeout(function () {
-                        // add in the favorite flag
-                        cacheValue = _.map(mockData, function (event) {
-                            event.favorite = isFavorite(event.id);
-                            return event;
-                        });
+                Events.query().$promise.then(function (list) {
+                    cacheValue = processList(list, locations);
 
-                        // resolve the location
-                        cacheValue = _.map(cacheValue, function (event) {
-                            event.location = getLocation(locations, event.locationId);
-                            return event;
-                        });
+                    dataCache.put(cacheEntry, cacheValue);
+                    deferred.resolve(cacheValue);
+                }, function (errResponse) {
+                    if (!angular.isUndefined(cacheValue)) {
+                        $log.write('EventsService: falling back to cache entry');
 
-                        dataCache.put(cacheEntry, cacheValue);
+                        // fail safe
                         deferred.resolve(cacheValue);
-                    }, 1500);
-                } else {
-                    Events.query().$promise.then(function (list) {
-                        // add in the favorite flag
-                        cacheValue = _.map(list, function (event) {
-                            event.favorite = isFavorite(event.id);
-                            return event;
-                        });
-
-                        // success
-                        dataCache.put(cacheEntry, cacheValue);
-                        deferred.resolve(cacheValue);
-                    }, function (errResponse) {
-                        if (!angular.isUndefined(cacheValue)) {
-                            $log.write('EventsService: falling back to cache entry');
-
-                            // fail safe
-                            deferred.resolve(cacheValue);
-                        } else {
-                            // fail
-                            deferred.reject(errResponse);
-                        }
-                    });
-                }
+                    } else {
+                        // fail
+                        deferred.reject(errResponse);
+                    }
+                });
             }
         });
 
 
         return deferred.promise;
+    };
+
+    var processList = function(list, locations) {
+        // add in the favorite flag
+        list = _.map(list, function(event) {
+            event.favorite = isFavorite(event.id);
+            return event;
+        });
+
+        list = _.map(list, function(event) {
+            event.location = getLocation(locations, event.locationId);
+            return event;
+        });
+
+        return list;
     };
 
     var getEventById = function (eventId) {
