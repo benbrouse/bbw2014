@@ -15,7 +15,13 @@ angular.module('core-filters', [
                             'core.uniqueFilter'
 ]);
 
+angular.module('core-ui', [
+                            'core.resizeDirective'
+]);
+
+
 angular.module('core-all', [
                             'core-services',
-                            'core-filters'
+                            'core-filters',
+                            'core-ui'
 ]);

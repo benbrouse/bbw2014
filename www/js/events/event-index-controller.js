@@ -119,9 +119,6 @@
 
                             $scope.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
 
-                            // Candidate to be removed
-                            //initializeMap(16, location, $scope.event.location.name);
-
                             $scope.$apply();
                         },
                         function () {
@@ -130,6 +127,14 @@
                     );
                 });
             }
+
+            // HACK!!! - otherwise the google map doesn't account for anyspace at all!
+            var modalElement = document.querySelector('.modal');
+            var fullHeight = modalElement.clientHeight;
+
+            var wrapperElement = angular.element(document.querySelector('.event-detail-wrapper'));
+            // NOTE: 255 is the size of all the elements above the map div
+            wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
         }
     });
 

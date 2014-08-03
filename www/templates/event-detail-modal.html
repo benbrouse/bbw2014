@@ -5,7 +5,7 @@
         <button class="button button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
     </ion-header-bar>
 
-    <ion-content scroll="false" padding="false">
+    <ion-content scroll="false" padding="false" id="event-detail-modal">
         <div class="item item-thumbnail-left">
             <img ng-src="{{ event.location.image }}" />
             <h2>{{event.title}}</h2>
@@ -22,7 +22,7 @@
         <div class="row inline-bar">
             <div class="col" align="center" ng-click="switchEventView('details')">
                 <i class="icon ion-android-note"></i>
-                Details1
+                Details
             </div>
             <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
                 <i class="icon ion-location"></i>
@@ -35,7 +35,7 @@
         </div>
 
         <div ng-show="eventInitialized" class="event-detail-wrapper">
-            <div ng-show="showEventDescription">
+            <div ng-show="showEventDescription" class="padding">
                 <p>{{ event.description }}</p>
             </div>
 

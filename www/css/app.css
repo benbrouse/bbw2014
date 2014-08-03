@@ -44,7 +44,7 @@
 }
 
 .event-detail-wrapper {
-    height: 250px;
+    /* height: set dyanmically at run-time to accomodate different devices */
 }
 
 .event-detail-map {
