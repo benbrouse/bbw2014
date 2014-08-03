@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "17"
-        version="0.9.7"
+        versionCode = "18"
+        version="0.9.8"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -14,7 +14,7 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>0.9.7</version>
+    <version>0.9.8</version>
   
     <content src="index.html" />
     <access origin="*" />
@@ -62,6 +62,21 @@
     <!-- Spotlight Icon -->
     <icon src="icon-40.png" gap:platform="ios" width="40" height="40" />
     <icon src="icon-40@2x.png" gap:platform="ios" width="80" height="80" />
+
+    <!-- iPhone and iPod touch -->
+    <gap:splash src="Default.png" gap:platform="ios" width="320" height="480" />
+    <gap:splash src="Default@2x.png" gap:platform="ios" width="640" height="960" />
+
+    <!-- iPhone 5 / iPod Touch (5th Generation) -->
+    <gap:splash src="Default-568h@2x.png" gap:platform="ios" width="640" height="1136" />
+
+    <!-- iPad -->
+    <gap:splash src="Default-Portrait.png" gap:platform="ios" width="768" height="1024" />
+    <gap:splash src="Default-Landscape.png" gap:platform="ios" width="1024" height="768" />
+
+    <!-- Retina iPad -->
+    <gap:splash src="Default-Portrait@2x.png" gap:platform="ios" width="1536" height="2048" />
+    <gap:splash src="Default-Landscape@2x.png" gap:platform="ios" width="2048" height="1536" />
 
     <preference name="android-minSdkVersion" value="14" />    <!-- Android 4.0, 4.0.1, 4.0.2 -->
 
