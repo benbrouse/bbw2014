@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.brewnotes.bbw" version="0.0.6" versionCode="6" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.brewnotes.bbw" version="0.9.6" versionCode="16" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Hello Cordova</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -18,20 +18,21 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>0.0.6</version>
+    <version>0.9.6</version>
     <content src="index.html" />
     <access origin="*" />
+    <preference name="phonegap-version" value="3.5.0" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="permissions" value="INTERNET" />
-    <feature name="Geolocation">
-        <param name="android-package" value="org.apache.cordova.GeoBroker" />
-    </feature>
+    <preference name="permissions" value="none" />
     <gap:platform name="ios" />
     <gap:platform name="android" />
     <gap:platform name="winphone" />
+    <feature name="http://api.phonegap.com/1.0/geolocation" />
+    <gap:plugin name="org.apache.cordova.geolocation" version="0.3.7" />
+    <gap:plugin name="org.apache.cordova.device" version="0.2.8" />
     <preference name="target-device" value="handset" />
     <icon src="icon.png" />
     <icon gap:platform="android" gap:qualifier="ldpi" src="icon-ldpi.png" />
