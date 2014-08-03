@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "18"
-        version="0.9.8"
+        versionCode = "20"
+        version="0.9.10"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -14,7 +14,7 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>0.9.8</version>
+    <version>0.9.10</version>
   
     <content src="index.html" />
     <access origin="*" />
@@ -48,20 +48,20 @@
     <icon src="icon-xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
 
     <!-- iPhone / iPod Touch  -->
-    <icon src="icon-60.png" gap:platform="ios" width="60" height="60" />
-    <icon src="icon-60@2x.png" gap:platform="ios" width="120" height="120" />
+    <icon src="Icon-60.png" gap:platform="ios" width="60" height="60" />
+    <icon src="Icon-60@2x.png" gap:platform="ios" width="120" height="120" />
 
     <!-- iPad -->
-    <icon src="icon-76.png" gap:platform="ios" width="76" height="76" />
-    <icon src="icon-76@2x.png" gap:platform="ios" width="152" height="152" />
+    <icon src="Icon-76.png" gap:platform="ios" width="76" height="76" />
+    <icon src="Icon-76@2x.png" gap:platform="ios" width="152" height="152" />
 
     <!-- Settings Icon -->
-    <icon src="icon-small.png" gap:platform="ios" width="29" height="29" />
-    <icon src="icon-small@2x.png" gap:platform="ios" width="58" height="58" />
+    <icon src="Icon-small.png" gap:platform="ios" width="29" height="29" />
+    <icon src="Icon-small@2x.png" gap:platform="ios" width="58" height="58" />
 
     <!-- Spotlight Icon -->
-    <icon src="icon-40.png" gap:platform="ios" width="40" height="40" />
-    <icon src="icon-40@2x.png" gap:platform="ios" width="80" height="80" />
+    <icon src="Icon-40.png" gap:platform="ios" width="40" height="40" />
+    <icon src="Icon-40@2x.png" gap:platform="ios" width="80" height="80" />
 
     <!-- iPhone and iPod touch -->
     <gap:splash src="Default.png" gap:platform="ios" width="320" height="480" />
