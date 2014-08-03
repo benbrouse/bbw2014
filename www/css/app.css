@@ -43,6 +43,10 @@
     padding: 0;
 }
 
+.event-detail-wrapper {
+    height: 250px;
+}
+
 .event-detail-map {
     height: 100%;
 }

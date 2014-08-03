@@ -8,4 +8,4 @@
         //url: 'http://localhost:54644/api/'
         url: 'http://bbw14.azurewebsites.net/api/'
     };
-}]);s
+}]);
