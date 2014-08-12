@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "23"
-        version="0.9.13"
+        versionCode = "28"
+        version="1.0"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -14,7 +14,6 @@
     <author email="ben.brouse@brewnotes.com" href="http://brewnotes.com/">
         Baltimore Beer Week Team
     </author>
-    <version>1.0</version>
   
     <content src="index.html" />
     <access origin="*" />
@@ -39,45 +38,45 @@
     <preference name="target-device" value="handset" />  
   
     <!-- Android Configuration -->
-    <icon src="icon-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
-    <icon src="icon-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
-    <icon src="icon-hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
-    <icon src="icon-xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
+    <icon src="img/icons/android/icon-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
+    <icon src="img/icons/android/icon-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
+    <icon src="img/icons/android/icon-hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
+    <icon src="img/icons/android/icon-xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
 
     <!-- iPhone / iPod Touch  -->
-    <icon src="Icon.png" gap:platform="ios" width="57" height="57" />
-    <icon src="Icon@2x.png" gap:platform="ios" width="114" height="114" />
+    <icon src="img/icons/ios/Icon.png" gap:platform="ios" width="57" height="57" />
+    <icon src="img/icons/ios/Icon@2x.png" gap:platform="ios" width="114" height="114" />
 
     <!-- iPhone / iPod Touch  -->
-    <icon src="Icon-60.png" gap:platform="ios" width="60" height="60" />
-    <icon src="Icon-60@2x.png" gap:platform="ios" width="120" height="120" />
+    <icon src="img/icons/ios/Icon-60.png" gap:platform="ios" width="60" height="60" />
+    <icon src="img/icons/ios/Icon-60@2x.png" gap:platform="ios" width="120" height="120" />
 
     <!-- iPad -->
-    <icon src="Icon-76.png" gap:platform="ios" width="76" height="76" />
-    <icon src="Icon-76@2x.png" gap:platform="ios" width="152" height="152" />
+    <icon src="img/icons/ios/Icon-76.png" gap:platform="ios" width="76" height="76" />
+    <icon src="img/icons/ios/Icon-76@2x.png" gap:platform="ios" width="152" height="152" />
 
     <!-- Settings Icon -->
-    <icon src="Icon-small.png" gap:platform="ios" width="29" height="29" />
-    <icon src="Icon-small@2x.png" gap:platform="ios" width="58" height="58" />
+    <icon src="img/icons/ios/Icon-small.png" gap:platform="ios" width="29" height="29" />
+    <icon src="img/icons/ios/Icon-small@2x.png" gap:platform="ios" width="58" height="58" />
 
     <!-- Spotlight Icon -->
-    <icon src="Icon-40.png" gap:platform="ios" width="40" height="40" />
-    <icon src="Icon-40@2x.png" gap:platform="ios" width="80" height="80" />
+    <icon src="img/icons/ios/Icon-40.png" gap:platform="ios" width="40" height="40" />
+    <icon src="img/icons/ios/Icon-40@2x.png" gap:platform="ios" width="80" height="80" />
 
     <!-- iPhone and iPod touch -->
-    <gap:splash src="Default.png" gap:platform="ios" width="320" height="480" />
-    <gap:splash src="Default@2x.png" gap:platform="ios" width="640" height="960" />
+    <gap:splash src="img/icons/ios/Default.png" gap:platform="ios" width="320" height="480" />
+    <gap:splash src="img/icons/ios/Default@2x.png" gap:platform="ios" width="640" height="960" />
 
     <!-- iPhone 5 / iPod Touch (5th Generation) -->
-    <gap:splash src="Default-568h@2x.png" gap:platform="ios" width="640" height="1136" />
+    <gap:splash src="img/icons/ios/Default-568h@2x.png" gap:platform="ios" width="640" height="1136" />
 
     <!-- iPad -->
-    <gap:splash src="Default-Portrait.png" gap:platform="ios" width="768" height="1024" />
-    <gap:splash src="Default-Landscape.png" gap:platform="ios" width="1024" height="768" />
+    <gap:splash src="img/icons/ios/Default-Portrait.png" gap:platform="ios" width="768" height="1024" />
+    <gap:splash src="img/icons/ios/Default-Landscape.png" gap:platform="ios" width="1024" height="768" />
 
     <!-- Retina iPad -->
-    <gap:splash src="Default-Portrait@2x.png" gap:platform="ios" width="1536" height="2048" />
-    <gap:splash src="Default-Landscape@2x.png" gap:platform="ios" width="2048" height="1536" />
+    <gap:splash src="img/icons/ios/Default-Portrait@2x.png" gap:platform="ios" width="1536" height="2048" />
+    <gap:splash src="img/icons/ios/Default-Landscape@2x.png" gap:platform="ios" width="2048" height="1536" />
 
     <!-- Target OS versions 
     <preference name="deployment-target" value="7.0" />	-->    <!-- iOS MinimumOSVersion -->

@@ -1,7 +1,7 @@
 ﻿angular.module('bbw.sponsor-index-controller', [])
 
 // A simple controller that fetches a list of data from a service
-.controller('SponsorIndexCtrl', ['$scope', '$ionicModal', '$ionicLoading', 'LoaderService', 'SponsorsService', function ($scope, $ionicModal, $ionicLoading, LoaderService, SponsorsService) {
+.controller('SponsorIndexCtrl', ['$scope', '$ionicModal', '$ionicLoading', '$timeout', 'LoaderService', 'SponsorsService', function ($scope, $ionicModal, $ionicLoading, $timeout, LoaderService, SponsorsService) {
     $scope.initialized = false;
     $scope.sponsorInitialized = true;
 
@@ -80,7 +80,9 @@
         });
     };
 
-    getSponsorData(false);
+    $timeout(function() {
+        getSponsorData(false);
+    }, 100);
 }]);
 
 
