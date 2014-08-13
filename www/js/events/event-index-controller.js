@@ -113,8 +113,8 @@
                             };
 
                             var end = {
-                                latitude: location.k,
-                                longitude: location.B
+                                latitude: location.lat(),
+                                longitude: location.lng()
                             };
 
                             $scope.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);

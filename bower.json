@@ -1,6 +1,6 @@
 {
   "name": "bbw",
-  "version": "0.0.1",
+  "version": "1.0",
   "description": "bbw",
   "authors": [
     "bbrouse"
@@ -12,9 +12,14 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "www/lib/js"
   ],
   "dependencies": {
-    "angular-cache": "~2.3.3"
-  }
+    "angular-cache": "~2.3.3",
+    "ionic": "1.0.0-beta.11",
+    "showdown": "~0.3.1",
+    "angular-google-maps": "git://github.com/nlaplante/angular-google-maps.git#~1.2.0"
+  },
+  "homepage": "https://github.com/benbrouse/bbw2014"
 }

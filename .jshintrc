@@ -1,0 +1,15 @@
+{
+	"node": true,
+	"esnext": true,
+	"bitwise": true,
+	"camelcase": false,
+	"curly": true,
+	"immed": true,
+	"newcap": true,
+	"noarg": true,
+	"undef": false,
+	"unused": "vars",
+	"strict": false,
+	"eqnull": true,
+	"predef": ["angular", "_", "google"]
+}
