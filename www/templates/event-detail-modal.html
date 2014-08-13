@@ -36,7 +36,7 @@
 
         <div ng-show="eventInitialized" class="event-detail-wrapper">
             <div ng-show="showEventDescription" class="padding">
-                <p>{{ event.description }}</p>
+                <p data-markdown="{{ event.description }}"></p>
             </div>
 
             <div id="map" ng-show="showEventMap" class="event-detail-map" data-tap-disabled="true"></div>

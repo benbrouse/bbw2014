@@ -16,7 +16,8 @@ angular.module('core-filters', [
 ]);
 
 angular.module('core-ui', [
-                            'core.resizeDirective'
+                            'core.resizeDirective',
+                            'core.markdown-directive'
 ]);
 
 
