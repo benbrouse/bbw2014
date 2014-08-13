@@ -1,3 +1,5 @@
+"use strict";
+
 var gulp = require('gulp');
 
 var clean = require('gulp-clean');
@@ -5,93 +7,109 @@ var jshint = require('gulp-jshint');
 var imagemin = require('gulp-imagemin');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
+var rename = require('gulp-rename');
 var gulpif = require('gulp-if');
+var sequence = require('run-sequence');
+var argv = require('yargs').argv;
 
-var config = {'platform': 'android'};
+// Package information, including version
+var pkg = require('./package.json');
+
+var config = { 'platform': 'android' };
 
 var bases = {
- app: 'www/',
- dist: 'dist/',
+    app: 'www/',
+    dist: 'dist/',
 };
 
 var paths = {
- styles: ['css/**/*.css'],
- scripts: ['js/**/*.js'],
- mainhtml: ['index.html', 'config.xml'],
- html: ['templates/**/*.html'],
- images: ['img/**/*.png'],
- excludeiosimages: ['!img/icons/ios/**'],
- excludeandroidimages: ['!img/icons/android/**'],
- locales: ['locales/**/*.*'],
- lib: ['lib/**/*.min.css', 'lib/**/fonts/*.*', 'lib/**/*.min.js'],
+    styles: ['css/**/*.css'],
+    scripts: ['js/**/*.js'],
+    mainhtml: ['index.html', 'config.xml'],
+    html: ['templates/**/*.html'],
+    images: ['img/**/*.png'],
+    locales: ['locales/**/*.*'],
+    lib: ['lib/**/*.min.css', 'lib/**/fonts/*.*', 'lib/**/*.min.js'],
+};
+
+var platform = {
+    excludeiosimages: ['!img/icons/ios/**'],
+    excludeandroidimages: ['!img/icons/android/**'],
 };
 
 // Imagemin images and ouput them in dist
-gulp.task('imagemin', ['clean'], function() {
- gulp.src(paths.images)
- .pipe(imagemin())
- .pipe(gulp.dest(bases.dist));
+gulp.task('imagemin', function () {
+    gulp.src(paths.images)
+    .pipe(imagemin())
+    .pipe(gulp.dest(bases.dist));
 });
 
 // Delete the dist directory
-gulp.task('clean', function() {
- return gulp.src(bases.dist)
- .pipe(clean());
+gulp.task('clean', function () {
+    return gulp.src(bases.dist)
+    .pipe(clean());
 });
 
 // Process scripts and concatenate them into one output file
-gulp.task('scripts', ['clean'], function() {
- gulp.src(paths.scripts, {cwd: bases.app})
- .pipe(jshint('.jshintrc'))
- .pipe(jshint.reporter('default'))
- .pipe(jshint.reporter('fail'))
- .pipe(uglify())
- .pipe(gulp.dest(bases.dist + 'js/'));
+gulp.task('scripts', function () {
+    gulp.src(paths.scripts, { cwd: bases.app })
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
+    .pipe(jshint.reporter('fail'))
+    .pipe(gulpif(argv.production, uglify()))
+    // .pipe(gulpif(argv.production, rename({ suffix: '.min' })))
+    .pipe(gulp.dest(bases.dist + 'js/'));
 });
 
-gulp.task('copy', ['clean'], function(){
- gulp.src(paths.mainhtml, {cwd: bases.app})
- .pipe(gulp.dest(bases.dist));
+gulp.task('copy', function () {
+    gulp.src(paths.mainhtml, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist));
 
- gulp.src(paths.html, {cwd: bases.app})
- .pipe(gulp.dest(bases.dist + 'templates'));
+    gulp.src(paths.html, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist + 'templates'));
 
- gulp.src(paths.styles, {cwd: bases.app})
- .pipe(gulp.dest(bases.dist + 'css'));
+    gulp.src(paths.styles, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist + 'css'));
 
- if (config.platform == 'android') {
-   gulp.src(paths.images.concat(paths.excludeiosimages), {cwd: bases.app})
-   .pipe(gulp.dest(bases.dist + 'img'));
- }
+    if (argv.android) {
+        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
+        .pipe(gulp.dest(bases.dist + 'img'));
+    }
 
- if (config.platform == 'ios') {
-   gulp.src(paths.images.concat(paths.excludeandroidimages), {cwd: bases.app})
-   .pipe(gulp.dest(bases.dist + 'img'));
- }
+    if (argv.ios) {
+        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
+        .pipe(gulp.dest(bases.dist + 'img'));
+    }
 
- gulp.src(paths.locales, {cwd: bases.app})
- .pipe(gulp.dest(bases.dist + 'locales'));
+    gulp.src(paths.locales, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist + 'locales'));
 
- gulp.src(paths.lib, {cwd: bases.app})
- .pipe(gulp.dest(bases.dist + 'lib'));
+    gulp.src(paths.lib, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist + 'lib'));
 });
 
 // Define the default task as a sequence of the above tasks
-gulp.task('default', ['clean', 'scripts', 'imagemin', 'copy']);
+gulp.task('default', ['build']);
 
-gulp.task('androidconfig', function () {
-   config.platform = 'android';
-   bases.dist = 'dist-android/';
+// Full build - clean build folder, build js, build html
+gulp.task('build', function (callback) {
+    console.log('Building Version: ' + pkg.version);
+
+    if (argv.android) {
+        bases.dist = 'dist-android/';
+        console.log('    Android Build.  Output redirected to: ' + bases.dist);
+    }
+
+    if (argv.ios) {
+        bases.dist = 'dist-ios/';
+        console.log('   iOS Build.  Output redirected to: ' + bases.dist);
+    }
+
+    sequence(
+          'clean',
+          'scripts',
+          'imagemin',
+          'copy',
+          callback
+      );
 });
-
-gulp.task('iosconfig', function () {
-   config.platform = 'ios';
-   bases.dist = 'dist-ios/';
-});
-
-gulp.task('android', ['androidconfig','default']
-);
-
-gulp.task('ios', ['iosconfig','default']
-);
-
