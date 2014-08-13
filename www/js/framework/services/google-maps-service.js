@@ -1,11 +1,14 @@
-﻿/*
-    core service to wrap the google.maps global object
-*/
+﻿(function() {
+    'use strict';
 
-angular.module('core.google-maps-service', [])
+    /*
+        core service to wrap the google.maps global object
+    */
 
-.service('GoogleMapsService', function () {
-    return {
-        gmaps: google.maps
-    };
-});
+    angular.module('core.google-maps-service', [])
+        .service('GoogleMapsService', function() {
+            return {
+                gmaps: google.maps
+            };
+        });
+})();

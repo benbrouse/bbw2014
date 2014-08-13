@@ -1,59 +1,64 @@
-﻿angular.module('bbw.about-controller', ['ionic'])
+﻿(function() {
+    'use strict';
 
-// A simple controller that fetches a list of data from a service
-.controller('AboutCtrl', ['$scope', '$log', '$ionicModal', 'AppSettings', function ($scope, $log, $ionicModal, AppSettings) {
-    $scope.initialized = false;
-    $scope.allowConfiguration = AppSettings.allowConfiguration;
+    angular.module('bbw.about-controller', ['ionic', 'core-all'])
 
-    // Load the modal from the given template URL
-    $ionicModal.fromTemplateUrl('templates/about-map-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.modalMap = modal;
-    });
+    // A simple controller that fetches a list of data from a service
+    .controller('AboutCtrl', [
+        '$scope', '$log', '$ionicModal', 'AppSettings', function($scope, $log, $ionicModal, AppSettings) {
+            $scope.initialized = false;
+            $scope.allowConfiguration = AppSettings.allowConfiguration;
 
-    // Load the modal from the given template URL
-    $ionicModal.fromTemplateUrl('templates/about-settings-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.modalSettings = modal;
-    });
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/about-map-modal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modalMap = modal;
+            });
 
-    $scope.openMapModal = function () {
-        $scope.modalMap.show();
-    };
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/about-settings-modal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modalSettings = modal;
+            });
 
-    $scope.closeMapModal = function () {
-        $scope.modalMap.hide();
-    };
+            $scope.openMapModal = function() {
+                $scope.modalMap.show();
+            };
 
-    $scope.openSettingsModal = function () {
-        $scope.modalSettings.show();
-    };
+            $scope.closeMapModal = function() {
+                $scope.modalMap.hide();
+            };
 
-    $scope.closeSettingsModal = function () {
-        $scope.modalSettings.hide();
-    };
+            $scope.openSettingsModal = function() {
+                $scope.modalSettings.show();
+            };
 
-    //Be sure to cleanup the modal
-    $scope.$on('$destroy', function () {
-        $scope.modalMap.remove();
-    });
+            $scope.closeSettingsModal = function() {
+                $scope.modalSettings.hide();
+            };
 
+            //Be sure to cleanup the modal
+            $scope.$on('$destroy', function() {
+                $scope.modalMap.remove();
+            });
 
-    $scope.getLocation = function() {
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                $scope.latitude = position.coords.latitude;
-                $scope.longitude = position.coords.longitude;
+            $scope.getLocation = function() {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        $scope.latitude = position.coords.latitude;
+                        $scope.longitude = position.coords.longitude;
 
-                $scope.$apply();
-            },
-            function () {
-                $log.log('Error getting location');
-            }
-        );
-    };
-}]);
+                        $scope.$apply();
+                    },
+                    function() {
+                        $log.log('Error getting location');
+                    }
+                );
+            };
+        }
+    ]);
+})();

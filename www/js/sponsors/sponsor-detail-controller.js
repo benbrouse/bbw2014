@@ -1,15 +1,21 @@
-﻿angular.module('bbw.sponsor-detail-controller', [])
+﻿(function() {
+    'use strict';
 
-// A simple controller that shows a tapped item's data
-.controller('SponsorDetailCtrl', ['$scope', '$stateParams', '$window', 'SponsorsService', function ($scope, $stateParams, $window, SponsorsService) {
-    $scope.sponsor = SponsorsService.get($stateParams.sponsorId);
+    angular.module('bbw.sponsor-detail-controller', ['ionic', 'core-all'])
 
-    $scope.leftButtons = [
-           {
-               type: 'button-icon icon ion-arrow-left-c',
-               tap: function () {
-                   $window.history.back();
-               }
-           }
-    ];
-}]);
+    // A simple controller that shows a tapped item's data
+    .controller('SponsorDetailCtrl', [
+        '$scope', '$stateParams', '$window', 'SponsorsService', function($scope, $stateParams, $window, SponsorsService) {
+            $scope.sponsor = SponsorsService.get($stateParams.sponsorId);
+
+            $scope.leftButtons = [
+                {
+                    type: 'button-icon icon ion-arrow-left-c',
+                    tap: function() {
+                        $window.history.back();
+                    }
+                }
+            ];
+        }
+    ]);
+})();

@@ -1,88 +1,92 @@
-﻿angular.module('bbw.sponsor-index-controller', [])
+﻿(function() {
+    'use strict';
 
-// A simple controller that fetches a list of data from a service
-.controller('SponsorIndexCtrl', ['$scope', '$ionicModal', '$ionicLoading', '$timeout', 'LoaderService', 'SponsorsService', function ($scope, $ionicModal, $ionicLoading, $timeout, LoaderService, SponsorsService) {
-    $scope.initialized = false;
-    $scope.sponsorInitialized = true;
+    angular.module('bbw.sponsor-index-controller', ['ionic', 'core-all'])
 
-    $scope.data = {
-        isLoading: false
-    };
+    // A simple controller that fetches a list of data from a service
+    .controller('SponsorIndexCtrl', [
+        '$scope', '$ionicModal', '$ionicLoading', '$timeout', 'LoaderService', 'SponsorsService', function($scope, $ionicModal, $ionicLoading, $timeout, LoaderService, SponsorsService) {
+            $scope.initialized = false;
+            $scope.sponsorInitialized = true;
 
-    // Load the modal from the given template URL
-    $ionicModal.fromTemplateUrl('templates/sponsor-detail-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-    }).then(function (modal) {
-        $scope.modalSponsor = modal;
-    });
+            $scope.data = {
+                isLoading: false
+            };
 
-    $scope.openSponsorModal = function (sponsorId) {
-        SponsorsService.get(sponsorId).then(function(sponsor) {
-            $scope.sponsor = sponsor;
-            $scope.modalSponsor.show();
-        });
-    };
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/sponsor-detail-modal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modalSponsor = modal;
+            });
 
-    $scope.closeSponsorModal = function () {
-        $scope.modalSponsor.hide();
-    };
+            $scope.openSponsorModal = function(sponsorId) {
+                SponsorsService.get(sponsorId).then(function(sponsor) {
+                    $scope.sponsor = sponsor;
+                    $scope.modalSponsor.show();
+                });
+            };
 
-    $scope.refreshContent = function () {
-        // update content
-        getSponsorData(true);
+            $scope.closeSponsorModal = function() {
+                $scope.modalSponsor.hide();
+            };
 
-        // Stop the ion-refresher from spinning
-        $scope.$broadcast('scroll.refreshComplete');
-        $scope.$apply();
-    };
+            $scope.refreshContent = function() {
+                // update content
+                getSponsorData(true);
 
-    $scope.showLoading = function (text) {
-        // Show the loading overlay and text
-        $ionicLoading.show({
-            // The text to display in the loading indicator
-            content: 'One moment please',
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
+                $scope.$apply();
+            };
 
-            // The animation to use
-            animation: 'fade-in',
+            $scope.showLoading = function(text) {
+                // Show the loading overlay and text
+                $ionicLoading.show({
+                    // The text to display in the loading indicator
+                    content: 'One moment please',
 
-            // Will a dark overlay or backdrop cover the entire view
-            showBackdrop: true,
+                    // The animation to use
+                    animation: 'fade-in',
 
-            // The maximum width of the loading indicator
-            // Text will be wrapped if longer than maxWidth
-            maxWidth: 200,
+                    // Will a dark overlay or backdrop cover the entire view
+                    showBackdrop: true,
 
-            // The delay in showing the indicator
-            showDelay: 500
-        });
+                    // The maximum width of the loading indicator
+                    // Text will be wrapped if longer than maxWidth
+                    maxWidth: 200,
 
-        $scope.loadingText = text;
-        $scope.data.isLoading = true;
-    };
+                    // The delay in showing the indicator
+                    showDelay: 500
+                });
 
-    $scope.hideLoading = function () {
-        $ionicLoading.hide();
-        $scope.data.isLoading = false;
-    };
+                $scope.loadingText = text;
+                $scope.data.isLoading = true;
+            };
 
-    var getSponsorData = function(force) {
+            $scope.hideLoading = function() {
+                $ionicLoading.hide();
+                $scope.data.isLoading = false;
+            };
 
-        $scope.showLoading('Retrieving Sponsor List');
+            var getSponsorData = function(force) {
 
-        SponsorsService.all(force).then(function (sponsors) {
-            $scope.sponsors = sponsors;
-            $scope.levels = SponsorsService.getLevels();
+                $scope.showLoading('Retrieving Sponsor List');
 
-            // Hide overlay when done
-            $scope.hideLoading();
-            $scope.initialized = true;
-        });
-    };
+                SponsorsService.all(force).then(function(sponsors) {
+                    $scope.sponsors = sponsors;
+                    $scope.levels = SponsorsService.getLevels();
 
-    $timeout(function() {
-        getSponsorData(false);
-    }, 100);
-}]);
+                    // Hide overlay when done
+                    $scope.hideLoading();
+                    $scope.initialized = true;
+                });
+            };
 
-
+            $timeout(function() {
+                getSponsorData(false);
+            }, 100);
+        }
+    ]);
+})();
