@@ -46,7 +46,7 @@ gulp.task('imagemin', function () {
 
 // Delete the dist directory
 gulp.task('clean', function () {
-    return gulp.src(bases.dist)
+    return gulp.src(bases.dist, { read: false})
     .pipe(clean());
 });
 
@@ -62,48 +62,51 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('copy', function () {
-    gulp.src(paths.mainhtml, { cwd: bases.app })
+    gulp.src(paths.mainhtml, { cwd: bases.app, read: false })
     .pipe(gulp.dest(bases.dist));
 
-    gulp.src(paths.html, { cwd: bases.app })
+    gulp.src(paths.html, { cwd: bases.app, read: false })
     .pipe(gulp.dest(bases.dist + 'templates'));
 
-    gulp.src(paths.styles, { cwd: bases.app })
+    gulp.src(paths.styles, { cwd: bases.app, read: false })
     .pipe(gulp.dest(bases.dist + 'css'));
 
     if (argv.android) {
-        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
+        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app, read: false })
         .pipe(gulp.dest(bases.dist + 'img'));
     }
 
     if (argv.ios) {
-        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
+        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app, read: false })
         .pipe(gulp.dest(bases.dist + 'img'));
     }
 
-    gulp.src(paths.locales, { cwd: bases.app })
+    gulp.src(paths.locales, { cwd: bases.app, read: false })
     .pipe(gulp.dest(bases.dist + 'locales'));
 
-    gulp.src(paths.lib, { cwd: bases.app })
+    gulp.src(paths.lib, { cwd: bases.app, read: false })
     .pipe(gulp.dest(bases.dist + 'lib'));
 });
 
-// Define the default task as a sequence of the above tasks
+// Define the default task as a sequence and delegate to the full build
 gulp.task('default', ['build']);
 
-// Full build - clean build folder, build js, build html
+// Full build
 gulp.task('build', function (callback) {
-    console.log('Building Version: ' + pkg.version);
+    console.log('\nBuilding Version: ' + pkg.version);
 
     if (argv.android) {
         bases.dist = 'dist-android/';
-        console.log('    Android Build.  Output redirected to: ' + bases.dist);
+        console.log('Platform: Android - Output redirected to: ' + bases.dist);
     }
 
     if (argv.ios) {
         bases.dist = 'dist-ios/';
-        console.log('   iOS Build.  Output redirected to: ' + bases.dist);
+        console.log('Platform: iOS -Output redirected to: ' + bases.dist);
     }
+
+    // empty line for easy reading
+    console.log();
 
     sequence(
           'clean',
