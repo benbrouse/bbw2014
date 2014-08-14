@@ -1,10 +1,13 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('bbw.event-index-controller', ['ionic', 'core-all'])
+    angular
+        .module('bbw.event-index-controller', ['ionic', 'core-all'])
+        .controller('EventIndexCtrl', EventIndexCtrl);
 
-    // A simple controller that fetches a list of data from a service
-    .controller('EventIndexCtrl', ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService', function ($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, AppSettings, EventsService, AddressService, DistanceService) {
+    EventIndexCtrl.$inject = ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService'];
+    
+    function EventIndexCtrl($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, AppSettings, EventsService, AddressService, DistanceService) {
         $scope.initialized = false;
         $scope.allowFavorites = AppSettings.allowFavorites;
         $scope.eventInitialized = false;
@@ -279,6 +282,5 @@
         };
 
         getEventData(false);
-    }]);
-
+    }
 })();
