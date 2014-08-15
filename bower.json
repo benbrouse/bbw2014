@@ -19,7 +19,9 @@
     "angular-cache": "~2.3.3",
     "ionic": "1.0.0-beta.11",
     "showdown": "~0.3.1",
-    "angular-google-maps": "git://github.com/nlaplante/angular-google-maps.git#~1.2.0"
+    "angular-google-maps": "git://github.com/nlaplante/angular-google-maps.git#~1.2.0",
+    "angular-resource": "~1.2.17"
   },
-  "homepage": "https://github.com/benbrouse/bbw2014"
+  "homepage": "https://gitbhub.com/benbrouse/bbw2014",
+  "devDependencies": {}
 }

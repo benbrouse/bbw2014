@@ -3,7 +3,7 @@
 platforms/^.*
 *.apk
 /platforms
-/bower_components
+www/lib
 /collateral
 /dist
 /dist-ios
