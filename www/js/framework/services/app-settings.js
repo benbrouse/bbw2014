@@ -8,7 +8,7 @@
     function AppSettings() {
 
         return {
-            allowConfiguration: true,
+            allowConfiguration: false,
             allowFavorites: false,
             cacheMaxAge: null,
             cacheFlushInterval: null,

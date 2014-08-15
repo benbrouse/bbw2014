@@ -60,12 +60,12 @@
                 hideLoading();
                 vm.initialized = true;
             });
-        };
+        }
 
         function hideLoading() {
             $ionicLoading.hide();
             vm.data.isLoading = false;
-        };
+        }
 
         function refreshContent() {
             // update content
@@ -74,7 +74,7 @@
             // Stop the ion-refresher from spinning
             vm.$broadcast('scroll.refreshComplete');
             vm.$apply();
-        };
+        }
 
         function showLoading (text) {
             // Show the loading overlay and text
@@ -98,6 +98,6 @@
 
             vm.loadingText = text;
             vm.data.isLoading = true;
-        };
+        }
     }
 })();

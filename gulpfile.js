@@ -19,7 +19,7 @@ var config = { 'platform': 'android' };
 
 var bases = {
     app: 'www/',
-    dist: 'dist/',
+    dist: 'dist/www/',
 };
 
 var paths = {
@@ -62,29 +62,29 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('copy', function () {
-    gulp.src(paths.mainhtml, { cwd: bases.app, read: false })
+    gulp.src(paths.mainhtml, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist));
 
-    gulp.src(paths.html, { cwd: bases.app, read: false })
+    gulp.src(paths.html, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'templates'));
 
-    gulp.src(paths.styles, { cwd: bases.app, read: false })
+    gulp.src(paths.styles, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'css'));
 
     if (argv.android) {
-        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app, read: false })
+        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
         .pipe(gulp.dest(bases.dist + 'img'));
     }
 
     if (argv.ios) {
-        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app, read: false })
+        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
         .pipe(gulp.dest(bases.dist + 'img'));
     }
 
-    gulp.src(paths.locales, { cwd: bases.app, read: false })
+    gulp.src(paths.locales, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'locales'));
 
-    gulp.src(paths.lib, { cwd: bases.app, read: false })
+    gulp.src(paths.lib, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'lib'));
 });
 
@@ -96,12 +96,12 @@ gulp.task('build', function (callback) {
     console.log('\nBuilding Version: ' + pkg.version);
 
     if (argv.android) {
-        bases.dist = 'dist-android/';
+        bases.dist = 'dist-android/www/';
         console.log('Platform: Android - Output redirected to: ' + bases.dist);
     }
 
     if (argv.ios) {
-        bases.dist = 'dist-ios/';
+        bases.dist = 'dist-ios/www/';
         console.log('Platform: iOS -Output redirected to: ' + bases.dist);
     }
 
