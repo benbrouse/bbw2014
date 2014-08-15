@@ -10,38 +10,42 @@
      if the key === false then no filtering will be performed
      * @return {array}
      */
-    angular.module('core.excludeFilter', []).filter('exclude', [
-        '$parse', function($parse) {
+    angular
+        .module('core.excludeFilter', [])
+        .filter('exclude', ExcludeFilter);
 
-            return function(items, filterOn, valueToMatch) {
+    ExcludeFilter.$inject = ['$parse'];
+    
+    function ExcludeFilter($parse) {
 
-                if (filterOn === false) {
-                    return items;
-                }
+        return function(items, filterOn, valueToMatch) {
 
-                if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
-                    var newItems = [],
-                        get = angular.isString(filterOn) ? $parse(filterOn) : function(item) { return item; };
-
-                    var extractValueToCompare = function(item) {
-                        return angular.isObject(item) ? get(item) : item;
-                    };
-
-                    var isSame = function(s1, s2) {
-                        return angular.equals(s1, s2);
-                    };
-
-                    angular.forEach(items, function(item) {
-                        var itemString = extractValueToCompare(item);
-                        if (!isSame(itemString, valueToMatch)) {
-                            newItems.push(item);
-                        }
-                    });
-
-                    items = newItems;
-                }
+            if (filterOn === false) {
                 return items;
-            };
-        }
-    ]);
+            }
+
+            if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
+                var newItems = [],
+                    get = angular.isString(filterOn) ? $parse(filterOn) : function(item) { return item; };
+
+                var extractValueToCompare = function(item) {
+                    return angular.isObject(item) ? get(item) : item;
+                };
+
+                var isSame = function(s1, s2) {
+                    return angular.equals(s1, s2);
+                };
+
+                angular.forEach(items, function(item) {
+                    var itemString = extractValueToCompare(item);
+                    if (!isSame(itemString, valueToMatch)) {
+                        newItems.push(item);
+                    }
+                });
+
+                items = newItems;
+            }
+            return items;
+        };
+    }
 })();

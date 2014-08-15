@@ -1,7 +1,8 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('core.resizeDirective', [])
+    angular
+        .module('core.resizeDirective', [])
         .directive('resizeToparent', function($timeout) {
             return {
                 restrict: 'A',

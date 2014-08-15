@@ -1,52 +1,56 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('core.telephoneFilter', []).filter('telephone', [
-        function() {
-            return function(tel) {
-                if (!tel) {
-                    return '';
-                }
+    angular
+        .module('core.telephoneFilter', [])
+        .filter('telephone', TelephoneFilter);
 
-                var value = tel.toString().trim().replace(/^\+/, '');
+    TelephoneFilter.$inject = [];
 
-                if (value.match(/[^0-9]/)) {
-                    return tel;
-                }
+    function TelephoneFilter() {
+        return function(tel) {
+            if (!tel) {
+                return '';
+            }
 
-                var country, city, number;
+            var value = tel.toString().trim().replace(/^\+/, '');
 
-                switch (value.length) {
-                case 10: // +1PPP####### -> C (PPP) ###-####
-                    country = 1;
-                    city = value.slice(0, 3);
-                    number = value.slice(3);
-                    break;
+            if (value.match(/[^0-9]/)) {
+                return tel;
+            }
 
-                case 11: // +CPPP####### -> CCC (PP) ###-####
-                    country = value[0];
-                    city = value.slice(1, 4);
-                    number = value.slice(4);
-                    break;
+            var country, city, number;
 
-                case 12: // +CCCPP####### -> CCC (PP) ###-####
-                    country = value.slice(0, 3);
-                    city = value.slice(3, 5);
-                    number = value.slice(5);
-                    break;
+            switch (value.length) {
+            case 10: // +1PPP####### -> C (PPP) ###-####
+                country = 1;
+                city = value.slice(0, 3);
+                number = value.slice(3);
+                break;
 
-                default:
-                    return tel;
-                }
+            case 11: // +CPPP####### -> CCC (PP) ###-####
+                country = value[0];
+                city = value.slice(1, 4);
+                number = value.slice(4);
+                break;
 
-                if (country == 1) {
-                    country = "";
-                }
+            case 12: // +CCCPP####### -> CCC (PP) ###-####
+                country = value.slice(0, 3);
+                city = value.slice(3, 5);
+                number = value.slice(5);
+                break;
 
-                number = number.slice(0, 3) + '-' + number.slice(3);
+            default:
+                return tel;
+            }
 
-                return (country + " (" + city + ") " + number).trim();
-            };
-        }
-    ]);
+            if (country == 1) {
+                country = "";
+            }
+
+            number = number.slice(0, 3) + '-' + number.slice(3);
+
+            return (country + " (" + city + ") " + number).trim();
+        };
+    }
 })();

@@ -1,9 +1,13 @@
 ﻿(function() {
     'use strict';
-    
-    angular.module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache', 'locations'])
 
-    .factory('EventsService', ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'LocationsService', 'AppSettings', function ($q, $timeout, $filter, $log, $resource, $angularCacheFactory, LocationsService, AppSettings) {
+    angular
+        .module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache', 'locations'])
+        .factory('EventsService', EventsService);
+
+    EventsService.$inject = ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'LocationsService', 'AppSettings'];
+
+    function EventsService($q, $timeout, $filter, $log, $resource, $angularCacheFactory, LocationsService, AppSettings) {
         var cacheNameData = 'eventDataCache';
         var cacheNameFavorite = 'eventFavoriteCache';
 
@@ -11,19 +15,18 @@
         var dataCache = $angularCacheFactory(cacheNameData, {
             maxAge: AppSettings.cacheMaxAge,
             cacheFlushInterval: AppSettings.cacheFlushInterval,
-            storageMode: 'localStorage'         // This cache will sync itself with `localStorage`.
+            storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
         });
 
         var favoriteCache = $angularCacheFactory(cacheNameFavorite, {
             maxAge: AppSettings.cacheMaxAge,
             cacheFlushInterval: AppSettings.cacheFlushInterval,
-            storageMode: 'localStorage'         // This cache will sync itself with `localStorage`.
+            storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
         });
-
 
         var dataUrl = AppSettings.url + 'events/:id';
 
-        var retrieveAll = function (force) {
+        var retrieveAll = function(force) {
             var deferred = $q.defer();
 
             // the cache entry for ALL events
@@ -36,21 +39,21 @@
                 retrieve = true;
             }
 
-            LocationsService.all(force).then(function (locations) {
+            LocationsService.all(force).then(function(locations) {
                 var cacheValue = dataCache.get(cacheEntry);
 
                 if (!retrieve && !angular.isUndefined(cacheValue)) {
-                    $timeout(function () {
+                    $timeout(function() {
                         cacheValue = processList(cacheValue, locations);
                         deferred.resolve(cacheValue);
                     }, 0);
                 } else {
-                    Events.query().$promise.then(function (list) {
+                    Events.query().$promise.then(function(list) {
                         cacheValue = processList(list, locations);
 
                         dataCache.put(cacheEntry, cacheValue);
                         deferred.resolve(cacheValue);
-                    }, function (errResponse) {
+                    }, function(errResponse) {
                         if (!angular.isUndefined(cacheValue)) {
                             $log.write('EventsService: falling back to cache entry');
 
@@ -83,13 +86,13 @@
             return list;
         };
 
-        var getEventById = function (eventId) {
+        var getEventById = function(eventId) {
             var id = angular.isString(eventId) ? Number(eventId) : eventId;
 
             var deferred = $q.defer();
 
             LocationsService.all().then(function(locations) {
-                retrieveAll().then(function (eventList) {
+                retrieveAll().then(function(eventList) {
                     var filtered = _.where(eventList, { id: id });
                     if (filtered != null && filtered.length > 0) {
                         var record = filtered[0];
@@ -98,7 +101,7 @@
 
                         deferred.resolve(record);
                     }
-                }, function (err) {
+                }, function(err) {
                     deferred.reject(err);
                 });
             });
@@ -106,14 +109,14 @@
             return deferred.promise;
         };
 
-        var isFavorite = function (eventId) {
+        var isFavorite = function(eventId) {
             var cacheEntry = "fav:" + eventId;
             var cacheValue = favoriteCache.get(cacheEntry);
 
             return !angular.isUndefined(cacheValue);
         };
 
-        var getLocation = function (locations, id) {
+        var getLocation = function(locations, id) {
             var entity = {};
 
             var filtered = _.where(locations, { id: id });
@@ -199,17 +202,17 @@
                 return deferred.promise;
             },
 
-            getLocationEvents: function (locationName, excludeId, passedEventList) {
+            getLocationEvents: function(locationName, excludeId, passedEventList) {
                 var deferred = $q.defer();
 
                 LocationsService.all().then(function(locations) {
-                    var processEventList = function (eventList) {
+                    var processEventList = function(eventList) {
                         // begin to transform the list
                         eventList = $filter('matchesString')(eventList, 'location.name', locationName);
                         eventList = $filter('exclude')(eventList, 'id', excludeId);
 
                         // define a function to be used to sort the list
-                        var date_sort_asc = function (date1, date2) {
+                        var date_sort_asc = function(date1, date2) {
                             if (new Date(date1) > new Date(date2)) {
                                 return 1;
                             }
@@ -223,13 +226,13 @@
                         eventList = eventList.sort(date_sort_asc);
 
                         // add in the favorite flag
-                        eventList = _.map(eventList, function (event) {
+                        eventList = _.map(eventList, function(event) {
                             event.favorite = isFavorite(event.id);
                             return event;
                         });
 
                         // resolve the event location
-                        eventList = _.map(eventList, function (event) {
+                        eventList = _.map(eventList, function(event) {
                             event.location = getLocation(locations, event.locationId);
                             return event;
                         });
@@ -238,7 +241,7 @@
                     };
 
                     if (angular.isUndefined(passedEventList)) {
-                        retrieveAll().then(function (eventList) {
+                        retrieveAll().then(function(eventList) {
                             processEventList(eventList);
                         });
                     } else {
@@ -249,7 +252,7 @@
                 return deferred.promise;
             },
 
-            toggleFavorite: function (event) {
+            toggleFavorite: function(event) {
                 event.favorite = !event.favorite;
 
                 var cacheEntry = "fav:" + event.id;
@@ -262,6 +265,5 @@
 
             isFavorite: isFavorite
         };
-    }]);
-
+    }
 })();

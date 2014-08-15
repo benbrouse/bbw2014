@@ -8,58 +8,35 @@
     AboutCtrl.$inject = ['$scope', '$log', '$ionicModal', 'AppSettings'];
     
     function AboutCtrl($scope, $log, $ionicModal, AppSettings) {
-        $scope.initialized = false;
-        $scope.allowConfiguration = AppSettings.allowConfiguration;
+        var modals = {};
+        var vm = $scope;
 
-        // Load the modal from the given template URL
-        $ionicModal.fromTemplateUrl('templates/about-map-modal.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            $scope.modalMap = modal;
-        });
+        vm.allowConfiguration = AppSettings.allowConfiguration;
+        vm.initialized = false;
 
-        // Load the modal from the given template URL
-        $ionicModal.fromTemplateUrl('templates/about-settings-modal.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            $scope.modalSettings = modal;
-        });
+        vm.openSettingsModal = function () { modals.modalSettings.show(); };
+        vm.closeSettingsModal = function () { modals.modalSettings.hide(); };
 
-        $scope.openMapModal = function() {
-            $scope.modalMap.show();
-        };
+        activate();
 
-        $scope.closeMapModal = function() {
-            $scope.modalMap.hide();
-        };
+        /////////////////////////////////
+        function activate() {
+            setupModals();
+        }
 
-        $scope.openSettingsModal = function() {
-            $scope.modalSettings.show();
-        };
+        function setupModals() {
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/about-settings-modal.html', {
+                scope: vm,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                modals.modalSettings = modal;
+            });
 
-        $scope.closeSettingsModal = function() {
-            $scope.modalSettings.hide();
-        };
-
-        //Be sure to cleanup the modal
-        $scope.$on('$destroy', function() {
-            $scope.modalMap.remove();
-        });
-
-        $scope.getLocation = function() {
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    $scope.latitude = position.coords.latitude;
-                    $scope.longitude = position.coords.longitude;
-
-                    $scope.$apply();
-                },
-                function() {
-                    $log.log('Error getting location');
-                }
-            );
-        };
+            //Be sure to cleanup the modal
+            vm.$on('$destroy', function () {
+                modals.modalSettings.remove();
+            });
+        }
     }
 })();

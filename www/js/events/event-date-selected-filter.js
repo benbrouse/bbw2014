@@ -1,10 +1,13 @@
 ﻿(function () {
     'use strict';
 
-    /**
+    angular
+        .module('bbw.eventDateSelectedFilter', [])
+        .filter('eventDateSelected', EventDateSelected);
 
-     */
-    angular.module('bbw.eventDateSelectedFilter', []).filter('eventDateSelected', ['$parse', function ($parse) {
+    EventDateSelected.$inject = ['$parse'];
+    
+    function EventDateSelected($parse) {
 
         return function (items, filterOn, selectedDates) {
             if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
@@ -40,6 +43,5 @@
 
             return items;
         };
-    }]);
-
+    }
 })();

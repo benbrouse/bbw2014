@@ -1,24 +1,27 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('core.loader-service', [])
-        .factory('LoaderService', [
-            '$rootScope', '$ionicLoading', function($rootScope, $ionicLoading) {
+    angular
+        .module('core.loader-service', [])
+        .factory('LoaderService', LoaderService);
 
-                // Trigger the loading indicator
-                return {
-                    show: function(text) { //code from the ionic framework doc
+    LoaderService.$inject = ['$rootScope', '$ionicLoading'];
+    
+    function LoaderService($rootScope, $ionicLoading) {
 
-                        // Show the loading overlay and text
-                        $rootScope.loading = $ionicLoading.show({
-                            // The text to display in the loading indicator
-                            template: text
-                        });
-                    },
-                    hide: function() {
-                        $ionicLoading.hide();
-                    }
-                };
+        // Trigger the loading indicator
+        return {
+            show: function(text) { //code from the ionic framework doc
+
+                // Show the loading overlay and text
+                $rootScope.loading = $ionicLoading.show({
+                    // The text to display in the loading indicator
+                    template: text
+                });
+            },
+            hide: function() {
+                $ionicLoading.hide();
             }
-        ]);
+        };
+    }
 })();

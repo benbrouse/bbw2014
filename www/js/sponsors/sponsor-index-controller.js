@@ -8,42 +8,75 @@
     SponsorIndexCtrl.$inject = ['$scope', '$ionicModal', '$ionicLoading', '$timeout', 'LoaderService', 'SponsorsService'];
     
     function SponsorIndexCtrl($scope, $ionicModal, $ionicLoading, $timeout, LoaderService, SponsorsService) {
-        $scope.initialized = false;
-        $scope.sponsorInitialized = true;
+        var vm = $scope;
 
-        $scope.data = {
-            isLoading: false
-        };
+        vm.initialized = false;
+        vm.data = { isLoading: false };
+        vm.refreshContent = refreshContent;
+        vm.sponsorInitialized = true;
 
-        // Load the modal from the given template URL
-        $ionicModal.fromTemplateUrl('templates/sponsor-detail-modal.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            $scope.modalSponsor = modal;
-        });
+        initialize();
+        activate();
 
-        $scope.openSponsorModal = function(sponsorId) {
-            SponsorsService.get(sponsorId).then(function(sponsor) {
-                $scope.sponsor = sponsor;
-                $scope.modalSponsor.show();
+        ///////////////////////////
+        function activate() {
+            $timeout(function () {
+                getSponsorData(false);
+            }, 100);
+        }
+
+        function initialize() {
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/sponsor-detail-modal.html', {
+                scope: vm,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                vm.modalSponsor = modal;
+            });
+        }
+
+        ////////////////////////////
+
+        //function closeSponsorModal() {
+        //    vm.modalSponsor.hide();
+        //};
+
+        //function openSponsorModal(sponsorId) {
+        //    SponsorsService.get(sponsorId).then(function(sponsor) {
+        //        vm.sponsor = sponsor;
+        //        vm.modalSponsor.show();
+        //    });
+        //};
+
+        function getSponsorData(force) {
+
+            showLoading('Retrieving Sponsor List');
+
+            SponsorsService.all(force).then(function (sponsors) {
+                vm.sponsors = sponsors;
+                vm.levels = SponsorsService.getLevels();
+
+                // Hide overlay when done
+                hideLoading();
+                vm.initialized = true;
             });
         };
 
-        $scope.closeSponsorModal = function() {
-            $scope.modalSponsor.hide();
+        function hideLoading() {
+            $ionicLoading.hide();
+            vm.data.isLoading = false;
         };
 
-        $scope.refreshContent = function() {
+        function refreshContent() {
             // update content
             getSponsorData(true);
 
             // Stop the ion-refresher from spinning
-            $scope.$broadcast('scroll.refreshComplete');
-            $scope.$apply();
+            vm.$broadcast('scroll.refreshComplete');
+            vm.$apply();
         };
 
-        $scope.showLoading = function(text) {
+        function showLoading (text) {
             // Show the loading overlay and text
             $ionicLoading.show({
                 // The text to display in the loading indicator
@@ -63,31 +96,8 @@
                 showDelay: 500
             });
 
-            $scope.loadingText = text;
-            $scope.data.isLoading = true;
+            vm.loadingText = text;
+            vm.data.isLoading = true;
         };
-
-        $scope.hideLoading = function() {
-            $ionicLoading.hide();
-            $scope.data.isLoading = false;
-        };
-
-        var getSponsorData = function(force) {
-
-            $scope.showLoading('Retrieving Sponsor List');
-
-            SponsorsService.all(force).then(function(sponsors) {
-                $scope.sponsors = sponsors;
-                $scope.levels = SponsorsService.getLevels();
-
-                // Hide overlay when done
-                $scope.hideLoading();
-                $scope.initialized = true;
-            });
-        };
-
-        $timeout(function() {
-            getSponsorData(false);
-        }, 100);
     }
 })();

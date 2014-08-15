@@ -1,7 +1,11 @@
 ﻿(function() {
     'use strict';
 
-    angular.module('core.markdown-directive', []).directive('markdown', function() {
+    angular
+        .module('core.markdown-directive', [])
+        .directive('markdown', MarkDownDirective);
+    
+    function MarkDownDirective() {
         // Usage:
         // <div data-markdown="{{vm.content}}"></div>
 
@@ -19,5 +23,5 @@
                 element.html(markup);
             });
         }
-    });
+    }
 })();
