@@ -29,7 +29,7 @@ var paths = {
     html: ['templates/**/*.html'],
     images: ['img/**/*.png'],
     locales: ['locales/**/*.*'],
-    lib: ['lib/**/*.min.css', 'lib/**/fonts/*.*', 'lib/**/*.min.js'],
+    lib: ['lib/**/*.min.css', 'lib/**/fonts/*.*', 'lib/**/*.min.js', 'lib/**/compressed/showdown.js'],
 };
 
 var platform = {

@@ -8,81 +8,83 @@
     EventIndexCtrl.$inject = ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService'];
     
     function EventIndexCtrl($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, AppSettings, EventsService, AddressService, DistanceService) {
-        $scope.initialized = false;
-        $scope.allowFavorites = AppSettings.allowFavorites;
-        $scope.eventInitialized = false;
+        var vm = $scope;
 
-        $scope.sortByDate = true;
+        vm.initialized = false;
+        vm.allowFavorites = AppSettings.allowFavorites;
+        vm.eventInitialized = false;
 
-        $scope.favoriteFilter = { text: "Show favorite events only", checked: false };
+        vm.sortByDate = true;
 
-        $scope.data = {
+        vm.favoriteFilter = { text: "Show favorite events only", checked: false };
+
+        vm.data = {
             isLoading: true
         };
 
         // state flag for which tab is being displayed
-        $scope.showEventMap = false;
-        $scope.showEventDescription = true;
-        $scope.showEventOther = false;
+        vm.showEventMap = false;
+        vm.showEventDescription = true;
+        vm.showEventOther = false;
 
         // Load the modal from the given template URL
         $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
-            scope: $scope,
+            scope: vm,
             animation: 'slide-in-up'
         }).then(function(modal) {
-            $scope.modalFilter = modal;
+            vm.modalFilter = modal;
         });
 
         // Load the modal from the given template URL
         $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
-            scope: $scope,
+            scope: vm,
             animation: 'slide-in-up'
         }).then(function(modal) {
-            $scope.modalEvent = modal;
+            vm.modalEvent = modal;
         });
 
-        $scope.openFilterModal = function () {
-            $scope.modalFilter.show();
+        vm.openFilterModal = function () {
+            vm.modalFilter.show();
         };
 
-        $scope.closeFilterModal = function() {
-            $scope.modalFilter.hide();
+        vm.closeFilterModal = function () {
+            vm.modalFilter.hide();
         };
      
-        $scope.openEventModal = function (eventId) {
-            $scope.showLoading('Retrieving Event Details');
+        vm.openEventModal = function (eventId) {
+            vm.showLoading('Retrieving Event Details');
         
             // retrieve all data needed for the modal
             EventsService.get(eventId).then(function(event) {
-                $scope.event = event;
+                vm.event = event;
 
-                EventsService.getLocationEvents($scope.event.location.name, eventId).then(function (locationEvents) {
-                    $scope.locationEvents = locationEvents;
+                EventsService.getLocationEvents(vm.event.location.name, eventId).then(function (locationEvents) {
+                    vm.locationEvents = locationEvents;
 
-                    $scope.hideLoading();
+                    vm.hideLoading();
 
-                    if (!$scope.modalEvent.isShown()) {
+                    if (!vm.modalEvent.isShown()) {
                         // setup state for the modal
-                        $scope.showEventDescription = true;
-                        $scope.showEventMap = false;
+                        vm.showEventDescription = true;
+                        vm.showEventMap = false;
 
-                        $scope.modalEvent.show();
-                        $scope.currentModal = "eventDetail";
+                        vm.modalEvent.show();
+                        vm.currentModal = "eventDetail";
                     }
                 });
             });
         };
 
-        $scope.closeEventModal = function () {
-            $scope.modalEvent.hide();
+        vm.closeEventModal = function () {
+            vm.modalEvent.hide();
 
-            $scope.eventInitialized = true;
-            $scope.currentModal = null;
+            vm.eventInitialized = true;
+            vm.currentModal = null;
         };
 
-        $scope.loadingText = "Loading event data";
+        vm.loadingText = "Loading event data";
 
-        $scope.refreshContent = function () {
+        vm.refreshContent = function () {
             // update content
             getEventData(true);
 
@@ -93,23 +95,23 @@
 
         //Be sure to cleanup the modal
         $scope.$on('$destroy', function () {
-            if ($scope.modalEvent) {
-                $scope.modalEvent.remove();
+            if (vm.modalEvent) {
+                vm.modalEvent.remove();
             }
 
-            if ($scope.modalFilter) {
-                $scope.modalFilter.remove();
+            if (vm.modalFilter) {
+                vm.modalFilter.remove();
             }
         });
 
         // Execute action on hide modal
         $scope.$on('modal.shown', function () {
             // extra bootstrapping to display the map correctly
-            if ($scope.currentModal == "eventDetail") {
-                var eventAddress = $scope.event.location.address;
+            if (vm.currentModal == "eventDetail") {
+                var eventAddress = vm.event.location.address;
                 if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                     AddressService.geocode(eventAddress).then(function (location) {
-                        $scope.eventInitialized = true;
+                        vm.eventInitialized = true;
 
                         navigator.geolocation.getCurrentPosition(
                             function (position) {
@@ -123,7 +125,7 @@
                                     longitude: location.lng()
                                 };
 
-                                $scope.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+                                vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
 
                                 $scope.$apply();
                             },
@@ -169,44 +171,44 @@
                 //infowindow.open(map, marker);
             });
 
-            $scope.map = map;
+            vm.map = map;
         };
 
-        $scope.switchEventView = function (id) {
-            $scope.showEventDescription = (id == 'details') ? true : false;
-            $scope.showEventMap = (id == 'location') ? true : false;
-            $scope.showEventOther = (id == 'events') ? true : false;
+        vm.switchEventView = function (id) {
+            vm.showEventDescription = (id == 'details') ? true : false;
+            vm.showEventMap = (id == 'location') ? true : false;
+            vm.showEventOther = (id == 'events') ? true : false;
 
-            if ($scope.showEventMap) {
-                var eventAddress = $scope.event.location.address;
+            if (vm.showEventMap) {
+                var eventAddress = vm.event.location.address;
                 if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                     AddressService.geocode(eventAddress).then(function (location) {
 
-                        $scope.eventInitialized = true;
-                        initializeMap(16, location, $scope.event.location.name);
+                        vm.eventInitialized = true;
+                        initializeMap(16, location, vm.event.location.name);
                     });
                 }
             }
 
-            google.maps.event.trigger($scope.map, "resize");
+            google.maps.event.trigger(vm.map, "resize");
         };
 
-        $scope.switchSort = function() {
-            $scope.sortByDate = !$scope.sortByDate;
+        vm.switchSort = function () {
+            vm.sortByDate = !vm.sortByDate;
         };
 
-        $scope.toggleFavorite = function() {
-            EventsService.toggleFavorite($scope.event);
+        vm.toggleFavorite = function () {
+            EventsService.toggleFavorite(vm.event);
         };
 
-        $scope.toggleLocationFavorite = function(eventId) {
-            var event = _.findWhere($scope.locationEvents, { id: eventId });
+        vm.toggleLocationFavorite = function (eventId) {
+            var event = _.findWhere(vm.locationEvents, { id: eventId });
             if (event != null) {
                 EventsService.toggleFavorite(event);
             }
         };
 
-        $scope.showLoading = function(text) {
+        vm.showLoading = function (text) {
             // Show the loading overlay and text
             $ionicLoading.show({
                 // The text to display in the loading indicator
@@ -226,51 +228,51 @@
                 showDelay: 500
             });
 
-            $scope.loadingText = text;
-            $scope.data.isLoading = true;
+            vm.loadingText = text;
+            vm.data.isLoading = true;
         };
 
-        $scope.hideLoading = function () {
+        vm.hideLoading = function () {
             $ionicLoading.hide();
-            $scope.data.isLoading = false;
+            vm.data.isLoading = false;
         };
 
 
         var getEventData = function(force) {
             // Show loader from service
-            $scope.showLoading('Retrieving Event List');
+            vm.showLoading('Retrieving Event List');
 
             EventsService.all(force).then(function(events) {
-                $scope.events = events;
+                vm.events = events;
 
-                $scope.filterSettingsList = [
-                    $scope.favoriteFilter
+                vm.filterSettingsList = [
+                    vm.favoriteFilter
     //                { text: "Limit to events near me", checked: false }
                 ];
 
-                EventsService.getEventLocations($scope.events).then(function(eventLocations) {
-                    $scope.eventLocations = _.map(eventLocations, function(location) {
+                EventsService.getEventLocations(vm.events).then(function (eventLocations) {
+                    vm.eventLocations = _.map(eventLocations, function (location) {
                         return { name: location, selected: true };
                     });
                 });
 
                 // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
-                EventsService.getEventDates($scope.events).then(function(eventDates) {
-                    $scope.eventDates = _.map(eventDates, function(date) {
+                EventsService.getEventDates(vm.events).then(function (eventDates) {
+                    vm.eventDates = _.map(eventDates, function (date) {
                         return { date: date, selected: true };
                     });
 
-                    $scope.selection = [];
+                    vm.selection = [];
 
                     $scope.$watch('eventDates|filter:{selected:true}', function(nv) {
-                        $scope.selection = nv.map(function(date) {
+                        vm.selection = nv.map(function (date) {
                             return date.date;
                         });
                     }, true);
 
                     // Hide overlay when done
-                    $scope.hideLoading();
-                    $scope.initialized = true;
+                    vm.hideLoading();
+                    vm.initialized = true;
                 }, function(reason) {
                     // could not get the list of event dates
                     $log.write(reason);
