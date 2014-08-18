@@ -1,0 +1,20 @@
+{
+  "name": "scrape-loader",
+  "version": "0.0.0",
+  "description": "NodeJS utility to load data from main website",
+  "main": "scrape.js",
+  "dependencies": {
+    "azure-storage": "~0.3.2",
+    "cheerio": "~0.17.0",
+    "nconf": "~0.6.9",
+    "node-uuid": "~1.4.1",
+    "q": "~1.0.1",
+    "request": "~2.40.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "benbrouse",
+  "license": "MIT"
+}
