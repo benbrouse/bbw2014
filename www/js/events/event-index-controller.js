@@ -5,54 +5,56 @@
         .module('bbw.event-index-controller', ['ionic', 'core-all'])
         .controller('EventIndexCtrl', EventIndexCtrl);
 
-    EventIndexCtrl.$inject = ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService'];
+    EventIndexCtrl.$inject = ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', '$timeout', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService'];
     
-    function EventIndexCtrl($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, AppSettings, EventsService, AddressService, DistanceService) {
+    function EventIndexCtrl($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, $timeout, AppSettings, EventsService, AddressService, DistanceService) {
+
+        var modals = {};
         var vm = $scope;
 
-        vm.initialized = false;
         vm.allowFavorites = AppSettings.allowFavorites;
+        vm.data = { isLoading: true };
         vm.eventInitialized = false;
+        vm.favoriteFilter = { text: "Show favorite events only", checked: false };
+        vm.initialized = false;
+        vm.loadingText = "Loading event data";
+
+        vm.refreshContent = refreshContent;
+        vm.switchEventView = switchEventView;
 
         vm.sortByDate = true;
-
-        vm.favoriteFilter = { text: "Show favorite events only", checked: false };
-
-        vm.data = {
-            isLoading: true
-        };
 
         // state flag for which tab is being displayed
         vm.showEventMap = false;
         vm.showEventDescription = true;
         vm.showEventOther = false;
 
-        // Load the modal from the given template URL
-        $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
-            scope: vm,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            vm.modalFilter = modal;
-        });
+        vm.switchSort = function () { vm.sortByDate = !vm.sortByDate; };
 
-        // Load the modal from the given template URL
-        $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
-            scope: vm,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            vm.modalEvent = modal;
-        });
+        vm.toggleFavorite = function () { EventsService.toggleFavorite(vm.event); };
+        vm.toggleLocationFavorite = toggleLocationFavorite;
 
-        vm.openFilterModal = function () {
-            vm.modalFilter.show();
-        };
+        //// modals
+        vm.openFilterModal = function () { modals.modalFilter.show(); };
+        vm.closeFilterModal = function () { modals.modalFilter.hide(); };
 
-        vm.closeFilterModal = function () {
-            vm.modalFilter.hide();
-        };
-     
-        vm.openEventModal = function (eventId) {
-            vm.showLoading('Retrieving Event Details');
+        vm.openEventModal = openEventModal;
+        vm.closeEventModal = closeEventModal;
+
+        activate();
+
+        ////////////////////
+        function activate() {
+            setupModals();
+            setupControllerEvents();
+
+            $timeout(function () {
+                getEventData(false);
+            }, 100);
+        }
+
+        function openEventModal(eventId) {
+            showLoading('Retrieving Event Details');
         
             // retrieve all data needed for the modal
             EventsService.get(eventId).then(function(event) {
@@ -61,92 +63,78 @@
                 EventsService.getLocationEvents(vm.event.location.name, eventId).then(function (locationEvents) {
                     vm.locationEvents = locationEvents;
 
-                    vm.hideLoading();
+                    hideLoading();
 
-                    if (!vm.modalEvent.isShown()) {
+                    if (!modals.modalEvent.isShown()) {
                         // setup state for the modal
                         vm.showEventDescription = true;
                         vm.showEventMap = false;
 
-                        vm.modalEvent.show();
+                        modals.modalEvent.show();
                         vm.currentModal = "eventDetail";
                     }
                 });
             });
-        };
+        }
 
-        vm.closeEventModal = function () {
-            vm.modalEvent.hide();
+        function closeEventModal() {
+            modals.modalEvent.hide();
 
             vm.eventInitialized = true;
             vm.currentModal = null;
-        };
+        }
 
-        vm.loadingText = "Loading event data";
+        function getEventData(force) {
+            // Show loader from service
+            showLoading('Retrieving Event List');
 
-        vm.refreshContent = function () {
-            // update content
-            getEventData(true);
+            EventsService.all(force).then(function (events) {
+                vm.events = events;
 
-            // Stop the ion-refresher from spinning
-            $scope.$broadcast('scroll.refreshComplete');
-            $scope.$apply();
-        };
+                vm.filterSettingsList = [
+                    vm.favoriteFilter
+    //                { text: "Limit to events near me", checked: false }
+                ];
 
-        //Be sure to cleanup the modal
-        $scope.$on('$destroy', function () {
-            if (vm.modalEvent) {
-                vm.modalEvent.remove();
-            }
-
-            if (vm.modalFilter) {
-                vm.modalFilter.remove();
-            }
-        });
-
-        // Execute action on hide modal
-        $scope.$on('modal.shown', function () {
-            // extra bootstrapping to display the map correctly
-            if (vm.currentModal == "eventDetail") {
-                var eventAddress = vm.event.location.address;
-                if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
-                    AddressService.geocode(eventAddress).then(function (location) {
-                        vm.eventInitialized = true;
-
-                        navigator.geolocation.getCurrentPosition(
-                            function (position) {
-                                var start = {
-                                    latitude: position.coords.latitude,
-                                    longitude: position.coords.longitude
-                                };
-
-                                var end = {
-                                    latitude: location.lat(),
-                                    longitude: location.lng()
-                                };
-
-                                vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
-
-                                $scope.$apply();
-                            },
-                            function () {
-                                $log.error('Error getting location');
-                            }
-                        );
+                EventsService.getEventLocations(vm.events).then(function (eventLocations) {
+                    vm.eventLocations = _.map(eventLocations, function (location) {
+                        return { name: location, selected: true };
                     });
-                }
+                });
 
-                // HACK!!! - otherwise the google map doesn't account for anyspace at all!
-                var modalElement = document.querySelector('.modal');
-                var fullHeight = modalElement.clientHeight;
+                // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
+                EventsService.getEventDates(vm.events).then(function (eventDates) {
+                    vm.eventDates = _.map(eventDates, function (date) {
+                        return { date: date, selected: true };
+                    });
 
-                var wrapperElement = angular.element(document.querySelector('.event-detail-wrapper'));
-                // NOTE: 255 is the size of all the elements above the map div
-                wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
-            }
-        });
+                    vm.selection = [];
 
-        var initializeMap = function(zoomLevel, location, name) {
+                    $scope.$watch('eventDates|filter:{selected:true}', function (nv) {
+                        vm.selection = nv.map(function (date) {
+                            return date.date;
+                        });
+                    }, true);
+
+                    // Hide overlay when done
+                    hideLoading();
+                    vm.initialized = true;
+                }, function (reason) {
+                    // could not get the list of event dates
+                    $log.write(reason);
+                });
+            }, function (reason) {
+                // could not get the list of events
+                $log.write(reason);
+            });
+        }
+
+        function hideLoading() {
+            $ionicLoading.hide();
+            vm.data.isLoading = false;
+        }
+
+        function initializeMap(zoomLevel, location, name) {
             var mapOptions = {
                 center: location,
                 zoom: zoomLevel,
@@ -172,43 +160,91 @@
             });
 
             vm.map = map;
-        };
+        }
 
-        vm.switchEventView = function (id) {
-            vm.showEventDescription = (id == 'details') ? true : false;
-            vm.showEventMap = (id == 'location') ? true : false;
-            vm.showEventOther = (id == 'events') ? true : false;
+        function refreshContent() {
+            // update content
+            getEventData(true);
 
-            if (vm.showEventMap) {
-                var eventAddress = vm.event.location.address;
-                if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
-                    AddressService.geocode(eventAddress).then(function (location) {
+            // Stop the ion-refresher from spinning
+            $scope.$broadcast('scroll.refreshComplete');
+            $scope.$apply();
+        }
 
-                        vm.eventInitialized = true;
-                        initializeMap(16, location, vm.event.location.name);
-                    });
+        function setupControllerEvents() {
+            //Be sure to cleanup the modal
+            $scope.$on('$destroy', function () {
+                if (vm.modalEvent) {
+                    vm.modalEvent.remove();
                 }
-            }
 
-            google.maps.event.trigger(vm.map, "resize");
-        };
+                if (vm.modalFilter) {
+                    vm.modalFilter.remove();
+                }
+            });
 
-        vm.switchSort = function () {
-            vm.sortByDate = !vm.sortByDate;
-        };
+            // Execute action on hide modal
+            $scope.$on('modal.shown', function () {
+                // extra bootstrapping to display the map correctly
+                if (vm.currentModal == "eventDetail") {
+                    var eventAddress = vm.event.location.address;
+                    if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
+                        AddressService.geocode(eventAddress).then(function (location) {
+                            vm.eventInitialized = true;
 
-        vm.toggleFavorite = function () {
-            EventsService.toggleFavorite(vm.event);
-        };
+                            navigator.geolocation.getCurrentPosition(
+                                function (position) {
+                                    var start = {
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude
+                                    };
 
-        vm.toggleLocationFavorite = function (eventId) {
-            var event = _.findWhere(vm.locationEvents, { id: eventId });
-            if (event != null) {
-                EventsService.toggleFavorite(event);
-            }
-        };
+                                    var end = {
+                                        latitude: location.lat(),
+                                        longitude: location.lng()
+                                    };
 
-        vm.showLoading = function (text) {
+                                    vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+
+                                    $scope.$apply();
+                                },
+                                function () {
+                                    $log.error('Error getting location');
+                                }
+                            );
+                        });
+                    }
+
+                    // HACK!!! - otherwise the google map doesn't account for anyspace at all!
+                    var modalElement = document.querySelector('.modal');
+                    var fullHeight = modalElement.clientHeight;
+
+                    var wrapperElement = angular.element(document.querySelector('.event-detail-wrapper'));
+                    // NOTE: 255 is the size of all the elements above the map div
+                    wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
+                }
+            });
+        }
+
+        function setupModals() {
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
+                scope: vm,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                modals.modalFilter = modal;
+            });
+
+            // Load the modal from the given template URL
+            $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
+                scope: vm,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                modals.modalEvent = modal;
+            });
+        }
+
+        function showLoading(text) {
             // Show the loading overlay and text
             $ionicLoading.show({
                 // The text to display in the loading indicator
@@ -230,59 +266,32 @@
 
             vm.loadingText = text;
             vm.data.isLoading = true;
-        };
+        }
 
-        vm.hideLoading = function () {
-            $ionicLoading.hide();
-            vm.data.isLoading = false;
-        };
+        function switchEventView(id) {
+            vm.showEventDescription = (id == 'details') ? true : false;
+            vm.showEventMap = (id == 'location') ? true : false;
+            vm.showEventOther = (id == 'events') ? true : false;
 
+            if (vm.showEventMap) {
+                var eventAddress = vm.event.location.address;
+                if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
+                    AddressService.geocode(eventAddress).then(function (location) {
 
-        var getEventData = function(force) {
-            // Show loader from service
-            vm.showLoading('Retrieving Event List');
-
-            EventsService.all(force).then(function(events) {
-                vm.events = events;
-
-                vm.filterSettingsList = [
-                    vm.favoriteFilter
-    //                { text: "Limit to events near me", checked: false }
-                ];
-
-                EventsService.getEventLocations(vm.events).then(function (eventLocations) {
-                    vm.eventLocations = _.map(eventLocations, function (location) {
-                        return { name: location, selected: true };
+                        vm.eventInitialized = true;
+                        initializeMap(16, location, vm.event.location.name);
                     });
-                });
+                }
+            }
 
-                // retrieve the list of unique dates for the events,    NOTE: these should be sorted at this point also
-                EventsService.getEventDates(vm.events).then(function (eventDates) {
-                    vm.eventDates = _.map(eventDates, function (date) {
-                        return { date: date, selected: true };
-                    });
+            google.maps.event.trigger(vm.map, "resize");
+        }    
 
-                    vm.selection = [];
-
-                    $scope.$watch('eventDates|filter:{selected:true}', function(nv) {
-                        vm.selection = nv.map(function (date) {
-                            return date.date;
-                        });
-                    }, true);
-
-                    // Hide overlay when done
-                    vm.hideLoading();
-                    vm.initialized = true;
-                }, function(reason) {
-                    // could not get the list of event dates
-                    $log.write(reason);
-                });
-            }, function(reason) {
-                // could not get the list of events
-                $log.write(reason);
-            });
-        };
-
-        getEventData(false);
+        function toggleLocationFavorite(eventId) {
+            var event = _.findWhere(vm.locationEvents, { id: eventId });
+            if (event != null) {
+                EventsService.toggleFavorite(event);
+            }
+        }
     }
 })();

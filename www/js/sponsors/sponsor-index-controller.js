@@ -12,6 +12,7 @@
 
         vm.initialized = false;
         vm.data = { isLoading: false };
+        vm.loadingText = 'Retrieving Sponsor List';
         vm.refreshContent = refreshContent;
         vm.sponsorInitialized = true;
 
@@ -19,6 +20,7 @@
         activate();
 
         ///////////////////////////
+
         function activate() {
             $timeout(function () {
                 getSponsorData(false);
@@ -50,7 +52,7 @@
 
         function getSponsorData(force) {
 
-            showLoading('Retrieving Sponsor List');
+            showLoading(vm.loadingText);
 
             SponsorsService.all(force).then(function (sponsors) {
                 vm.sponsors = sponsors;
