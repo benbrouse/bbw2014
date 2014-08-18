@@ -1,5 +1,6 @@
 *.keystore
 *.sw*
+.ntvs_analysis.dat
 platforms/^.*
 *.apk
 /platforms

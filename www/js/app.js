@@ -40,7 +40,7 @@
                 views: {
                     'sponsors-tab': {
                         templateUrl: 'templates/sponsor-index.html',
-                        controller: 'SponsorIndexCtrl'
+//                        controller: 'SponsorIndexCtrl'
                     }
                 }
             })
