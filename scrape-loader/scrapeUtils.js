@@ -7,9 +7,24 @@
 function timeOfDay(input) {
     var time = input;
 
+    time = _processTimes(time);    
+    
+    // fix-up bad data like "19,"
+    var location = time.indexOf(",");
+    if (location > -1) {
+        time = _processTimes("12pm");
+    }
+    
+        
+    return time;
+}
+
+function _processTimes(input) {
+    var time = input;
+        
     time = _processTime(time, false);
     time = _processTime(time, true);
-    
+
     return time;
 }
 
@@ -30,8 +45,8 @@ function _processTime(input, pm) {
         if (timeParts.length == 2) {
             minutes = Number(timeParts[1]);
         }
-        
-        time = pad(hours, 2) + ":" + pad(minutes, 2);
+
+        time = pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(Number(0), 2);
     }
 
     return time;

@@ -11,8 +11,8 @@ var Events = require('./events.js');
 var events = new Events();
 
 var baseUrl = 'http://baltimorebeerweek.com/events/';
-var dates = ['OCT11', 'OCT12'];
-//var dates = ['OCT11', 'OCT12', 'OCT13', 'OCT14', 'OCT15', 'OCT16', 'OCT17', 'OCT18', 'OCT19'];
+//var dates = ['OCT11', 'OCT12'];
+var dates = ['OCT11', 'OCT12', 'OCT13', 'OCT14', 'OCT15', 'OCT16', 'OCT17', 'OCT18', 'OCT19'];
 
 // data holders
 var locations;
@@ -80,6 +80,7 @@ function processDate(dateString) {
                     var cost = $(details).eq(2).text().trim().replace("Cost: ", "");
                     cost = cost.replace("Fixed Price", "-1");
                     cost = cost.replace("Pay as you go", "0");
+                    cost = cost.replace("Free", "0");
 
                     var description = $(details).eq(4).text().trim();
 
