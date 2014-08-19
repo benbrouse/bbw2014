@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using Microsoft.WindowsAzure.Storage.Table;
 using server.Models;
 
 namespace server.Data
@@ -8,6 +13,26 @@ namespace server.Data
         public LocationService()
         {
             _tableName = Tables.LOCATION;
+        }
+
+        public List<Location> RetrieveByAddress(string address)
+        {
+            Debug.Assert(String.IsNullOrEmpty(_tableName) != true);
+
+            // retrieve the storage account to be used
+            string storageAccountSetting = Configuration.GetSetting(ApplicationSettings.STORAGE_ACCOUNT);
+            string accountId = Configuration.GetSetting(ApplicationSettings.ACCOUNT_ID);
+
+            CloudTable table = GetTableReference(storageAccountSetting);
+
+            // establish key values for the entity
+            var entity = default(Location);
+
+            // Construct the query operation for all customer entities where PartitionKey="Smith".
+            TableQuery<Location> query = new TableQuery<Location>().Where(TableQuery.GenerateFilterCondition("Address", QueryComparisons.Equal, address));
+            var results = table.ExecuteQuery(query).ToList();
+
+            return results;
         }
 
         public List<Location> GetMockData()

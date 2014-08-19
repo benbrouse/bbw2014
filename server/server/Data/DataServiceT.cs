@@ -80,7 +80,8 @@ namespace server.Data
             T entity = default(T);
 
             // retrieve the details about the file
-            TableOperation retrieveOperation = TableOperation.Retrieve<Sponsor>(accountId, id.ToString(CultureInfo.InvariantCulture));
+            TableOperation retrieveOperation = TableOperation.Retrieve<T>(accountId, id.ToString(CultureInfo.InvariantCulture));
+
             TableResult retrievedResult = table.Execute(retrieveOperation);
 
             if (retrievedResult.Result != null)
@@ -92,7 +93,7 @@ namespace server.Data
         }
 
         #region Implementation
-        private CloudTable GetTableReference(string storageAccountSetting)
+        protected CloudTable GetTableReference(string storageAccountSetting)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(storageAccountSetting);
 

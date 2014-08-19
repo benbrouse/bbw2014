@@ -13,6 +13,7 @@ namespace server.Data
         public static string SPONSOR = "Sponsor";
         public static string EVENT = "Event";
         public static string LOCATION = "Location";
+        public static string EVENT_IMPORT = "EventsImport";
     }
     
     public class Configuration

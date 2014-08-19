@@ -184,12 +184,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\DataloadController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MockDataController.cs" />
     <Compile Include="Controllers\SponsorsController.cs" />
     <Compile Include="Data\Configuration.cs" />
+    <Compile Include="Data\DataloadService.cs" />
     <Compile Include="Data\DataServiceT.cs" />
     <Compile Include="Data\EventService.cs" />
     <Compile Include="Data\LocationService.cs" />
@@ -199,6 +201,7 @@
     </Compile>
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\EventLoad.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Sponsor.cs" />
     <Compile Include="Models\SponsorLocation.cs" />
