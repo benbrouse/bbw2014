@@ -21,16 +21,22 @@
 
         <div ng-show="eventInitialized" class="row inline-bar">
             <div class="col" align="center" ng-click="switchEventView('details')">
-                <i class="icon ion-android-note"></i>
-                Details
+                <span ng-class="{'icon-active': showEventDescription}">
+                    <i class="icon ion-android-note"></i>
+                    Details
+                </span>
             </div>
             <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
-                <i class="icon ion-location"></i>
-                Map
+                <span ng-class="{'icon-active': showEventMap}">
+                    <i class="icon ion-location"></i>
+                    Map
+                </span>
             </div>
             <div ng-if="locationEvents.length > 0" class="col" align="center" ng-click="switchEventView('events')">
-                <i class="icon ion-ios7-calendar"></i>
-                More
+                <span ng-class="{'icon-active': showEventOther}">
+                    <i class="icon ion-ios7-calendar"></i>
+                    More
+                </span>
             </div>
         </div>
 

@@ -12,6 +12,10 @@
     margin: 0 auto;
 }
 
+.icon-active {
+    font-weight: bold;
+}
+
 .checkbox input:checked:before {
     border: 0;
     background: #444444;
