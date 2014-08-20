@@ -39,8 +39,6 @@
                 <p data-markdown="{{ event.description }}"></p>
             </div>
 
-            <div id="map" ng-show="showEventMap" class="event-detail-map" data-tap-disabled="true"></div>
-
             <div ng-if="locationEvents.length > 0" ng-show="showEventOther" class="item event-detail-others">
                 <ion-scroll direction="y" class="event-detail-others">
                     <div ng-repeat="event in locationEvents | orderBy:'date'" class="row event-detail-other-event" ng-show="showEventOther">
@@ -63,6 +61,13 @@
                         </div>
                     </div>
                 </ion-scroll>
+            </div>
+
+            <div id="map">
+                <google-map ng-if="showEventMap" class="event-detail-map" center="map.center" zoom="map.zoom" draggable="true" refresh="showEventMap">
+                    <marker coords="marker.coords" options="marker.options" idkey="marker.id">
+                    </marker>                    
+                </google-map>
             </div>
         </div>
 

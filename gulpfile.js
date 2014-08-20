@@ -71,15 +71,18 @@ gulp.task('copy', function () {
     gulp.src(paths.styles, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'css'));
 
-    if (argv.android) {
-        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
-        .pipe(gulp.dest(bases.dist + 'img'));
-    }
+    gulp.src(paths.images, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist + 'img'));
 
-    if (argv.ios) {
-        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
-        .pipe(gulp.dest(bases.dist + 'img'));
-    }
+    //if (argv.android) {
+    //    gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
+    //    .pipe(gulp.dest(bases.dist + 'img'));
+    //}
+
+    //if (argv.ios) {
+    //    gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
+    //    .pipe(gulp.dest(bases.dist + 'img'));
+    //}
 
     gulp.src(paths.locales, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'locales'));

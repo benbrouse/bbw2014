@@ -47,9 +47,16 @@
     /* height: set dyanmically at run-time to accomodate different devices */
 }
 
+#map {
+    position: relative;
+}
+
 .event-detail-map {
     height: 100%;
 }
+
+.angular-google-map { height: 100% }
+.angular-google-map-container { height: 100% }
 
 .event-detail-others {
     height: 100%;

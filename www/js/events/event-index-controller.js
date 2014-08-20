@@ -135,30 +135,6 @@
             vm.data.isLoading = false;
         }
 
-        function initializeMap(zoomLevel, location, name) {
-
-            var mapOptions = {
-                center: location,
-                zoom: zoomLevel,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-
-            var mapElement = document.getElementById('map');
-            var map = new google.maps.Map(mapElement, mapOptions);
-
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                title: name
-            });
-
-            google.maps.event.addListener(marker, 'click', function () {
-                $log.write('show the marker');
-            });
-
-            vm.map = map;
-        }
-
         function refreshContent() {
             // update content
             getEventData(true);
@@ -200,6 +176,24 @@
                                     };
 
                                     vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+
+                                    vm.map = {
+                                        center: {
+                                            latitude: location.lat(),
+                                            longitude: location.lng()
+                                        },
+                                        zoom: 16
+                                    };
+
+                                    $scope.marker = {
+                                        id: 0,
+                                        coords: {
+                                            latitude: location.lat(),
+                                            longitude: location.lng()
+                                        },
+                                        options: { draggable: false }
+                                    };
+
                                     vm.eventInitialized = true;
 
                                     $scope.$apply();
@@ -215,7 +209,7 @@
                     var modalElement = document.querySelector('.modal');
                     var fullHeight = modalElement.clientHeight;
 
-                    var wrapperElement = angular.element(document.querySelector('.event-detail-wrapper'));
+                    var wrapperElement = angular.element(document.querySelector('#map'));
                     // NOTE: 255 is the size of all the elements above the map div
                     wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
                 }
@@ -268,21 +262,6 @@
             vm.showEventDescription = (id == 'details') ? true : false;
             vm.showEventMap = (id == 'location') ? true : false;
             vm.showEventOther = (id == 'events') ? true : false;
-
-            if (vm.showEventMap) {
-                var eventAddress = vm.event.location.address;
-                if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
-                    AddressService.geocode(eventAddress).then(function (location) {
-
-                        // vm.eventInitialized = true;
-                        initializeMap(16, location, vm.event.location.name);
-
-                        google.maps.event.trigger(vm.map, "resize");
-
-                    });
-                }
-
-            }
         }    
 
         function toggleLocationFavorite(eventId) {
