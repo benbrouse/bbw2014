@@ -9,7 +9,7 @@
 
         return {
             allowConfiguration: false,
-            allowFavorites: false,
+            allowFavorites: true,
             cacheMaxAge: null,
             cacheFlushInterval: null,
             //url: 'http://localhost:54644/api/'

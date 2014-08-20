@@ -8,7 +8,7 @@
     SponsorIndexCtrl.$inject = ['$scope', '$ionicModal', '$ionicLoading', '$timeout', 'LoaderService', 'SponsorsService'];
     
     function SponsorIndexCtrl($scope, $ionicModal, $ionicLoading, $timeout, LoaderService, SponsorsService) {
-        var vm = this;
+        var vm = $scope;
 
         vm.initialized = false;
         vm.data = { isLoading: false };
@@ -75,7 +75,7 @@
 
             // Stop the ion-refresher from spinning
             $scope.$broadcast('scroll.refreshComplete');
-            $scope.$apply();
+           // $scope.$apply();
         }
 
         function showLoading (text) {

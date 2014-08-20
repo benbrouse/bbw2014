@@ -16,7 +16,7 @@
 
         <div class="item">
             <h3 class="text-center">{{ event.location.name }} <span ng-if="event.location.phone.length > 0"> - <a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></span></h3>
-            <h4 class="text-center">{{ event.location.address }} - {{ event.location.distance }}m</h4>
+            <h4 class="text-center">{{ event.location.address }} <span ng-show="eventInitialized">- {{ event.location.distance }}m</span></h4>
         </div>
 
         <div class="row inline-bar">

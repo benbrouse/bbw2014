@@ -69,6 +69,7 @@
                         // setup state for the modal
                         vm.showEventDescription = true;
                         vm.showEventMap = false;
+                        vm.showEventOther = false;
 
                         modals.modalEvent.show();
                         vm.currentModal = "eventDetail";
@@ -80,7 +81,7 @@
         function closeEventModal() {
             modals.modalEvent.hide();
 
-            vm.eventInitialized = true;
+            vm.eventInitialized = false;
             vm.currentModal = null;
         }
 
@@ -135,6 +136,7 @@
         }
 
         function initializeMap(zoomLevel, location, name) {
+
             var mapOptions = {
                 center: location,
                 zoom: zoomLevel,
@@ -144,19 +146,10 @@
             var mapElement = document.getElementById('map');
             var map = new google.maps.Map(mapElement, mapOptions);
 
-            var infowindow = new google.maps.InfoWindow({
-                content: "This is the text"
-            });
-
             var marker = new google.maps.Marker({
                 position: location,
                 map: map,
                 title: name
-            });
-
-            google.maps.event.addListener(marker, 'click', function () {
-                $log.write('show the marker' + infowindow.content);
-                //infowindow.open(map, marker);
             });
 
             vm.map = map;
@@ -190,8 +183,6 @@
                     var eventAddress = vm.event.location.address;
                     if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                         AddressService.geocode(eventAddress).then(function (location) {
-                            vm.eventInitialized = true;
-
                             navigator.geolocation.getCurrentPosition(
                                 function (position) {
                                     var start = {
@@ -205,6 +196,7 @@
                                     };
 
                                     vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+                                    vm.eventInitialized = true;
 
                                     $scope.$apply();
                                 },
@@ -278,13 +270,15 @@
                 if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                     AddressService.geocode(eventAddress).then(function (location) {
 
-                        vm.eventInitialized = true;
+                        // vm.eventInitialized = true;
                         initializeMap(16, location, vm.event.location.name);
+
+                        google.maps.event.trigger(vm.map, "resize");
+
                     });
                 }
-            }
 
-            google.maps.event.trigger(vm.map, "resize");
+            }
         }    
 
         function toggleLocationFavorite(eventId) {
