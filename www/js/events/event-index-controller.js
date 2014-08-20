@@ -152,6 +152,10 @@
                 title: name
             });
 
+            google.maps.event.addListener(marker, 'click', function () {
+                $log.write('show the marker');
+            });
+
             vm.map = map;
         }
 

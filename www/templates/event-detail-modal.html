@@ -19,7 +19,7 @@
             <h4 class="text-center">{{ event.location.address }} <span ng-show="eventInitialized">- {{ event.location.distance }}m</span></h4>
         </div>
 
-        <div class="row inline-bar">
+        <div ng-show="eventInitialized" class="row inline-bar">
             <div class="col" align="center" ng-click="switchEventView('details')">
                 <i class="icon ion-android-note"></i>
                 Details
