@@ -54,18 +54,18 @@
         }
 
         function openEventModal(eventId) {
-            showLoading('Retrieving Event Details');
-        
-            // retrieve all data needed for the modal
-            EventsService.get(eventId).then(function(event) {
-                vm.event = event;
+            if (!modals.modalEvent.isShown()) {
+                showLoading('Retrieving Event Details');
 
-                EventsService.getLocationEvents(vm.event.location.name, eventId).then(function (locationEvents) {
-                    vm.locationEvents = locationEvents;
+                // retrieve all data needed for the modal
+                EventsService.get(eventId).then(function(event) {
 
-                    hideLoading();
+                    EventsService.getLocationEvents(event.location.name, eventId).then(function(locationEvents) {
+                        vm.event = event;
+                        vm.locationEvents = locationEvents;
 
-                    if (!modals.modalEvent.isShown()) {
+                        hideLoading();
+
                         // setup state for the modal
                         vm.showEventDescription = true;
                         vm.showEventMap = false;
@@ -73,9 +73,9 @@
 
                         modals.modalEvent.show();
                         vm.currentModal = "eventDetail";
-                    }
+                    });
                 });
-            });
+            }
         }
 
         function closeEventModal() {
@@ -160,6 +160,16 @@
             $scope.$on('modal.shown', function () {
                 // extra bootstrapping to display the map correctly
                 if (vm.currentModal == "eventDetail") {
+
+                    // HACK!!! - otherwise the google map doesn't account for anyspace at all!
+                    var modalElement = document.querySelector('.modal');
+                    var fullHeight = modalElement.clientHeight;
+
+                    var wrapperElement = angular.element(document.querySelector('#map'));
+                    // NOTE: 255 is the size of all the elements above the map div
+                    wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
+
+
                     var eventAddress = vm.event.location.address;
                     if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                         AddressService.geocode(eventAddress).then(function (location) {
@@ -204,14 +214,6 @@
                             );
                         });
                     }
-
-                    // HACK!!! - otherwise the google map doesn't account for anyspace at all!
-                    var modalElement = document.querySelector('.modal');
-                    var fullHeight = modalElement.clientHeight;
-
-                    var wrapperElement = angular.element(document.querySelector('#map'));
-                    // NOTE: 255 is the size of all the elements above the map div
-                    wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
                 }
             });
         }
@@ -238,20 +240,7 @@
             // Show the loading overlay and text
             $ionicLoading.show({
                 // The text to display in the loading indicator
-                content: 'One moment please',
-
-                // The animation to use
-                animation: 'fade-in',
-
-                // Will a dark overlay or backdrop cover the entire view
-                showBackdrop: true,
-
-                // The maximum width of the loading indicator
-                // Text will be wrapped if longer than maxWidth
-                maxWidth: 200,
-
-                // The delay in showing the indicator
-                showDelay: 500
+                template: 'One moment please'
             });
 
             vm.loadingText = text;
