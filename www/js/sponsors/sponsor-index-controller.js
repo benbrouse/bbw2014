@@ -65,7 +65,7 @@
         }
 
         function hideLoading() {
-            $ionicLoading.hide();
+            // $ionicLoading.hide();
             vm.data.isLoading = false;
         }
 
@@ -79,11 +79,11 @@
         }
 
         function showLoading (text) {
-            // Show the loading overlay and text
-            $ionicLoading.show({
-                // The text to display in the loading indicator
-                template: 'One moment please'
-            });
+            //// Show the loading overlay and text
+            //$ionicLoading.show({
+            //    // The text to display in the loading indicator
+            //    template: 'One moment please'
+            //});
 
             vm.loadingText = text;
             vm.data.isLoading = true;

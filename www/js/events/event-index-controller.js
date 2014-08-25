@@ -5,9 +5,9 @@
         .module('bbw.event-index-controller', ['ionic', 'core-all'])
         .controller('EventIndexCtrl', EventIndexCtrl);
 
-    EventIndexCtrl.$inject = ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', '$timeout', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService'];
+    EventIndexCtrl.$inject = ['$scope', '$log', '$filter', '$ionicModal', '$ionicActionSheet', '$ionicLoading', '$timeout', '$document', 'AppSettings', 'EventsService', 'AddressService', 'DistanceService'];
     
-    function EventIndexCtrl($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, $timeout, AppSettings, EventsService, AddressService, DistanceService) {
+    function EventIndexCtrl($scope, $log, $filter, $ionicModal, $ionicActionSheet, $ionicLoading, $timeout, $document, AppSettings, EventsService, AddressService, DistanceService) {
 
         var modals = {};
         var vm = $scope;
@@ -54,28 +54,31 @@
         }
 
         function openEventModal(eventId) {
-            if (!modals.modalEvent.isShown()) {
-                showLoading('Retrieving Event Details');
+            showLoading('Retrieving Event Details');
 
-                // retrieve all data needed for the modal
-                EventsService.get(eventId).then(function(event) {
+            setupModals();
 
-                    EventsService.getLocationEvents(event.location.name, eventId).then(function(locationEvents) {
-                        vm.event = event;
-                        vm.locationEvents = locationEvents;
+            // retrieve all data needed for the modal
+            EventsService.get(eventId).then(function(event) {
 
-                        hideLoading();
+                EventsService.getLocationEvents(event.location.name, eventId).then(function(locationEvents) {
+                    vm.event = event;
+                    vm.locationEvents = locationEvents;
 
-                        // setup state for the modal
+                    hideLoading();
+
+                    if (!modals.modalEvent.isShown()) {
+                        // setup default state for the modal
                         vm.showEventDescription = true;
                         vm.showEventMap = false;
                         vm.showEventOther = false;
 
                         modals.modalEvent.show();
+
                         vm.currentModal = "eventDetail";
-                    });
+                    }
                 });
-            }
+            });
         }
 
         function closeEventModal() {
@@ -131,7 +134,7 @@
         }
 
         function hideLoading() {
-            $ionicLoading.hide();
+            // $ionicLoading.hide();
             vm.data.isLoading = false;
         }
 
@@ -147,12 +150,12 @@
         function setupControllerEvents() {
             //Be sure to cleanup the modal
             $scope.$on('$destroy', function () {
-                if (vm.modalEvent) {
-                    vm.modalEvent.remove();
+                if (modals.modalEvent) {
+                    modals.modalEvent.remove();
                 }
 
-                if (vm.modalFilter) {
-                    vm.modalFilter.remove();
+                if (modals.modalFilter) {
+                    modals.modalFilter.remove();
                 }
             });
 
@@ -169,6 +172,13 @@
                     // NOTE: 255 is the size of all the elements above the map div
                     wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
 
+                    // HACK: for this is a temporary fix for the ionic framework
+                        // http://forum.ionicframework.com/t/modal-not-receiving-touch-events/8025/2
+                    $timeout(function() {
+                        if($document[0].body.classList.contains('loading-active')) {
+                            $document[0].body.classList.remove('loading-active');
+                        }
+                    }, 500);
 
                     var eventAddress = vm.event.location.address;
                     if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
@@ -195,18 +205,23 @@
                                         zoom: 16
                                     };
 
-                                    $scope.marker = {
+                                    vm.marker = {
                                         id: 0,
                                         coords: {
                                             latitude: location.lat(),
                                             longitude: location.lng()
                                         },
-                                        options: { draggable: false }
+                                        options: {
+                                            draggable: false
+                                        }
                                     };
 
-                                    vm.eventInitialized = true;
-
                                     $scope.$apply();
+
+                                    $timeout(function() {
+                                        vm.eventInitialized = true;
+                                        //vm.map.control.refresh();
+                                    }, 250);
                                 },
                                 function () {
                                     $log.error('Error getting location');
@@ -214,34 +229,40 @@
                             );
                         });
                     }
+
+
                 }
             });
         }
 
         function setupModals() {
-            // Load the modal from the given template URL
-            $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
-                scope: vm,
-                animation: 'slide-in-up'
-            }).then(function (modal) {
-                modals.modalFilter = modal;
-            });
+            if (modals.modalFiter == null) {
+                // Load the modal from the given template URL
+                $ionicModal.fromTemplateUrl('templates/event-filter-modal.html', {
+                    scope: vm,
+                    animation: 'slide-in-up'
+                }).then(function (modal) {
+                    modals.modalFilter = modal;
+                });
+            }
 
-            // Load the modal from the given template URL
-            $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
-                scope: vm,
-                animation: 'slide-in-up'
-            }).then(function (modal) {
-                modals.modalEvent = modal;
-            });
+            if (modals.modalEvent == null) {
+                // Load the modal from the given template URL
+                $ionicModal.fromTemplateUrl('templates/event-detail-modal.html', {
+                    scope: vm,
+                    animation: 'slide-in-up'
+                }).then(function (modal) {
+                    modals.modalEvent = modal;
+                });
+            }
         }
 
         function showLoading(text) {
-            // Show the loading overlay and text
-            $ionicLoading.show({
-                // The text to display in the loading indicator
-                template: 'One moment please'
-            });
+            //// Show the loading overlay and text
+            //$ionicLoading.show({
+            //    // The text to display in the loading indicator
+            //    template: 'One moment please'
+            //});
 
             vm.loadingText = text;
             vm.data.isLoading = true;

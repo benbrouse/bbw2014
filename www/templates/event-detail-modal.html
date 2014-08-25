@@ -25,7 +25,7 @@
                     <i class="icon ion-android-note"></i>
                     Details
                 </span>
-            </div>
+            </div>            
             <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
                 <span ng-class="{'icon-active': showEventMap}">
                     <i class="icon ion-location"></i>
@@ -41,7 +41,7 @@
         </div>
 
         <div ng-show="eventInitialized" class="event-detail-wrapper">
-            <div ng-show="showEventDescription" class="padding">
+            <div ng-if="showEventDescription" class="padding">
                 <p data-markdown="{{ event.description }}"></p>
             </div>
 
@@ -70,7 +70,7 @@
             </div>
 
             <div id="map">
-                <google-map ng-if="showEventMap" class="event-detail-map" center="map.center" zoom="map.zoom" draggable="true" refresh="showEventMap">
+                <google-map ng-if="showEventMap" class="event-detail-map" center="map.center" zoom="map.zoom" draggable="true" >
                     <marker coords="marker.coords" options="marker.options" idkey="marker.id">
                     </marker>                    
                 </google-map>

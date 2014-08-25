@@ -5,9 +5,9 @@
         .module('bbw.about-controller', ['ionic', 'core-all'])
         .controller('AboutCtrl', AboutCtrl);
 
-    AboutCtrl.$inject = ['$scope', '$log', '$ionicModal', 'AppSettings'];
+    AboutCtrl.$inject = ['$scope', '$log', '$ionicModal', '$timeout', '$document', 'AppSettings'];
     
-    function AboutCtrl($scope, $log, $ionicModal, AppSettings) {
+    function AboutCtrl($scope, $log, $ionicModal, $timeout, $document, AppSettings) {
         var modals = {};
         var vm = $scope;
 
@@ -38,5 +38,15 @@
                 modals.modalSettings.remove();
             });
         }
+
+        $scope.$on('modal.shown', function () {
+            // HACK: for this is a temporary fix for the ionic framework
+            // http://forum.ionicframework.com/t/modal-not-receiving-touch-events/8025/2
+            $timeout(function () {
+                if ($document[0].body.classList.contains('loading-active')) {
+                    $document[0].body.classList.remove('loading-active');
+                }
+            }, 500);
+        });
     }
 })();
