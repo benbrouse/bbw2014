@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "43"
+        versionCode = "47"
         version="1.1"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
@@ -30,13 +30,18 @@
     <gap:platform name="android" />
     <gap:platform name="winphone" />
 
+    <!-- Core Plugins -->
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <gap:plugin name="org.apache.cordova.geolocation" version="0.3.7" />
     <gap:plugin name="org.apache.cordova.device" version="0.2.8" />
+    <gap:plugin name="org.apache.cordova.splashscreen" />
 
     <!-- iOS Configuration -->
-    <preference name="target-device" value="handset" />  
-  
+    <preference name="target-device" value="handset" />
+
+    <preference name="SplashScreen" value="splash" />
+    <preference name="SplashScreenDelay" value="2000" />
+
     <!-- Android Configuration -->
     <icon src="img/icons/android/icon-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
     <icon src="img/icons/android/icon-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
@@ -77,6 +82,19 @@
     <!-- Retina iPad -->
     <gap:splash src="img/icons/ios/Default-Portrait@2x.png" gap:platform="ios" width="1536" height="2048" />
     <gap:splash src="img/icons/ios/Default-Landscape@2x.png" gap:platform="ios" width="2048" height="1536" />
+
+    <!-- Android Splashscreens -->
+    <gap:splash src="img/icons/android/port-ldpi.png" gap:platform="android" gap:qualifier="port-ldpi" />
+    <gap:splash src="img/icons/android/port-mdpi.png" gap:platform="android" gap:qualifier="port-mdpi" />
+    <gap:splash src="img/icons/android/port-hdpi.png" gap:platform="android" gap:qualifier="port-hdpi" />
+    <gap:splash src="img/icons/android/port-xhdpi.png" gap:platform="android" gap:qualifier="port-xhdpi" />
+    <gap:splash src="img/icons/android/port-xxhdpi.png" gap:platform="android" gap:qualifier="port-xxhdpi" />
+
+    <gap:splash src="img/icons/android/land-ldpi.png" gap:platform="android" gap:qualifier="land-ldpi" />
+    <gap:splash src="img/icons/android/land-mdpi.png" gap:platform="android" gap:qualifier="land-mdpi" />
+    <gap:splash src="img/icons/android/land-hdpi.png" gap:platform="android" gap:qualifier="land-hdpi" />
+    <gap:splash src="img/icons/android/land-xhdpi.png" gap:platform="android" gap:qualifier="land-xhdpi" />
+    <gap:splash src="img/icons/android/land-xxhdpi.png" gap:platform="android" gap:qualifier="land-xxhdpi" />
 
     <!-- Target OS versions 
     <preference name="deployment-target" value="7.0" />	-->    <!-- iOS MinimumOSVersion -->
