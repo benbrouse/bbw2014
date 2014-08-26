@@ -69,11 +69,8 @@
                 </ion-scroll>
             </div>
 
-            <div id="map">
-                <google-map ng-if="showEventMap" class="event-detail-map" center="map.center" zoom="map.zoom" draggable="true" >
-                    <marker coords="marker.coords" options="marker.options" idkey="marker.id">
-                    </marker>                    
-                </google-map>
+            <div id="map" data-tap-disabled="true">
+                <leaflet ng-if="showEventMap" markers="markers" center="center" layers="layers"></leaflet>
             </div>
         </div>
 

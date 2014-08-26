@@ -61,6 +61,10 @@
 
 .angular-google-map { height: 100% }
 .angular-google-map-container { height: 100% }
+ .angular-leaflet-map {
+            width: 100%;
+            height: 100%;
+        }
 
 .event-detail-others {
     height: 100%;

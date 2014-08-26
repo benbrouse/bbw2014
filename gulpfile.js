@@ -29,7 +29,8 @@ var paths = {
     html: ['templates/**/*.html'],
     images: ['img/**/*.png'],
     locales: ['locales/**/*.*'],
-    lib: ['lib/**/*.min.css', 'lib/**/fonts/*.*', 'lib/**/*.min.js', 'lib/**/compressed/showdown.js'],
+    lib: ['lib/**/*.min.css', 'lib/**/fonts/*.*', 'lib/**/*.min.js', 'lib/**/compressed/showdown.js', 'lib/**/Google.js', 'lib/**/leaflet.js'],
+    leaflet: ['lib/**/leaflet-dist/*.css', 'lib/**/leaflet-dist/**/*.png'],
 };
 
 var platform = {
@@ -71,18 +72,21 @@ gulp.task('copy', function () {
     gulp.src(paths.styles, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'css'));
 
-    gulp.src(paths.images, { cwd: bases.app })
-    .pipe(gulp.dest(bases.dist + 'img'));
+    gulp.src(paths.leaflet, { cwd: bases.app })
+    .pipe(gulp.dest(bases.dist + 'lib'));
 
-    //if (argv.android) {
-    //    gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
-    //    .pipe(gulp.dest(bases.dist + 'img'));
-    //}
+    //gulp.src(paths.images, { cwd: bases.app })
+    //.pipe(gulp.dest(bases.dist + 'img'));
 
-    //if (argv.ios) {
-    //    gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
-    //    .pipe(gulp.dest(bases.dist + 'img'));
-    //}
+    if (argv.android) {
+        gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
+        .pipe(gulp.dest(bases.dist + 'img'));
+    }
+
+    if (argv.ios) {
+        gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
+        .pipe(gulp.dest(bases.dist + 'img'));
+    }
 
     gulp.src(paths.locales, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'locales'));

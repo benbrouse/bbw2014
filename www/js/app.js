@@ -2,7 +2,7 @@
     'use strict';
 
     // the main app definition
-    var app = angular.module('bbw', ['ionic', 'google-maps', 'core-all', 'bbw-depends']);
+    var app = angular.module('bbw', ['ionic', 'leaflet-directive', 'core-all', 'bbw-depends']);
 
     app.config(function($stateProvider, $urlRouterProvider) {
 

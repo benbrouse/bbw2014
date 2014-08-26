@@ -197,30 +197,64 @@
 
                                     vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
 
-                                    vm.map = {
-                                        center: {
-                                            latitude: location.lat(),
-                                            longitude: location.lng()
+                                    angular.extend($scope, {
+                                        center : {
+                                            lat: location.lat(),
+                                            lng: location.lng(),
+                                            zoom: 16
                                         },
-                                        zoom: 16
-                                    };
+                                        markers: {
+                                            locationMarker: {
+                                                lat: location.lat(),
+                                                lng: location.lng(),
+                                                focus: true,
+                                                draggable: false
+                                            }
+                                        },
 
-                                    vm.marker = {
-                                        id: 0,
-                                        coords: {
-                                            latitude: location.lat(),
-                                            longitude: location.lng()
-                                        },
-                                        options: {
-                                            draggable: false
+                                        layers: {
+                                            baselayers: {
+                                                //osm: {
+                                                //    name: 'OpenStreetMap',
+                                                //    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                                //    type: 'xyz'
+                                                //},
+
+                                                googleRoadmap: {
+                                                    name: 'Streets',
+                                                    layerType: 'ROADMAP',
+                                                    type: 'google'
+                                                },
+
+                                                //// http://wiki.openstreetmap.org/wiki/MapQuest#MapQuest-hosted_map_tiles
+                                                //mapQuest: {
+                                                //    name: 'Street',
+                                                //    url: 'http://{s}.mqcdn.com/tiles/1.0.0/{styleId}/{z}/{x}/{y}.png',
+                                                //    type: 'xyz',
+                                                //    layerParams: {
+                                                //        styleId: 'osm',
+                                                //        attribution: 'Data, imagery and map information provided by MapQuest, OpenStreetMap <http://www.openstreetmap.org/copyright> and contributors',
+                                                //        subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
+
+                                                //    }
+                                                //},
+                                                mapQuestSat: {
+                                                    name: 'Satellite',
+                                                    url: 'http://{s}.mqcdn.com/tiles/1.0.0/{styleId}/{z}/{x}/{y}.png',
+                                                    type: 'xyz',
+                                                    layerParams: {
+                                                        styleId: 'sat',
+                                                        attribution: 'Data, imagery and map information provided by MapQuest, OpenStreetMap <http://www.openstreetmap.org/copyright> and contributors',
+                                                        subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
+                                                    }
+                                                }
+                                            }
                                         }
-                                    };
+                                    });
 
-                                    $scope.$apply();
-
-                                    $timeout(function() {
+                                    // force another digest cycle
+                                    $timeout(function () {
                                         vm.eventInitialized = true;
-                                        //vm.map.control.refresh();
                                     }, 250);
                                 },
                                 function () {
