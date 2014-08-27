@@ -11,10 +11,10 @@
         var vm = $scope;
 
         vm.initialized = false;
-        vm.data = { isLoading: false };
+        vm.data = { isLoading: true };
         vm.loadingText = 'Retrieving Sponsor List';
         vm.refreshContent = refreshContent;
-        vm.sponsorInitialized = true;
+//        vm.sponsorInitialized = true;
 
         initialize();
         activate();

@@ -88,22 +88,6 @@
     margin-top: 7px;
 }
 
-.bar.bar-loading {
-  display: block;
-  height: 24px;
-  
-  /* starts right below a normal header */
-  top: 44px;
-  
-  /* make the text centered vertically and horizontally */
-  text-align: center;
-  padding: 0;
-  line-height: 24px;
-
-  /* transition 'sliding down' (check below)*/
-  -webkit-transition: 200ms all;
-}
-
 /* 
  * make the content's top changes animate.
  * might not always look good, but looks
@@ -113,9 +97,9 @@
   -webkit-transition: 200ms top;
 }
 
-.has-header.has-loading {
+.has-subheader.has-loading {
   /* 44px (header) + 24px */
-  top: 68px;
+  top: 88px;
 }
 
 /* make loading bar slide up/down */

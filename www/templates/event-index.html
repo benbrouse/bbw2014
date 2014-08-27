@@ -4,28 +4,30 @@
         <button class="button-icon icon ion-navicon light" ng-show="!data.isLoading" ng-click="openFilterModal()"></button>
     </ion-nav-buttons>
 
-    <ion-header-bar align-title="left" class="bar-subheader bar-light" ng-show="!data.isLoading">
+    <ion-header-bar class="bar-subheader bar-light">
         <div class="row">
-            <div class="col" align="center" ng-click="switchSort()">
+            <div class="col" align="center" ng-show="!data.isLoading" ng-click="switchSort()">
                 <span ng-class="{'icon-active': sortByDate}">
                     <i class="icon ion-ios7-time-outline"></i>
                     Sort By Date
                 </span>
             </div>
-            <div class="col" align="center" ng-click="switchSort()">
+            <div class="col" align="center" ng-show="!data.isLoading" ng-click="switchSort()">
                 <span ng-class="{'icon-active': !sortByDate}">
                     <i class="icon ion-ios7-location"></i>
                     Sort By Location
                 </span>
             </div>
+            <div class="col" align="center" ng-show="data.isLoading">
+                <span class='icon-active'>
+                    <i class="icon ion-ios7-reloading"></i>
+                    {{ loadingText }}
+                </span>
+            </div>
         </div>
     </ion-header-bar>
 
-    <div class="bar bar-loading bar-dark" ng-show="data.isLoading">
-        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>{{ loadingText }}
-    </div>
-
-    <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
+    <ion-content ng-show="!data.isLoading">
         <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
         </ion-refresher>
 

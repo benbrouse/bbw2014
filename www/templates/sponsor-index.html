@@ -2,16 +2,23 @@
 -->
 
 <ion-view title="{{ applicationName }}">
+    <ion-header-bar class="bar-subheader bar-light" ng-show="data.isLoading">
+        <div class="row">
 
-    <div class="bar bar-loading bar-dark" ng-show="data.isLoading">
-        <i class="icon ion-ios7-reloading" style="margin-right:10px;"></i>{{ loadingText }}
-    </div>
+            <div class="col" align="center">
+                <span class='icon-active'>
+                    <i class="icon ion-ios7-reloading"></i>
+                    {{ loadingText }}
+                </span>
+            </div>
+        </div>
+    </ion-header-bar>
 
-    <ion-content ng-class="{'has-loading': data.isLoading}" ng-show="!data.isLoading">
-        <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
+    <ion-content class="has-header">
+        <ion-refresher ng-show="!data.isLoading" pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
         </ion-refresher>
 
-        <div class="list">
+        <div class="list" ng-show="!data.isLoading">
 
             <div ng-repeat="sponsorLevel in levels">
                 <div ng-show="initialized" class="item item-divider">
