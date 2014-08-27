@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "57"
+        versionCode = "60"
         version="1.2"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
@@ -17,7 +17,11 @@
   
     <content src="index.html" />
     <access origin="*" />
-  
+
+    <gap:config-file platform="ios" parent="CFBundleShortVersionString">
+      <string>12</string>
+    </gap:config-file>
+
     <preference name="phonegap-version" value="3.5.0" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="false" />
