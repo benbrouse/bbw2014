@@ -1,5 +1,3 @@
-/* Your app's CSS, go crazy, make it your own */
-
 .ionic-logo {
     display: block;
     margin: 15px auto;
@@ -36,6 +34,31 @@
     background-color: #444444 !important;
 }
 
+#event-detail-modal-content:before {
+    content:'';
+    float: left;
+    height: 100%;
+}
+#event-detail-modal-content {
+    height: 100%;
+}
+
+#event-detail-wrapper:after {
+    content:'';
+    display: block;
+    clear: both;
+}
+
+.event-location-item {
+    padding: 0;
+}
+
+    /*
+#event-detail-modal-header {
+    float: left;
+    width: 100%;
+}*/
+
 .event-detail-content {
     top: 253px;
     border-color: #ddd;
@@ -47,25 +70,9 @@
     padding: 0;
 }
 
-.event-detail-wrapper {
-    /* height: set dyanmically at run-time to accomodate different devices */
-}
-
-#map {
-    position: relative;
-}
-
-.event-detail-map {
+.angular-leaflet-map {
     height: 100%;
 }
-
-.angular-google-map { height: 100% }
-.angular-google-map-container { height: 100% }
- .angular-leaflet-map {
-            width: 100%;
-            height: 100%;
-        }
-
 .event-detail-others {
     height: 100%;
     padding: 0;

@@ -68,12 +68,12 @@
                     hideLoading();
 
                     if (!modals.modalEvent.isShown()) {
+                        modals.modalEvent.show();
+
                         // setup default state for the modal
                         vm.showEventDescription = true;
                         vm.showEventMap = false;
                         vm.showEventOther = false;
-
-                        modals.modalEvent.show();
 
                         vm.currentModal = "eventDetail";
                     }
@@ -163,16 +163,7 @@
             $scope.$on('modal.shown', function () {
                 // extra bootstrapping to display the map correctly
                 if (vm.currentModal == "eventDetail") {
-
-                    // HACK!!! - otherwise the google map doesn't account for anyspace at all!
-                    var modalElement = document.querySelector('.modal');
-                    var fullHeight = modalElement.clientHeight;
-
-                    var wrapperElement = angular.element(document.querySelector('#map'));
-                    // NOTE: 255 is the size of all the elements above the map div
-                    wrapperElement.attr('style', 'height: ' + (fullHeight - 255) + 'px');
-
-                    // HACK: for this is a temporary fix for the ionic framework
+                    //// HACK: for this is a temporary fix for the ionic framework
                         // http://forum.ionicframework.com/t/modal-not-receiving-touch-events/8025/2
                     $timeout(function() {
                         if($document[0].body.classList.contains('loading-active')) {
@@ -303,6 +294,10 @@
         }
 
         function switchEventView(id) {
+            if (!vm.eventInitialized) {
+                return;
+            }
+
             vm.showEventDescription = (id == 'details') ? true : false;
             vm.showEventMap = (id == 'location') ? true : false;
             vm.showEventOther = (id == 'events') ? true : false;

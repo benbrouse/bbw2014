@@ -1,78 +1,86 @@
 <div class="modal">
-    <ion-header-bar class="bat bar-dark">
+    <ion-header-bar id="event-details-modal-header" class="bar bar-dark">
         <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite()" ng-if="allowFavorites"></button>
         <h1 class="title">{{ applicationName }}</h1>
         <button class="button button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
     </ion-header-bar>
 
-    <ion-content scroll="false" padding="false" id="event-detail-modal">
-        <div class="item item-thumbnail-left">
-            <img ng-src="{{ event.location.image }}" />
-            <h2>{{event.title}}</h2>
-            <h4 class="item-text-wrap">Date: {{event.date | date: 'fullDate'}}</h4>
-            <h4 class="item-text-wrap">Time: {{event.date | date: 'shortTime'}}</h4>
-            <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
-        </div>
+    <ion-content padding="false" id="event-detail-modal">
+        <div id="event-detail-modal-content">
+            <div id="event-detail-modal-header">
+                <div class="item item-thumbnail-left">
+                    <img ng-src="{{ event.location.image }}" />
+                    <h2>{{event.title}}</h2>
+                    <h4 class="item-text-wrap">Date: {{event.date | date: 'fullDate'}}</h4>
+                    <h4 class="item-text-wrap">Time: {{event.date | date: 'shortTime'}}</h4>
+                    <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
+                </div>
 
-        <div class="item">
-            <h3 class="text-center">{{ event.location.name }} <span ng-if="event.location.phone.length > 0"> - <a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></span></h3>
-            <h4 class="text-center">{{ event.location.address }} <span ng-show="eventInitialized">- {{ event.location.distance }}m</span></h4>
-        </div>
+                <div class="item">
+                    <h3 class="text-center">{{ event.location.name }} <span ng-if="event.location.phone.length > 0"> - <a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></span></h3>
+                    <h4 class="text-center">{{ event.location.address }} <span ng-show="eventInitialized">- {{ event.location.distance }}m</span></h4>
+                </div>
 
-        <div ng-show="eventInitialized" class="row inline-bar">
-            <div class="col" align="center" ng-click="switchEventView('details')">
-                <span ng-class="{'icon-active': showEventDescription}">
-                    <i class="icon ion-android-note"></i>
-                    Details
-                </span>
-            </div>            
-            <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
-                <span ng-class="{'icon-active': showEventMap}">
-                    <i class="icon ion-location"></i>
-                    Map
-                </span>
-            </div>
-            <div ng-if="locationEvents.length > 0" class="col" align="center" ng-click="switchEventView('events')">
-                <span ng-class="{'icon-active': showEventOther}">
-                    <i class="icon ion-ios7-calendar"></i>
-                    More
-                </span>
-            </div>
-        </div>
-
-        <div ng-show="eventInitialized" class="event-detail-wrapper">
-            <div ng-if="showEventDescription" class="padding">
-                <p data-markdown="{{ event.description }}"></p>
-            </div>
-
-            <div ng-if="locationEvents.length > 0" ng-show="showEventOther" class="item event-detail-others">
-                <ion-scroll direction="y" class="event-detail-others">
-                    <div ng-repeat="event in locationEvents | orderBy:'date'" class="row event-detail-other-event" ng-show="showEventOther">
-                        <div class="col col-10"></div>
-
-                        <div class="col col-70 event-detail-other-event-desc">
-                            <a ng-click="openEventModal(event.id)">
-                                <h3>{{event.title}}</h3>
-                                <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
-                            </a>
-                        </div>
-
-                        <div class="col col-20">
-                            <a>
-                                <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline' "
-                                        class="button button-clear icon dark event-detail-other-event-star"
-                                        ng-click="toggleLocationFavorite(event.id)"
-                                        ng-if="allowFavorites"></button>
-                            </a>
-                        </div>
+                <div ng-show="eventInitialized" class="row inline-bar">
+                    <div class="col" align="center" ng-click="switchEventView('details')">
+                        <span ng-class="{'icon-active': showEventDescription}">
+                            <i class="icon ion-android-note"></i>
+                            Details
+                        </span>
                     </div>
-                </ion-scroll>
+                    <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
+                        <span ng-class="{'icon-active': showEventMap}">
+                            <i class="icon ion-location"></i>
+                            Map
+                        </span>
+                    </div>
+                    <div ng-if="locationEvents.length > 0" class="col" align="center" ng-click="switchEventView('events')">
+                        <span ng-class="{'icon-active': showEventOther}">
+                            <i class="icon ion-ios7-calendar"></i>
+                            More
+                        </span>
+                    </div>
+                </div>
             </div>
 
-            <div id="map" data-tap-disabled="true">
-                <leaflet ng-if="showEventMap" markers="markers" center="center" layers="layers"></leaflet>
+            <div id="event-detail-wrapper" ng-show="eventInitialized">
+                <div ng-if="showEventDescription" class="padding">
+                    <p data-markdown="{{ event.description }}"></p>
+                </div>
+
+                <div ng-if="locationEvents.length > 0" ng-show="showEventOther" class="event-location-item item">
+                    <ion-scroll direction="y"
+                                ng-if="showEventOther"
+                                resizetoparent resize-parameters="event-detail-modal;event-detail-modal-header">
+                        <div ng-repeat="event in locationEvents | orderBy:'date'" class="row event-detail-other-event" ng-show="showEventOther">
+                            <div class="col col-10"></div>
+
+                            <div class="col col-70 event-detail-other-event-desc">
+                                <a ng-click="openEventModal(event.id)">
+                                    <h3>{{event.title}}</h3>
+                                    <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
+                                </a>
+                            </div>
+
+                            <div class="col col-20">
+                                <a>
+                                    <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline' "
+                                            class="button button-clear icon dark event-detail-other-event-star"
+                                            ng-click="toggleLocationFavorite(event.id)"
+                                            ng-if="allowFavorites"></button>
+                                </a>
+                            </div>
+                        </div>
+                    </ion-scroll>
+                </div>
+
+                <div id="map" data-tap-disabled="true" ng-cloak>
+                    <leaflet ng-if="showEventMap" 
+                             resizetoparent resize-parameters="event-detail-modal;event-detail-modal-header" 
+                             markers="markers" center="center" layers="layers">
+                    </leaflet>
+                </div>
             </div>
         </div>
-
     </ion-content>
 </div>
