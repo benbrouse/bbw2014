@@ -9,6 +9,7 @@ var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var gulpif = require('gulp-if');
+var replace = require('gulp-replace');
 var sequence = require('run-sequence');
 var argv = require('yargs').argv;
 
@@ -23,9 +24,10 @@ var bases = {
 };
 
 var paths = {
+    config: ['config.xml'],
     styles: ['css/**/*.css'],
     scripts: ['js/**/*.js'],
-    mainhtml: ['index.html', 'config.xml'],
+    mainhtml: ['index.html'],
     html: ['templates/**/*.html'],
     images: ['img/**/*.png'],
     locales: ['locales/**/*.*'],
@@ -81,11 +83,19 @@ gulp.task('copy', function () {
     if (argv.android) {
         gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
         .pipe(gulp.dest(bases.dist + 'img'));
+
+        gulp.src(paths.config, { cwd: bases.app })
+            .pipe(replace('APP-NAME', 'Baltimore Beer Week 2014'))
+            .pipe(gulp.dest(bases.dist));
     }
 
     if (argv.ios) {
         gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
         .pipe(gulp.dest(bases.dist + 'img'));
+
+        gulp.src(paths.config, { cwd: bases.app })
+            .pipe(replace('APP-NAME', 'BBW 2014'))
+            .pipe(gulp.dest(bases.dist));
     }
 
     gulp.src(paths.locales, { cwd: bases.app })
