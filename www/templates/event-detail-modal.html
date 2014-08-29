@@ -17,8 +17,17 @@
                 </div>
 
                 <div class="item">
-                    <h3 class="text-center">{{ event.location.name }} <span ng-if="event.location.phone.length > 0"> - <a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></span></h3>
-                    <h4 class="text-center">{{ event.location.address }} <span ng-show="eventInitialized && gpsAvailable">- {{ event.location.distance }}m</span></h4>
+                    <h3 class="text-center">
+                        <!-- Android -->
+                        <a href="" ng-if="navigationAppUrl.length > 0" ng-click="openGPSNavigator();">{{ event.location.name }}</a>
+                        <!-- iOS -->
+                        <span ng-if="navigationAppUrl.length == 0">{{ event.location.name }}</span>
+                    </h3>
+                    <h4 class="text-center">
+                        {{ event.location.address }}
+                        <div ng-if="eventInitialized && gpsAvailable">{{ event.location.distance }} miles away</div>
+                        <div ng-if="event.location.phone.length > 0"><a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></div>
+                    </h4>
                 </div>
 
                 <div ng-show="eventInitialized" class="row inline-bar">

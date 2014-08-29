@@ -19,6 +19,7 @@
         vm.initialized = false;
         vm.loadingText = "Loading event data";
 
+        vm.openGPSNavigator = openGPSNavigator;
         vm.refreshContent = refreshContent;
         vm.switchEventView = switchEventView;
 
@@ -28,7 +29,9 @@
         vm.showEventMap = false;
         vm.showEventDescription = true;
         vm.showEventOther = false;
+
         vm.gpsAvailable = true;
+        vm.navigationAppUrl = "";
 
         vm.switchSort = function () { vm.sortByDate = !vm.sortByDate; };
 
@@ -38,7 +41,6 @@
         //// modals
         vm.openFilterModal = function () { modals.modalFilter.show(); };
         vm.closeFilterModal = function () { modals.modalFilter.hide(); };
-
         vm.openEventModal = openEventModal;
         vm.closeEventModal = closeEventModal;
 
@@ -52,34 +54,6 @@
             $timeout(function () {
                 getEventData(false);
             }, 100);
-        }
-
-        function openEventModal(eventId) {
-            showLoading('Retrieving Event Details');
-
-            setupModals();
-
-            // retrieve all data needed for the modal
-            EventsService.get(eventId).then(function(event) {
-
-                EventsService.getLocationEvents(event.location.name, eventId).then(function(locationEvents) {
-                    vm.event = event;
-                    vm.locationEvents = locationEvents;
-
-                    hideLoading();
-
-                    if (!modals.modalEvent.isShown()) {
-                        modals.modalEvent.show();
-
-                        // setup default state for the modal
-                        vm.showEventDescription = true;
-                        vm.showEventMap = false;
-                        vm.showEventOther = false;
-
-                        vm.currentModal = "eventDetail";
-                    }
-                });
-            });
         }
 
         function closeEventModal() {
@@ -137,6 +111,39 @@
         function hideLoading() {
             // $ionicLoading.hide();
             vm.data.isLoading = false;
+        }
+
+        function openEventModal(eventId) {
+            showLoading('Retrieving Event Details');
+
+            setupModals();
+
+            // retrieve all data needed for the modal
+            EventsService.get(eventId).then(function (event) {
+
+                EventsService.getLocationEvents(event.location.name, eventId).then(function (locationEvents) {
+                    vm.event = event;
+                    vm.locationEvents = locationEvents;
+
+                    hideLoading();
+
+                    if (!modals.modalEvent.isShown()) {
+                        modals.modalEvent.show();
+
+                        // setup default state for the modal
+                        vm.showEventDescription = true;
+                        vm.showEventMap = false;
+                        vm.showEventOther = false;
+
+                        vm.currentModal = "eventDetail";
+                    }
+                });
+            });
+        }
+
+        function openGPSNavigator() {
+            window.location = vm.navigationAppUrl;
+            return false;
         }
 
         function refreshContent() {
@@ -245,6 +252,10 @@
                                     };
 
                                     vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
+
+                                    if (ionic.Platform.isAndroid()) {
+                                        vm.navigationAppUrl = "geo:" + end.latitude + "," + end.longitude + ";u=35";  // "37.786971,-122.399677;u=35";
+                                    }
 
                                     // force another digest cycle
                                     $timeout(function () {
