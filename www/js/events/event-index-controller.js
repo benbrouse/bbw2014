@@ -256,6 +256,10 @@
                                     if (ionic.Platform.isAndroid()) {
                                         vm.navigationAppUrl = "geo:" + end.latitude + "," + end.longitude + ";u=35";  // "37.786971,-122.399677;u=35";
                                     }
+                                    else if (ionic.Platform.isIOS()) {
+                                        // http://stackoverflow.com/questions/14286951/mobile-html5-launch-phones-native-navigation-app
+                                        vm.navigationAppUrl = "maps:daddr=" + end.latitude + "," + end.longitude;
+                                    }
 
                                     // force another digest cycle
                                     $timeout(function () {
