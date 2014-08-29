@@ -28,6 +28,7 @@
         vm.showEventMap = false;
         vm.showEventDescription = true;
         vm.showEventOther = false;
+        vm.gpsAvailable = true;
 
         vm.switchSort = function () { vm.sortByDate = !vm.sortByDate; };
 
@@ -174,6 +175,63 @@
                     var eventAddress = vm.event.location.address;
                     if (!angular.isUndefined(eventAddress) && angular.isString(eventAddress)) {
                         AddressService.geocode(eventAddress).then(function (location) {
+
+                            angular.extend($scope, {
+                                center: {
+                                    lat: location.lat(),
+                                    lng: location.lng(),
+                                    zoom: 16
+                                },
+                                markers: {
+                                    locationMarker: {
+                                        lat: location.lat(),
+                                        lng: location.lng(),
+                                        focus: true,
+                                        draggable: false
+                                    }
+                                },
+
+                                layers: {
+                                    baselayers: {
+                                        //osm: {
+                                        //    name: 'OpenStreetMap',
+                                        //    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                        //    type: 'xyz'
+                                        //},
+
+                                        googleRoadmap: {
+                                            name: 'Streets',
+                                            layerType: 'ROADMAP',
+                                            type: 'google'
+                                        },
+
+                                        //// http://wiki.openstreetmap.org/wiki/MapQuest#MapQuest-hosted_map_tiles
+                                        //mapQuest: {
+                                        //    name: 'Street',
+                                        //    url: 'http://{s}.mqcdn.com/tiles/1.0.0/{styleId}/{z}/{x}/{y}.png',
+                                        //    type: 'xyz',
+                                        //    layerParams: {
+                                        //        styleId: 'osm',
+                                        //        attribution: 'Data, imagery and map information provided by MapQuest, OpenStreetMap <http://www.openstreetmap.org/copyright> and contributors',
+                                        //        subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
+
+                                        //    }
+                                        //},
+                                        mapQuestSat: {
+                                            name: 'Satellite',
+                                            url: 'http://{s}.mqcdn.com/tiles/1.0.0/{styleId}/{z}/{x}/{y}.png',
+                                            type: 'xyz',
+                                            layerParams: {
+                                                styleId: 'sat',
+                                                attribution: 'Data, imagery and map information provided by MapQuest, OpenStreetMap <http://www.openstreetmap.org/copyright> and contributors',
+                                                subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+
                             navigator.geolocation.getCurrentPosition(
                                 function (position) {
                                     var start = {
@@ -188,68 +246,19 @@
 
                                     vm.event.location.distance = DistanceService.haversine(start, end, { unit: 'mile' }).toFixed(1);
 
-                                    angular.extend($scope, {
-                                        center : {
-                                            lat: location.lat(),
-                                            lng: location.lng(),
-                                            zoom: 16
-                                        },
-                                        markers: {
-                                            locationMarker: {
-                                                lat: location.lat(),
-                                                lng: location.lng(),
-                                                focus: true,
-                                                draggable: false
-                                            }
-                                        },
-
-                                        layers: {
-                                            baselayers: {
-                                                //osm: {
-                                                //    name: 'OpenStreetMap',
-                                                //    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                                //    type: 'xyz'
-                                                //},
-
-                                                googleRoadmap: {
-                                                    name: 'Streets',
-                                                    layerType: 'ROADMAP',
-                                                    type: 'google'
-                                                },
-
-                                                //// http://wiki.openstreetmap.org/wiki/MapQuest#MapQuest-hosted_map_tiles
-                                                //mapQuest: {
-                                                //    name: 'Street',
-                                                //    url: 'http://{s}.mqcdn.com/tiles/1.0.0/{styleId}/{z}/{x}/{y}.png',
-                                                //    type: 'xyz',
-                                                //    layerParams: {
-                                                //        styleId: 'osm',
-                                                //        attribution: 'Data, imagery and map information provided by MapQuest, OpenStreetMap <http://www.openstreetmap.org/copyright> and contributors',
-                                                //        subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
-
-                                                //    }
-                                                //},
-                                                mapQuestSat: {
-                                                    name: 'Satellite',
-                                                    url: 'http://{s}.mqcdn.com/tiles/1.0.0/{styleId}/{z}/{x}/{y}.png',
-                                                    type: 'xyz',
-                                                    layerParams: {
-                                                        styleId: 'sat',
-                                                        attribution: 'Data, imagery and map information provided by MapQuest, OpenStreetMap <http://www.openstreetmap.org/copyright> and contributors',
-                                                        subdomains: ['otile1', 'otile2', 'otile3', 'otile4'],
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-
                                     // force another digest cycle
                                     $timeout(function () {
                                         vm.eventInitialized = true;
                                     }, 250);
                                 },
-                                function () {
-                                    $log.error('Error getting location');
+                                function (err) {
+                                    $log.error('Error getting location: ' + err.code);
+                                    vm.gpsAvailable = false;
+
+                                    // force another digest cycle
+                                    $timeout(function () {
+                                        vm.eventInitialized = true;
+                                    }, 250);
                                 }
                             );
                         });
