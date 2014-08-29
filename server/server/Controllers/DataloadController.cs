@@ -63,7 +63,7 @@ namespace server.Controllers
                     }
                 }
 
-                if(scheduledEvent == null)
+                if (scheduledEvent == null)
                 {
                     var newEvent = new Event();
                     newEvent.Id = nextEventKey;
@@ -76,6 +76,12 @@ namespace server.Controllers
 
                     eventService.Save(newEvent);
                     nextEventKey++;
+                }
+                else
+                {
+                    scheduledEvent.Description = eventLoad.EventDescription.Trim();
+                    scheduledEvent.Date = String.Format("{0}T{1}", eventLoad.EventDate.Trim(), eventLoad.EventTime.Trim());
+                    eventService.Save(scheduledEvent);
                 }
             }
 
