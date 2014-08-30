@@ -36,7 +36,7 @@
             <div ng-show="sortByDate" ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
 
                 <div ng-show="initialized" class="item item-divider">
-                    {{ eventDate.date | date: 'fullDate' }}
+                    <span>{{ eventDate.date | amDateFormat:'dddd, MMMM Do YYYY' }}</span>
                 </div>
 
                 <a ng-repeat="event in events | matchesDate:'date':eventDate.date | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
@@ -47,7 +47,7 @@
 
                     <h2>{{event.title}}</h2>
                     <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
-                    <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
+                    <h4 class="item-text-wrap">Time: {{ event.date | amDateFormat:'hh:mm A'}}</h4>
                     <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                     <h4 class="item-text-wrap">{{ event.description }}</h4>
                 </a>
@@ -63,8 +63,8 @@
                     <a class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
                         <img ng-src="{{ event.location.image }}" />
                         <h2>{{event.title}}</h2>
-                        <h4 class="item-text-wrap">{{ event.date | date: 'fullDate' }}</h4>
-                        <h4 class="item-text-wrap">Time: {{ event.date | date:'hh:mm a'}}</h4>
+                        <h4 class="item-text-wrap"><span>{{ event.date | amDateFormat:'dddd, MMMM Do YYYY' }}</span></h4>
+                        <h4 class="item-text-wrap">Time: {{ event.date | amDateFormat:'hh:mm A'}}</h4>
                         <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                         <h4 class="item-text-wrap">{{ event.description }}</h4>
                     </a>

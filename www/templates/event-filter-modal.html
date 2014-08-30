@@ -24,7 +24,7 @@
                 <label class="checkbox">
                     <input type="checkbox" name="selectedDates[]" ng-model="eventDate.selected">
                 </label>
-                {{ eventDate.date | date: 'fullDate'}}
+                <span>{{ eventDate.date | amDateFormat:'dddd, MMMM Do YYYY' }}</span>
             </li>
         </ul>
     </ion-content>
