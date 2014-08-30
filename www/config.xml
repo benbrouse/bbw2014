@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.brewnotes.bbw" 
-        versionCode = "61"
-        version="1.2"
+        versionCode = "VERSION-CODE"
+        version="-VERSION"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:gap = "http://phonegap.com/ns/1.0"
@@ -19,7 +19,7 @@
     <access origin="*" />
 
     <gap:config-file platform="ios" parent="CFBundleShortVersionString">
-      <string>12</string>
+      <string>VERSION-SHORT</string>
     </gap:config-file>
 
     <preference name="phonegap-version" value="3.5.0" />

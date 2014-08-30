@@ -11,7 +11,10 @@ var rename = require('gulp-rename');
 var gulpif = require('gulp-if');
 var replace = require('gulp-replace');
 var sequence = require('run-sequence');
+
 var argv = require('yargs').argv;
+var nconf = require('nconf');
+nconf.env().file({ file: 'gulpconfig.json' });
 
 // Package information, including version
 var pkg = require('./package.json');
@@ -80,12 +83,22 @@ gulp.task('copy', function () {
     //gulp.src(paths.images, { cwd: bases.app })
     //.pipe(gulp.dest(bases.dist + 'img'));
 
+    var appName = 'Unknown';
+    var versionCode = nconf.get("VERSION_CODE");
+    var version = nconf.get("VERSION");
+    var versionShort = nconf.get("VERSION_SHORT");
+
     if (argv.android) {
         gulp.src(paths.images.concat(platform.excludeiosimages), { cwd: bases.app })
         .pipe(gulp.dest(bases.dist + 'img'));
 
+        appName = nconf.get("APPNAME_ANDROID");
+
         gulp.src(paths.config, { cwd: bases.app })
-            .pipe(replace('APP-NAME', 'Baltimore Beer Week 2014'))
+            .pipe(replace('APP-NAME', appName))
+            .pipe(replace('VERSION-CODE', versionCode))
+            .pipe(replace('-VERSION', version))
+            .pipe(replace('VERSION-SHORT', versionShort))
             .pipe(gulp.dest(bases.dist));
     }
 
@@ -93,8 +106,13 @@ gulp.task('copy', function () {
         gulp.src(paths.images.concat(platform.excludeandroidimages), { cwd: bases.app })
         .pipe(gulp.dest(bases.dist + 'img'));
 
+        appName = nconf.get("APPNAME_IOS");
+
         gulp.src(paths.config, { cwd: bases.app })
-            .pipe(replace('APP-NAME', 'BBW 2014'))
+            .pipe(replace('APP-NAME', appName))
+            .pipe(replace('VERSION-CODE', versionCode))
+            .pipe(replace('-VERSION', version))
+            .pipe(replace('VERSION-SHORT', versionShort))
             .pipe(gulp.dest(bases.dist));
     }
 
