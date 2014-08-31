@@ -30,6 +30,11 @@ namespace server.Controllers
             // loop over each of the incoming events and make sure a location record has been created.
             foreach (var eventLoad in events)
             {
+                if (eventLoad.LocationName.ToLowerInvariant().Contains("non-sponsor"))
+                {
+                    continue;
+                }
+
                 Location eventLocation = null;
 
                 var results = locationService.RetrieveByAddress(eventLoad.LocationAddress.Trim());
@@ -79,8 +84,9 @@ namespace server.Controllers
                 }
                 else
                 {
-                    scheduledEvent.Description = eventLoad.EventDescription.Trim();
-                    scheduledEvent.Date = String.Format("{0}T{1}", eventLoad.EventDate.Trim(), eventLoad.EventTime.Trim());
+                    scheduledEvent.SourceUrl = eventLoad.SourceUrl;
+                    //scheduledEvent.Description = eventLoad.EventDescription.Trim();
+                    //scheduledEvent.Date = String.Format("{0}T{1}", eventLoad.EventDate.Trim(), eventLoad.EventTime.Trim());
                     eventService.Save(scheduledEvent);
                 }
             }

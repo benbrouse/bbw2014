@@ -19,5 +19,7 @@
         public string Image { get; set; }
         public int LocationId { get; set; }
         public int[] Sponsors { get; set; }
+
+        public string SourceUrl { get; set; }    
     }
 }
