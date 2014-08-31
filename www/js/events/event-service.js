@@ -9,6 +9,7 @@
 
     function EventsService($q, $timeout, $filter, $log, $resource, $angularCacheFactory, LocationsService, AppSettings) {
         var cacheNameData = 'eventDataCache';
+        var cacheNameEventUpdate = 'eventUpdateCache';
         var cacheNameFavorite = 'eventFavoriteCache';
 
         // NOTE: http://jmdobry.github.io/angular-cache/configuration.html
@@ -24,6 +25,14 @@
             storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
         });
 
+        var updateCache = $angularCacheFactory(cacheNameEventUpdate, {
+            maxAge: AppSettings.cacheMaxAge,
+            cacheFlushInterval: AppSettings.cacheFlushInterval,
+            storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
+        });
+
+        var updateCacheKey = 'EventLastUpdate';
+
         var dataUrl = AppSettings.url + 'events/:id';
 
         var retrieveAll = function(force) {
@@ -33,13 +42,32 @@
             var Events = $resource(dataUrl);
             var cacheEntry = "events";
 
-            // should we make the call across the wire?
+            // should we make the call across the wire due to a user request ??
             var retrieve = false;
             if (!angular.isUndefined(force) && force) {
                 retrieve = true;
             }
 
-            LocationsService.all(force).then(function(locations) {
+            // should we force a call across the wire since they haven't refreshed in a while ??
+            var lastUpdate = updateCache.get(updateCacheKey);
+            if (!retrieve) {
+                if (angular.isUndefined(lastUpdate)) {
+                    retrieve = true;
+                } else {
+                    // compare the current date to when the cache was last updated
+                    var lastUpdateDate = new Date(lastUpdate);
+                    var lastUpdateDateWrapper = moment(lastUpdateDate);
+
+                    // add 4 hours to the last time this was checked and compare against now
+                    lastUpdateDateWrapper.add(4, 'h');
+
+                    if(moment().isAfter(lastUpdateDateWrapper)) {
+                        retrieve = true;
+                    }
+                }
+            }
+
+            LocationsService.all(retrieve).then(function (locations) {
                 var cacheValue = dataCache.get(cacheEntry);
 
                 if (!retrieve && !angular.isUndefined(cacheValue)) {
@@ -51,6 +79,8 @@
                     Events.query().$promise.then(function(list) {
                         cacheValue = processList(list, locations);
 
+                        var currentDate = new Date();
+                        updateCache.put(updateCacheKey, currentDate.toGMTString());
                         dataCache.put(cacheEntry, cacheValue);
                         deferred.resolve(cacheValue);
                     }, function(errResponse) {
