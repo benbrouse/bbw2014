@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 
+var debug = require('gulp-debug');
 var clean = require('gulp-clean');
 var jshint = require('gulp-jshint');
 var imagemin = require('gulp-imagemin');
@@ -93,13 +94,6 @@ gulp.task('copy', function () {
         .pipe(gulp.dest(bases.dist + 'img'));
 
         appName = nconf.get("APPNAME_ANDROID");
-
-        gulp.src(paths.config, { cwd: bases.app })
-            .pipe(replace('APP-NAME', appName))
-            .pipe(replace('VERSION-CODE', versionCode))
-            .pipe(replace('-VERSION', version))
-            .pipe(replace('VERSION-SHORT', versionShort))
-            .pipe(gulp.dest(bases.dist));
     }
 
     if (argv.ios) {
@@ -107,14 +101,14 @@ gulp.task('copy', function () {
         .pipe(gulp.dest(bases.dist + 'img'));
 
         appName = nconf.get("APPNAME_IOS");
-
-        gulp.src(paths.config, { cwd: bases.app })
-            .pipe(replace('APP-NAME', appName))
-            .pipe(replace('VERSION-CODE', versionCode))
-            .pipe(replace('-VERSION', version))
-            .pipe(replace('VERSION-SHORT', versionShort))
-            .pipe(gulp.dest(bases.dist));
     }
+
+    gulp.src(paths.config, { cwd: bases.app })
+        .pipe(replace('APP-NAME', appName))
+        .pipe(replace('VERSION-CODE', versionCode))
+        .pipe(replace('-VERSION', version))
+        .pipe(replace('VERSION-SHORT', versionShort))
+        .pipe(gulp.dest(bases.dist));
 
     gulp.src(paths.locales, { cwd: bases.app })
     .pipe(gulp.dest(bases.dist + 'locales'));
@@ -144,10 +138,10 @@ gulp.task('build', function (callback) {
     console.log();
 
     sequence(
-          'clean',
-          'scripts',
-          'imagemin',
-          'copy',
-          callback
-      );
+            'clean',
+            'scripts',
+            'imagemin',
+            'copy',
+            callback
+        );
 });
