@@ -16,12 +16,13 @@ namespace server.Controllers
         {
             var eventService = new EventService();
             var masterEvents = eventService.RetrieveAll();
-            int nextEventKey = masterEvents.Max(e => e.Id);
+            
+            int nextEventKey = (masterEvents != null && masterEvents.Any()) ? masterEvents.Max(e => e.Id) : 0;
             nextEventKey++;
 
             var locationService = new LocationService();
             var locations = locationService.RetrieveAll();
-            int nextLocationKey = locations.Max(l => l.Id);
+            int nextLocationKey = (locations != null && locations.Any()) ? locations.Max(l => l.Id) : 0;
             nextLocationKey++;
 
             var dataService = new DataloadService();
@@ -30,7 +31,7 @@ namespace server.Controllers
             // loop over each of the incoming events and make sure a location record has been created.
             foreach (var eventLoad in events)
             {
-                if (eventLoad.LocationName.ToLowerInvariant().Contains("non-sponsor"))
+                if (!eventLoad.IsValid())
                 {
                     continue;
                 }
@@ -78,6 +79,7 @@ namespace server.Controllers
                     newEvent.Date = String.Format("{0}T{1}", eventLoad.EventDate.Trim(), eventLoad.EventTime.Trim());
                     newEvent.Description = eventLoad.EventDescription.Trim();
                     newEvent.LocationId = eventLocation.Id;
+                    newEvent.SourceUrl = eventLoad.SourceUrl;
 
                     eventService.Save(newEvent);
                     nextEventKey++;
