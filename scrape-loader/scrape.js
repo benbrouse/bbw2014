@@ -7,7 +7,6 @@ var lodash = require('lodash');
 var scrapeUtils = require('./scrapeUtils.js');
 var Events = require('./events.js');
 
-
 var events = new Events();
 
 var baseUrl = 'http://baltimorebeerweek.com/events/';
@@ -69,22 +68,53 @@ function processDate(dateString) {
                     var eventName = a.parent().parent().children('h2').eq(0).children('a').text().trim();
                     
                     var details = a.parent().parent().children('p');
-                    var processDate = $(details).eq(0).text().trim().replace("Date: ", "").split(" ");
+                    var parseDate = $(details).eq(0).text().trim();
+                    var processDate = parseDate.replace("Date: ", "").split(" ");
                     var date = "2014-10-" + processDate[2].replace(",", "").substring(0, 2);
 
                     var location = $(details).eq(1).text().trim().replace("Location: ", "");
-                    
-                    var time = processDate[3].trim().split("-")[0].trim();
-                    time = scrapeUtils.timeOfDay(time);
+
+                    //var time = processDate[3].trim().split(",")[0].trim();
+                    //time = time.replace(",", "");
+                    //time = time.replace(":00", "");
+                    var time = scrapeUtils.timeOfDay(parseDate);
                                         
                     var cost = $(details).eq(2).text().trim().replace("Cost: ", "");
                     cost = cost.replace("Fixed Price", "-1");
-                    cost = cost.replace("Pay as you go", "0");
+                    
+                    if (cost.indexOf("Pay as you go") > -1) {
+                        cost = "0";
+                    }
+
                     cost = cost.replace("Free", "0");
+                    cost = cost.replace("$$", "$");
+                    cost = cost.replace("$", "");
+                    cost = cost.replace(".00", "");
+                    
+                    if (cost.indexOf("-1") > -1 && cost != "-1") {
+                        cost = cost.replace("$", "");
+                        cost = cost.replace(",", " ");
+                        cost = cost.replace("/", " ");
+
+                        var costParts = cost.split(" ");
+                        if (costParts.length >= 4) {
+                            cost = costParts[3];
+                        }
+
+                        costParts = cost.split("-");
+                        cost = cost[0];
+                    }
 
                     var description = $(details).eq(4).text().trim();
 
-                    var logoUrl = a.parent().parent().parent().children().eq(0).children().eq(0).children().eq(0).attr('src').trim();
+                    var logoElement = null;
+                    try {
+                        logoElement = a.parent().parent().parent().children().eq(0).children().eq(0).children().eq(0).attr('src');
+                    } catch (err) {
+                        console.log(eventName);
+                    } 
+                    
+                    var logoUrl = (logoElement != null) ? logoElement.trim() : 'http://bbw14.blob.core.windows.net/images/logo.png';
 
                     var event = {
                         eventName: eventName,
@@ -117,10 +147,18 @@ function processEvent(event) {
 
                 var address = $(this).text().trim().replace("Location: ", "");
                 address = address.replace(" - Get Directions", "");
-
+                var addressParts = address.split("-");
+                if (addressParts.length > 1) {
+                    address = addressParts[addressParts.length-1].trim();
+                }     
+                
                 address = address.replace(event.location + " - ", "");
-
-                event.address = address;
+                
+                if (event.location == "M & T Stadium Parking Lots") {
+                    event.address = "1101 Russell Street Baltimore, MD  21230";
+                } else {
+                    event.address = address;
+                }
 
                 events.insertEvent(event);
             });

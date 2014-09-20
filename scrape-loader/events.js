@@ -27,6 +27,10 @@ Events.prototype.ensureTableExists = function() {
 }
 
 Events.prototype.insertEvent = function(event) {
+    
+    if (event.location == "Non-Sponsor Venue") {
+        event.address = "DO NOT LOAD";
+    }
 
     var entity = {
         EventName: entityGen.String(event.eventName),
