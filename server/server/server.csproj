@@ -184,27 +184,14 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\DataloadController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationsController.cs" />
     <Compile Include="Controllers\MockDataController.cs" />
     <Compile Include="Controllers\SponsorsController.cs" />
-    <Compile Include="Data\Configuration.cs" />
-    <Compile Include="Data\DataloadService.cs" />
-    <Compile Include="Data\DataServiceT.cs" />
-    <Compile Include="Data\EventService.cs" />
-    <Compile Include="Data\LocationService.cs" />
-    <Compile Include="Data\SponsorService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Entity.cs" />
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\EventLoad.cs" />
-    <Compile Include="Models\Location.cs" />
-    <Compile Include="Models\Sponsor.cs" />
-    <Compile Include="Models\SponsorLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -270,7 +257,12 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\server.data\server.data.csproj">
+      <Project>{dc2ee250-a89f-4628-a022-150083df4036}</Project>
+      <Name>server.data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

@@ -14,7 +14,7 @@ namespace server.Data
             _tableName = Tables.EVENT;
         }
 
-        public List<Event> RetrieveByName(string name)
+        public List<Event> RetrieveByName(string name, string date, int locationId)
         {
             Debug.Assert(String.IsNullOrEmpty(_tableName) != true);
 
@@ -24,13 +24,15 @@ namespace server.Data
 
             CloudTable table = GetTableReference(storageAccountSetting);
 
+
             // Construct the query operation for all customer entities where PartitionKey="Smith".
             TableQuery<Event> query = new TableQuery<Event>().Where(TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, accountId),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterCondition("Title", QueryComparisons.Equal, name)));
-                
+                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, accountId),
+                TableOperators.And,
+                TableQuery.GenerateFilterCondition("Title", QueryComparisons.Equal, name)));
+            
             var results = table.ExecuteQuery(query).ToList();
+            results = results.Where(x => x.LocationId == locationId && x.Date.Contains(date)).ToList();
 
             return results;
         }

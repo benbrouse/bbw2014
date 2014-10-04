@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http;
-using System.Web.Http.Cors;
 using server.Data;
 using server.Models;
 
-namespace server.Controllers
+namespace server.loadevents
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class DataloadController : ApiController
+    public class EventDataLoader
     {
-        // GET api/<controller>
-        public IEnumerable<EventLoad> Get()
+        public static void Execute()
         {
             var eventService = new EventService();
             var masterEvents = eventService.RetrieveAll();
-            
+
             int nextEventKey = (masterEvents != null && masterEvents.Any()) ? masterEvents.Max(e => e.Id) : 0;
             nextEventKey++;
 
@@ -29,6 +25,7 @@ namespace server.Controllers
             IEnumerable<EventLoad> events = dataService.RetrieveAll();
 
             // loop over each of the incoming events and make sure a location record has been created.
+            int processed = 0;
             foreach (var eventLoad in events)
             {
                 if (!eventLoad.IsValid())
@@ -58,7 +55,7 @@ namespace server.Controllers
                 }
 
                 // find a matching event
-                var eventList = eventService.RetrieveByName(eventLoad.EventName.Trim());
+                var eventList = eventService.RetrieveByName(eventLoad.EventName.Trim(), eventLoad.EventDate, eventLocation.Id);
                 Event scheduledEvent = null;
                 if (eventList.Count > 0)
                 {
@@ -91,9 +88,9 @@ namespace server.Controllers
                     //scheduledEvent.Date = String.Format("{0}T{1}", eventLoad.EventDate.Trim(), eventLoad.EventTime.Trim());
                     eventService.Save(scheduledEvent);
                 }
-            }
 
-            return events;
+                processed++;
+            }            
         }
     }
 }
