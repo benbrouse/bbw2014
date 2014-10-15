@@ -16,19 +16,22 @@
         var dataCache = $angularCacheFactory(cacheNameData, {
             maxAge: AppSettings.cacheMaxAge,
             cacheFlushInterval: AppSettings.cacheFlushInterval,
-            storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
+            storageMode: 'localStorage', // This cache will sync itself with `localStorage`.
+            verifyIntegrity: false
         });
 
         var favoriteCache = $angularCacheFactory(cacheNameFavorite, {
             maxAge: AppSettings.cacheMaxAge,
             cacheFlushInterval: AppSettings.cacheFlushInterval,
-            storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
+            storageMode: 'localStorage', // This cache will sync itself with `localStorage`.
+            verifyIntegrity: false
         });
 
         var updateCache = $angularCacheFactory(cacheNameEventUpdate, {
             maxAge: AppSettings.cacheMaxAge,
             cacheFlushInterval: AppSettings.cacheFlushInterval,
-            storageMode: 'localStorage' // This cache will sync itself with `localStorage`.
+            storageMode: 'localStorage', // This cache will sync itself with `localStorage`.
+            verifyIntegrity: false
         });
 
         var updateCacheKey = 'EventLastUpdate';
