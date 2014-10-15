@@ -84,7 +84,7 @@ namespace server.loadevents
                 else
                 {
                     scheduledEvent.SourceUrl = eventLoad.SourceUrl;
-                    //scheduledEvent.Description = eventLoad.EventDescription.Trim();
+                    scheduledEvent.Description = eventLoad.EventDescription.Trim();
                     //scheduledEvent.Date = String.Format("{0}T{1}", eventLoad.EventDate.Trim(), eventLoad.EventTime.Trim());
                     eventService.Save(scheduledEvent);
                 }

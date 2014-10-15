@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using GoogleAnalyticsTracker.WebApi2;
 using server.Data;
 using server.Models;
 
 namespace server.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [ActionTracking(Constants.GoogleAnalyticsTrackingId, Constants.GoogleAnalyticsTrackingWebsite)]
     public class SponsorsController : ApiController
     {
         // GET api/<controller>
