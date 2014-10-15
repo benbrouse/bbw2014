@@ -1,6 +1,6 @@
 <div class="modal">
     <ion-header-bar id="event-details-modal-header" class="bar bar-dark">
-        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite()" ng-if="allowFavorites"></button>
+        <button ng-class="event.favorite ? 'ion-ios7-star' : 'ion-ios7-star-outline'" class="button button-icon icon light" ng-click="toggleFavorite(event.id)" ng-if="allowFavorites"></button>
         <h1 class="title">{{ applicationName }}</h1>
         <button class="button button-icon icon ion-ios7-close-outline light" ng-click="closeEventModal()"></button>
     </ion-header-bar>
@@ -27,6 +27,7 @@
                     <h4 class="text-center">
                         {{ event.location.address }}
                         <div ng-if="eventInitialized && gpsAvailable">{{ event.location.distance }} miles away</div>
+                        <div ng-if="eventInitialized && !gpsAvailable">Current location unavailable</div>
                         <div ng-if="event.location.phone.length > 0"><a href="tel:{{event.location.phone}}">{{event.location.phone | telephone}}</a></div>
                     </h4>
                 </div>
@@ -38,7 +39,7 @@
                             Details
                         </span>
                     </div>
-                    <div ng-if="event.location.address.length > 0" class="col" align="center" ng-click="switchEventView('location')">
+                    <div ng-if="canShowEventMap" class="col" align="center" ng-click="switchEventView('location')">
                         <span ng-class="{'icon-active': showEventMap}">
                             <i class="icon ion-location"></i>
                             Map
@@ -54,8 +55,21 @@
             </div>
 
             <div id="event-detail-wrapper" ng-show="eventInitialized">
-                <div ng-if="showEventDescription" class="padding">
-                    <p data-markdown="{{ event.description }}"></p>
+                <div id="event-detail-details" ng-if="showEventDescription" resizetoparent resize-parameters="event-detail-modal;event-detail-modal-header" class="row" style="padding:0">
+
+                    <p data-markdown="{{ event.description }}" style="margin-left:10px;"></p>
+
+                    <div id="event-detail-social" ng-show="showSocial" class="col-10">
+                        <div class="social-col" ng-show="socialOptions.facebook" align="center" ng-click="shareEvent(event, 'facebook')">
+                            <img src="img/social/facebook6.png" />
+                        </div>
+                        <div class="social-col" ng-show="socialOptions.google" align="center" ng-click="shareEvent(event, 'google')">
+                            <img src="img/social/google10.png" />
+                        </div>
+                        <div class="social-col" ng-show="socialOptions.twitter" align="center" ng-click="shareEvent(event, 'twitter')">
+                            <img src="img/social/social19.png" />
+                        </div>
+                    </div>
                 </div>
 
                 <div ng-if="locationEvents.length > 0" ng-show="showEventOther" class="event-location-item item">
@@ -66,7 +80,7 @@
                             <div class="col col-10"></div>
 
                             <div class="col col-70 event-detail-other-event-desc">
-                                <a ng-click="openEventModal(event.id)">
+                                <a ng-click="openEventModal(event)">
                                     <h3>{{event.title}}</h3>
                                     <h4 class="item-text-wrap">{{ event.date | amDateFormat:'dddd, MMMM Do YYYY' }}</h4>
                                 </a>
@@ -85,8 +99,8 @@
                 </div>
 
                 <div id="map" data-tap-disabled="true" ng-cloak>
-                    <leaflet ng-if="showEventMap" 
-                             resizetoparent resize-parameters="event-detail-modal;event-detail-modal-header" 
+                    <leaflet ng-if="showEventMap"
+                             resizetoparent resize-parameters="event-detail-modal;event-detail-modal-header"
                              markers="markers" center="center" layers="layers">
                     </leaflet>
                 </div>

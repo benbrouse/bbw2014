@@ -1,23 +1,24 @@
 
-<ion-view title="{{ applicationName }}" animation="nav-title-slide-ios7">
+<ion-view title="{{ applicationName }}">
     <ion-nav-buttons side="right">
         <button class="button-icon icon ion-navicon light" ng-show="!data.isLoading" ng-click="openFilterModal()"></button>
     </ion-nav-buttons>
 
     <ion-header-bar class="bar-subheader bar-light">
         <div class="row">
-            <div class="col" align="center" ng-show="!data.isLoading" ng-click="switchSort()">
+            <div class="col" align="center" ng-show="!data.isLoading">
+                <!--ng-click="switchSort()"-->
                 <span ng-class="{'icon-active': sortByDate}">
                     <i class="icon ion-ios7-time-outline"></i>
-                    Sort By Date
+                    Events Sorted By Date
                 </span>
             </div>
-            <div class="col" align="center" ng-show="!data.isLoading" ng-click="switchSort()">
+            <!--<div class="col" align="center" ng-show="!data.isLoading" ng-click="switchSort()">
                 <span ng-class="{'icon-active': !sortByDate}">
                     <i class="icon ion-ios7-location"></i>
                     Sort By Location
                 </span>
-            </div>
+            </div>-->
             <div class="col" align="center" ng-show="data.isLoading">
                 <span class='icon-active'>
                     <i class="icon ion-ios7-reloading"></i>
@@ -27,40 +28,75 @@
         </div>
     </ion-header-bar>
 
-    <ion-content ng-show="!data.isLoading">
+    <ion-content id="event-content">
+        <!--ng-show="!data.isLoading">-->
         <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshContent()" refreshing-icon="ion-loading-c">
         </ion-refresher>
 
         <div class="list">
             <!-- event listing by date -->
-            <div ng-show="sortByDate" ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection">
+            <!--<div ng-show="sortByDate" ng-repeat="eventDate in eventDates | eventDateSelected:'date':selection ">-->
 
-                <div ng-show="initialized" class="item item-divider">
+            <div ng-show="!initialized" class="item">
+                <h3 class="text-center">One moment please...</h3>
+            </div>
+
+            <div ng-show="initialized">
+                <div collection-repeat="event in events"
+                     collection-item-width="'100%'"
+                     collection-item-height="getItemHeight(event, $index)"
+                     ng-style="{height: getItemHeight(event, $index)}">
+
+                    <a ng-if="event.selected && !event.message" class="item item-thumbnail-left"
+                       ng-click="openEventModal(event)"
+                       ng-style="{width: getItemWidth(event, $index)}">
+                        <!--style="border-top-style: solid;border-bottom-style:solid;border-right-style: none;">-->
+                        <img ng-src="{{ event.location.image }}" />
+
+                        <h2>{{event.title}}</h2>
+                        <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
+                        <h4 class="item-text-wrap">{{ event.date | amDateFormat:'dddd, MM/D/YYYY hh:mm A'}}</h4>
+                        <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
+                        <h4 class="padding-right">{{ event.description }}</h4>
+                    </a>
+
+                    <div ng-if="!event.selected && !event.message" class="item item-divider" ng-style="{width: getItemWidth(event, $index)}">
+                        <span>{{ event.date | amDateFormat:'dddd, MMMM Do YYYY' }}</span>
+                    </div>
+                    
+                    <div ng-if="event.message" class="item" ng-style="{width: getItemWidth(event, $index)}">
+                        <span class="item-text-wrap">
+                            There are no matching events that meet your filters.
+                        </span>
+                    </div>
+                </div>
+
+
+                <!--<div ng-show="initialized" class="item item-divider">
                     <span>{{ eventDate.date | amDateFormat:'dddd, MMMM Do YYYY' }}</span>
                 </div>
 
-                <a ng-repeat="event in events | matchesDate:'date':eventDate.date | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
+                <a ng-repeat="event in events | matchesDate:'date':eventDate.date | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized" class="item item-thumbnail-left" ng-click="openEventModal({{event}})">
                     <img ng-src="{{ event.location.image }}" />
 
                     <!--Show the ribbon that indicates that this is a sponsored event-->
-                    <!--<img src="/img/ribbon-icon.png" />-->
-
-                    <h2>{{event.title}}</h2>
+                <!--<img src="/img/ribbon-icon.png" />-->
+                <!--<h2>{{event.title}}</h2>
                     <h4 class="item-text-wrap">Location: {{ event.location.name }}</h4>
                     <h4 class="item-text-wrap">Time: {{ event.date | amDateFormat:'hh:mm A'}}</h4>
                     <h4 class="item-text-wrap">Cost: {{ event.cost | currency | costnone:'Pay as you go'}}</h4>
                     <h4 class="item-text-wrap">{{ event.description }}</h4>
-                </a>
+                </a>-->
             </div>
 
             <!-- event listing by location -->
-            <div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations | orderBy:'location.name'">
+            <!--<div ng-show="!sortByDate" ng-repeat="eventLocation in eventLocations | orderBy:'location.name'">
                 <div ng-repeat="event in events | matchesString:'location.name':eventLocation.name | eventDateSelected:'date':selection | eventIsFavorite:favoriteFilter.checked | orderBy:'date'" ng-show="initialized">
                     <div ng-show="initialized && $index==0" class="item item-divider">
                         {{ eventLocation.name }}
                     </div>
 
-                    <a class="item item-thumbnail-left" ng-click="openEventModal({{event.id}})">
+                    <a class="item item-thumbnail-left" ng-click="openEventModal({{event}})">
                         <img ng-src="{{ event.location.image }}" />
                         <h2>{{event.title}}</h2>
                         <h4 class="item-text-wrap"><span>{{ event.date | amDateFormat:'dddd, MMMM Do YYYY' }}</span></h4>
@@ -69,7 +105,7 @@
                         <h4 class="item-text-wrap">{{ event.description }}</h4>
                     </a>
                 </div>
-            </div>
+            </div>-->
         </div>
     </ion-content>
 </ion-view>

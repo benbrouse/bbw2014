@@ -88,6 +88,11 @@
     margin-top: 7px;
 }
 
+.social-col {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 /* 
  * make the content's top changes animate.
  * might not always look good, but looks

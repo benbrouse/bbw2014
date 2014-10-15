@@ -3,7 +3,8 @@
                             'core.address-service',
                             'core.loader-service',
                             'core.google-maps-service',
-                            'core.distance-service'
+                            'core.distance-service',
+                            'core.date-utils'
 ]);
 
 angular.module('core-filters', [
@@ -17,7 +18,9 @@ angular.module('core-filters', [
 
 angular.module('core-ui', [
                             'core.resizeDirective',
-                            'core.markdown-directive'
+                            'core.resizeWidthDirective',
+                            'core.markdown-directive',
+                            'core.toast-service'
 ]);
 
 

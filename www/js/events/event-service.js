@@ -5,9 +5,9 @@
         .module('bbw.event-service', ['ngResource', 'core-services', 'jmdobry.angular-cache', 'locations'])
         .factory('EventsService', EventsService);
 
-    EventsService.$inject = ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'LocationsService', 'AppSettings'];
+    EventsService.$inject = ['$q', '$timeout', '$filter', '$log', '$resource', '$angularCacheFactory', 'LocationsService', 'DateUtils', 'AppSettings'];
 
-    function EventsService($q, $timeout, $filter, $log, $resource, $angularCacheFactory, LocationsService, AppSettings) {
+    function EventsService($q, $timeout, $filter, $log, $resource, $angularCacheFactory, LocationsService, DateUtils, AppSettings) {
         var cacheNameData = 'eventDataCache';
         var cacheNameEventUpdate = 'eventUpdateCache';
         var cacheNameFavorite = 'eventFavoriteCache';
@@ -61,24 +61,78 @@
                     // add 4 hours to the last time this was checked and compare against now
                     lastUpdateDateWrapper.add(4, 'h');
 
-                    if(moment().isAfter(lastUpdateDateWrapper)) {
+                    if (moment().isAfter(lastUpdateDateWrapper)) {
                         retrieve = true;
                     }
                 }
             }
 
-            LocationsService.all(retrieve).then(function (locations) {
-                var cacheValue = dataCache.get(cacheEntry);
+            var cacheValue = dataCache.get(cacheEntry);
 
+            LocationsService.all(retrieve).then(function(locations) {
                 if (!retrieve && !angular.isUndefined(cacheValue)) {
                     $timeout(function() {
-                        cacheValue = processList(cacheValue, locations);
+                        //cacheValue = processList(cacheValue, locations);
                         deferred.resolve(cacheValue);
                     }, 0);
                 } else {
-                    Events.query().$promise.then(function(list) {
-                        cacheValue = processList(list, locations);
+                    Events.query().$promise.then(function (list) {
 
+                        // define a function to be used to sort the list
+                        var date_sort_asc = function (date1, date2) {
+                            if (new Date(date1.date) > new Date(date2.date)) {
+                                return 1;
+                            }
+                            if (new Date(date1.date) < new Date(date2.date)) {
+                                return -1;
+                            }
+                            return 0;
+                        };
+
+                        // sort the array in ascending order.
+                        list = list.sort(date_sort_asc);
+
+                        var updatedList = [];
+                        var prevEvent = null;
+                        var correlationId = 0;
+
+                        for (var i = 0; i < list.length; i++) {
+
+                            var event = list[i];
+
+                            event.description = event.description;
+                            event.type = 'event';
+                            event.selected = true;
+                            event.correlationId = correlationId;
+
+                            if (i === 0) {
+                                var initDivider = angular.copy(event);
+                                initDivider.selected = false;
+                                initDivider.separator = true;
+                                initDivider.correlationId = correlationId;
+                                updatedList.push(initDivider);
+                            }
+                            else if (prevEvent != null && !DateUtils.isSameDate(prevEvent.date, event.date)) {
+                                correlationId++;
+                                event.correlationId = correlationId;
+
+                                var dayDivider = angular.copy(event);
+
+                                dayDivider.selected = false;
+                                dayDivider.separator = true;
+                                dayDivider.correlationId = correlationId;
+
+                                updatedList.push(dayDivider);
+                            }
+
+                            updatedList.push(event);
+
+                            prevEvent = event;
+                        }
+
+                        cacheValue = processList(updatedList, locations);
+
+                        // store the list in cache
                         var currentDate = new Date();
                         updateCache.put(updateCacheKey, currentDate.toGMTString());
                         dataCache.put(cacheEntry, cacheValue);
@@ -97,18 +151,15 @@
                 }
             });
 
-
             return deferred.promise;
+
         };
 
         var processList = function(list, locations) {
             // add in the favorite flag
-            list = _.map(list, function(event) {
+            list = _.map(list, function (event) {
+                event.type = 'event';
                 event.favorite = isFavorite(event.id);
-                return event;
-            });
-
-            list = _.map(list, function(event) {
                 event.location = getLocation(locations, event.locationId);
                 return event;
             });
@@ -121,8 +172,9 @@
 
             var deferred = $q.defer();
 
-            LocationsService.all().then(function(locations) {
-                retrieveAll().then(function(eventList) {
+            LocationsService.all(false).then(function (locations) {
+
+                retrieveAll(false).then(function(eventList) {
                     var filtered = _.where(eventList, { id: id });
                     if (filtered != null && filtered.length > 0) {
                         var record = filtered[0];
@@ -157,7 +209,6 @@
             return entity;
         };
 
-
         return {
             all: retrieveAll,
             get: getEventById,
@@ -167,7 +218,12 @@
 
                 var processEventList = function(eventList) {
                     // get a list of unique dates for the events
-                    var eventDatesOnly = _.pluck(eventList, 'date');
+//                    var eventDatesOnly = _.pluck(eventList, 'date');
+                    var eventDatesOnly = [
+                        '2014-10-10T12:00:00', '2014-10-11T12:00:00', '2014-10-12T12:00:00', '2014-10-13T12:00:00',
+                        '2014-10-14T12:00:00', '2014-10-15T12:00:00', '2014-10-16T12:00:00', '2014-10-17T12:00:00',
+                        '2014-10-18T12:00:00', '2014-10-19T12:00:00'
+                    ];
 
                     var eventShortDates = _.map(eventDatesOnly, function(date) {
                         var parsedDate = new Date(date);
@@ -178,7 +234,7 @@
                     eventList = $filter('unique')(eventShortDates, 'date');
 
                     // define a function to be used to sort the list
-                    var date_sort_asc = function(date1, date2) {
+                    var date_sort_asc = function (date1, date2) {
                         if (new Date(date1) > new Date(date2)) {
                             return 1;
                         }
@@ -188,14 +244,14 @@
                         return 0;
                     };
 
-                    // First let's sort the array in ascending order.
+                    // sort the array in ascending order.
                     eventList = eventList.sort(date_sort_asc);
 
                     deferred.resolve(eventList);
                 };
 
                 if (angular.isUndefined(passedEventList)) {
-                    retrieveAll().then(function(eventList) {
+                    retrieveAll(false).then(function(eventList) {
                         processEventList(eventList);
                     });
                 } else {
@@ -222,7 +278,7 @@
                 };
 
                 if (angular.isUndefined(passedEventList)) {
-                    retrieveAll().then(function(eventList) {
+                    retrieveAll(false).then(function(eventList) {
                         processEventList(eventList);
                     });
                 } else {
@@ -235,35 +291,16 @@
             getLocationEvents: function(locationName, excludeId, passedEventList) {
                 var deferred = $q.defer();
 
-                LocationsService.all().then(function(locations) {
+                LocationsService.all(false).then(function(locations) {
                     var processEventList = function(eventList) {
                         // begin to transform the list
                         eventList = $filter('matchesString')(eventList, 'location.name', locationName);
                         eventList = $filter('exclude')(eventList, 'id', excludeId);
 
-                        // define a function to be used to sort the list
-                        var date_sort_asc = function(date1, date2) {
-                            if (new Date(date1) > new Date(date2)) {
-                                return 1;
-                            }
-                            if (new Date(date1) < new Date(date2)) {
-                                return -1;
-                            }
-                            return 0;
-                        };
-
-                        // First let's sort the array in ascending order.
-                        eventList = eventList.sort(date_sort_asc);
-
-                        // add in the favorite flag
+                        // add in the favorite flag & event locations
                         eventList = _.map(eventList, function(event) {
                             event.favorite = isFavorite(event.id);
-                            return event;
-                        });
-
-                        // resolve the event location
-                        eventList = _.map(eventList, function(event) {
-                            event.location = getLocation(locations, event.locationId);
+                            //event.location = getLocation(locations, event.locationId);
                             return event;
                         });
 
@@ -271,7 +308,7 @@
                     };
 
                     if (angular.isUndefined(passedEventList)) {
-                        retrieveAll().then(function(eventList) {
+                        retrieveAll(false).then(function(eventList) {
                             processEventList(eventList);
                         });
                     } else {
