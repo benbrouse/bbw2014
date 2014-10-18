@@ -8,7 +8,7 @@ using server.Models;
 namespace server.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    [ActionTracking(Constants.GoogleAnalyticsTrackingId, Constants.GoogleAnalyticsTrackingWebsite)]
+    //[ActionTracking(Constants.GoogleAnalyticsTrackingId, Constants.GoogleAnalyticsTrackingWebsite)]
     public class SponsorsController : ApiController
     {
         // GET api/<controller>

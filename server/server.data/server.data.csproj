@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlobData.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DataloadService.cs" />
     <Compile Include="DataServiceT.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventLoad.cs" />
     <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\MarkdownContent.cs" />
     <Compile Include="Models\Sponsor.cs" />
     <Compile Include="Models\SponsorLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

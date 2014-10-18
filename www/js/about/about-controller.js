@@ -26,11 +26,11 @@
         function activate() {
             setupModals();
 
-            AboutService.all(true).then(function() {
+            AboutService.all(false).then(function() {
                 $log.log('done');
             });
 
-            AboutService.summary(true, 'about-summary').then(function (entity) {
+            AboutService.summary().then(function (entity) {
                 $log.log(entity);
                 vm.summaryText = entity.data;
             });

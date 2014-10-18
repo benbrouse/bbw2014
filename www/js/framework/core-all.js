@@ -4,7 +4,8 @@
                             'core.loader-service',
                             'core.google-maps-service',
                             'core.distance-service',
-                            'core.date-utils'
+                            'core.date-utils',
+                            'core.caching-data-service'
 ]);
 
 angular.module('core-filters', [
