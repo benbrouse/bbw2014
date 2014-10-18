@@ -5,14 +5,17 @@
         .module('bbw.about-controller', ['ionic', 'core-all'])
         .controller('AboutCtrl', AboutCtrl);
 
-    AboutCtrl.$inject = ['$scope', '$log', '$ionicModal', '$timeout', '$document', 'AppSettings'];
+    AboutCtrl.$inject = ['$scope', '$log', '$ionicModal', '$timeout', '$document', 'AboutService', 'AppSettings'];
     
-    function AboutCtrl($scope, $log, $ionicModal, $timeout, $document, AppSettings) {
+    function AboutCtrl($scope, $log, $ionicModal, $timeout, $document, AboutService, AppSettings) {
         var modals = {};
         var vm = $scope;
 
         vm.allowConfiguration = AppSettings.allowConfiguration;
         vm.initialized = false;
+        vm.summaryText = "";
+        vm.summaryTitle = "The 6th Annual Baltimore Beer Week";
+        vm.summaryDates = "October 10 - 19, 2014";
 
         vm.openSettingsModal = function () { modals.modalSettings.show(); };
         vm.closeSettingsModal = function () { modals.modalSettings.hide(); };
@@ -22,6 +25,15 @@
         /////////////////////////////////
         function activate() {
             setupModals();
+
+            AboutService.all(true).then(function() {
+                $log.log('done');
+            });
+
+            AboutService.summary(true, 'about-summary').then(function (entity) {
+                $log.log(entity);
+                vm.summaryText = entity.data;
+            });
         }
 
         function setupModals() {
@@ -38,15 +50,5 @@
                 modals.modalSettings.remove();
             });
         }
-
-        $scope.$on('modal.shown', function () {
-            // HACK: for this is a temporary fix for the ionic framework
-            // http://forum.ionicframework.com/t/modal-not-receiving-touch-events/8025/2
-            $timeout(function () {
-                if ($document[0].body.classList.contains('loading-active')) {
-                    $document[0].body.classList.remove('loading-active');
-                }
-            }, 500);
-        });
     }
 })();

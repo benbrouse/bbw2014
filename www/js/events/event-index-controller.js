@@ -193,7 +193,7 @@
 
                     }, function (reason) {
                         // could not get the list of event dates
-                        $log.write(reason);
+                        $log.error(reason);
                     });
                 } else {
                     vm.events = filterEvents(vm.eventsMaster);
@@ -205,7 +205,7 @@
 
             }, function (reason) {
                 // could not get the list of events
-                $log.write(reason);
+                $log.error(reason);
             });
         }
 

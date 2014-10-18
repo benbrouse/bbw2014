@@ -41,7 +41,7 @@
                     deferred.resolve(list);
                 }, function(errResponse) {
                     if (dataCache.get(cacheEntry)) {
-                        $log.write('SponsorService: falling back to cache entry');
+                        $log.error('SponsorService: falling back to cache entry');
 
                         // fail safe
                         deferred.resolve(dataCache.get(cacheEntry));

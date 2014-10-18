@@ -16,24 +16,12 @@
             <div class="col-40">
             </div>
             <div class="col" style="text-align: center">
-                <h3>The 6th Annual Baltimore Beer Week</h3>
-                <h4>October 10 - 19, 2014</h4>
+                <h3>{{ summaryTitle }}</h3>
+                <h4>{{ summaryDates }}</h4>
             </div>
 
         </div>
-
-        <p>
-            UPDATE: The BBW 2014 Opening Celebration will take place on Saturday October 11th, 2014 and will once again
-            coincide with the Das Best Oktoberfest.  The location has been moved to Rash Field in the Inner Harbor.
-        </p>
-
-        <p>
-            Please check back often as events and sponsors are added.
-            <!--<a class="icon" href="#" ng-click="openMapModal()"> View Opening Tap Map</a>-->
-        </p>
-
-        <p>
-            Cheers - The Organizing Committee
-        </p>
+        
+        <p data-markdown="{{ summaryText }}"></p>
     </ion-content>
 </ion-view>

@@ -2,7 +2,10 @@
     'use strict';
 
     angular
-        .module('about', ['bbw.about-controller']);
+        .module('about', [
+            'bbw.about-controller',
+            'bbw.about-service'
+        ]);
 
     angular
         .module('events', [
@@ -10,7 +13,6 @@
             'bbw.event-index-controller',
             'bbw.eventDateSelectedFilter',
             'bbw.eventFavoriteFilter']);
-
 
     angular
         .module('sponsors', [

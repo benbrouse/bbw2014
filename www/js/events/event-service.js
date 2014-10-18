@@ -142,7 +142,7 @@
                         deferred.resolve(cacheValue);
                     }, function(errResponse) {
                         if (!angular.isUndefined(cacheValue)) {
-                            $log.write('EventsService: falling back to cache entry');
+                            $log.error('EventsService: falling back to cache entry');
 
                             // fail safe
                             deferred.resolve(cacheValue);
